@@ -6,7 +6,14 @@ const nextConfig = {
     // Pe Vercel, folderul public nu e copiat în funcțiile de server. PDF-urile (fonturi, siglă)
     // și pagina Despre noi (fotografiile echipei) citesc aceste fișiere de pe disc.
     outputFileTracingIncludes: {
-      "/**/*": ["./public/fonts/**/*", "./public/logo-mark.png", "./public/images/**/*"],
+      "/**/*": [
+        "./public/fonts/**/*",
+        "./public/logo-mark.png",
+        "./public/images/**/*",
+        // Biblioteca PDF încarcă dinamic fonturile standard și tabelele de date; Vercel nu le detectează singur.
+        "./node_modules/pdfkit/js/standard-fonts/**/*",
+        "./node_modules/pdfkit/js/data/**/*",
+      ],
     },
   },
   images: { remotePatterns: [{ protocol: "https", hostname: "**.supabase.co" }] },
