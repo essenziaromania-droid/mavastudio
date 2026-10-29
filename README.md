@@ -5,7 +5,7 @@ O singură aplicație Next.js 14 (TypeScript, Tailwind, Supabase):
 | Zonă | Adresă | Ce conține |
 |---|---|---|
 | Site public | `www.mavastudio.ro` | Acasă, Servicii (+6 pagini), Proiecte (studii de caz), Despre noi, Contact, Începe un proiect, Blog, pagini legale |
-| CRM / admin | `app.mavastudio.ro` (sau `/crm`) | Dashboard, Lead-uri, Clienți, Oferte, Contracte, Proiecte, Task-uri, Calendar, Financiar, Fișiere, Angajați, Rapoarte, **Website** (blog, portofoliu, setări site), Setări |
+| CRM / admin | `www.mavastudio.ro/crm` | Dashboard, Lead-uri, Clienți, Oferte, Contracte, Proiecte, Task-uri, Calendar, Financiar, Fișiere, Angajați, Rapoarte, **Website** (blog, portofoliu, setări site), Setări |
 | Pentru clienți | `/oferta/{token}`, `/contract/{token}` | Ofertă online (Acceptă / Solicită modificări), semnare electronică contract |
 
 ## Pornire – pas cu pas
@@ -13,7 +13,7 @@ O singură aplicație Next.js 14 (TypeScript, Tailwind, Supabase):
 ### 1. Supabase
 1. Creează un proiect pe [supabase.com](https://supabase.com) (regiunea Frankfurt).
 2. **SQL Editor** → lipește tot conținutul din `supabase/migrations/0001_init.sql` → **Run**. Apoi la fel cu `supabase/migrations/0002_i18n.sql` (versiunea în engleză).
-3. **Authentication → URL Configuration**: Site URL = `https://www.mavastudio.ro`; la Redirect URLs adaugă `https://www.mavastudio.ro/auth/callback`, `https://app.mavastudio.ro/auth/callback`, `http://localhost:3000/auth/callback`.
+3. **Authentication → URL Configuration**: Site URL = `https://www.mavastudio.ro`; la Redirect URLs adaugă `https://www.mavastudio.ro/auth/callback` și `http://localhost:3000/auth/callback`.
 4. **Authentication → Providers → Email**: dezactivează „Allow new users to sign up” după ce îți creezi contul (angajații se adaugă doar prin invitație din CRM).
 5. **Authentication → Users → Add user**: creează-ți contul. **Primul utilizator devine automat Administrator.**
 
@@ -32,7 +32,7 @@ npm run dev        # http://localhost:3000  ·  CRM: http://localhost:3000/crm
 ### 5. Publicare (Vercel)
 1. Urcă proiectul pe GitHub și importă-l în Vercel.
 2. Adaugă aceleași variabile de mediu în Vercel.
-3. Adaugă domeniile `www.mavastudio.ro`, `mavastudio.ro` (redirect către www) și `app.mavastudio.ro`. Subdomeniul `app.` deschide automat CRM-ul.
+3. Adaugă domeniile `www.mavastudio.ro` și `mavastudio.ro` (redirect către www). CRM-ul este la `www.mavastudio.ro/crm`.
 
 ## Conținut
 - **Logo** (oficial): `public/logo.svg` (siglă + text), `public/logo-mark.svg` (doar sigla), `public/icon.svg` (favicon), `public/logo-mark.png` (folosit în PDF-uri). Componenta: `src/components/ui/logo.tsx`.
