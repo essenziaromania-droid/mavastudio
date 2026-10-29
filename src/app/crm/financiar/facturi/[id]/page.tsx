@@ -1,21 +1,24 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ExternalLink, Send } from "lucide-react";
+import { Download, ExternalLink, Mail, Send } from "lucide-react";
 import { requireModule } from "@/lib/crm/auth";
-import { addPayment, deleteInvoice, emitInvoice, setInvoiceStatus } from "../../../actions/finance";
-import { Field, Input, KeyVal, PageHeader, Panel, Select, StatusBadge, Table, Td, optionsFrom } from "@/components/crm/ui";
+import { addPayment, deleteInvoice, emitInvoice, sendInvoiceEmail, setInvoiceStatus } from "../../../actions/finance";
+import { Field, Input, KeyVal, Textarea, PageHeader, Panel, Select, StatusBadge, Table, Td, optionsFrom } from "@/components/crm/ui";
 import { AutoSubmitSelect, ConfirmSubmit, SubmitButton } from "@/components/crm/client-ui";
 import { INVOICE_STATUS } from "@/lib/crm/constants";
 import { formatDate, formatLei } from "@/lib/utils";
 
 export const metadata = { title: "Factură" };
 
-export default async function InvoicePage({ params, searchParams }: { params: { id: string }; searchParams: { err?: string; ok?: string } }) {
+export default async function InvoicePage({ params, searchParams }: { params: { id: string }; searchParams: { err?: string; ok?: string; sent?: string } }) {
   const { sb } = await requireModule("financiar");
-  const { data: i } = await sb.from("invoices").select("*, clients(id, name), projects(id, name), payments(*)").eq("id", params.id).maybeSingle();
+  const { data: i } = await sb.from("invoices").select("*, clients(id, name, email, contact_email), projects(id, name), payments(*)").eq("id", params.id).maybeSingle();
   if (!i) notFound();
   const rest = Number(i.total) - Number(i.paid_amount);
   const label = [i.series, i.number].filter(Boolean).join(" ") || "Factură draft";
+  const issued = !!i.number && i.provider !== "manual";
+  const pdfUrl = `/api/invoices/${i.id}/pdf`;
+  const clientEmail = i.clients?.contact_email || i.clients?.email || "";
 
   return (
     <>
@@ -26,12 +29,14 @@ export default async function InvoicePage({ params, searchParams }: { params: { 
         actions={
           <>
             <AutoSubmitSelect name="status" defaultValue={i.status} options={optionsFrom(INVOICE_STATUS)} action={setInvoiceStatus} hidden={{ id: i.id }} className="!py-2.5 !text-sm" />
-            {i.external_url && <a href={i.external_url} target="_blank" className="btn-ghost !py-2.5"><ExternalLink className="h-4 w-4" /> PDF factură</a>}
+            {issued && <a href={pdfUrl} target="_blank" className="btn-ghost !py-2.5"><ExternalLink className="h-4 w-4" /> Vezi PDF</a>}
+            {issued && <a href={`${pdfUrl}?download=1`} className="btn-primary !py-2.5"><Download className="h-4 w-4" /> Descarcă PDF</a>}
           </>
         }
       />
       {searchParams.err && <p className="mb-5 rounded-xl bg-rose-50 px-4 py-3 text-sm text-rose-600">{searchParams.err}</p>}
       {searchParams.ok && <p className="mb-5 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">Factura a fost emisă în programul de facturare.</p>}
+      {searchParams.sent && <p className="mb-5 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">Factura a fost trimisă pe email către {searchParams.sent}.</p>}
 
       <div className="grid gap-6 xl:grid-cols-[1.4fr_1fr]">
         <div className="space-y-6">
@@ -67,6 +72,17 @@ export default async function InvoicePage({ params, searchParams }: { params: { 
           </Panel>
         </div>
         <div className="space-y-6">
+          {issued && (
+            <Panel title="Trimite clientului">
+              <form action={sendInvoiceEmail} className="space-y-3">
+                <input type="hidden" name="id" value={i.id} />
+                <Field label="Email client" hint={clientEmail ? undefined : "Clientul nu are email salvat în fișă."}><Input name="to" type="email" defaultValue={clientEmail} required /></Field>
+                <Field label="Mesaj (opțional)"><Textarea name="message" rows={3} placeholder="Ex.: Vă mulțumim pentru colaborare!" /></Field>
+                <SubmitButton className="w-full" pendingText="Se trimite..."><Mail className="h-4 w-4" /> Trimite factura pe email</SubmitButton>
+                <p className="text-xs text-muted">Emailul pleacă de pe contact@mavastudio.ro, cu factura PDF atașată. Răspunsurile clientului vin tot pe contact@mavastudio.ro.</p>
+              </form>
+            </Panel>
+          )}
           <Panel title="Înregistrează plată">
             <p className="mb-3 text-sm text-body">Rest de încasat: <b className={rest > 0 ? "text-rose-500" : "text-emerald-600"}>{formatLei(rest, { decimals: true })}</b></p>
             {rest > 0 && i.status !== "draft" ? (

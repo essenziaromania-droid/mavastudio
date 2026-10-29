@@ -3,10 +3,11 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/crm/auth";
 import { addActivity, audit, getSetting } from "@/lib/events";
-import { DEFAULT_INVOICING, emitWithProvider, snapVatRate, type InvoicingSettings } from "@/lib/invoicing";
+import { DEFAULT_INVOICING, downloadInvoicePdf, emitWithProvider, snapVatRate, type InvoicingSettings } from "@/lib/invoicing";
+import { ADMIN_EMAIL, brandedEmail, escapeHtml, sendEmail } from "@/lib/email";
 import { onInvoicePaid } from "@/lib/automations";
 import { createAdminClient } from "@/lib/supabase/server";
-import { formatLei } from "@/lib/utils";
+import { formatDate, formatLei } from "@/lib/utils";
 
 const str = (fd: FormData, k: string) => {
   const v = String(fd.get(k) ?? "").trim();
@@ -137,4 +138,46 @@ export async function refreshOverdue() {
   const s = await getSession();
   await s.sb.from("invoices").update({ status: "restanta" }).in("status", ["emisa", "trimisa", "partial"]).lt("due_date", new Date().toISOString().slice(0, 10));
   revalidatePath("/crm/financiar");
+}
+
+/** Trimite factura emisă pe email clientului, cu PDF-ul atașat din programul de facturare. */
+export async function sendInvoiceEmail(fd: FormData) {
+  const s = await getSession();
+  if (!s.can("financiar")) return;
+  const id = String(fd.get("id"));
+  const back = (q: string) => redirect(`/crm/financiar/facturi/${id}?${q}`);
+  const to = (str(fd, "to") ?? "").toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) back(`err=${encodeURIComponent("Adresa de email nu este validă.")}`);
+
+  const { data: inv } = await s.sb.from("invoices").select("*, clients(name, contact_name)").eq("id", id).single();
+  if (!inv?.number) back(`err=${encodeURIComponent("Factura trebuie emisă înainte de a fi trimisă.")}`);
+
+  const settings = await getSetting<InvoicingSettings>(createAdminClient(), "invoicing", DEFAULT_INVOICING);
+  const pdf = await downloadInvoicePdf(settings, inv);
+  if (!pdf.ok) back(`err=${encodeURIComponent(pdf.error)}`);
+  if (!pdf.ok) return;
+
+  const label = `${inv.series ?? ""} ${inv.number}`.trim();
+  const note = str(fd, "message");
+  const greet = inv.clients?.contact_name || inv.clients?.name || "";
+  const body = `
+    <p>Bună ziua${greet ? `, ${escapeHtml(greet)}` : ""},</p>
+    <p>Vă transmitem atașat factura <b>${escapeHtml(label)}</b> din ${formatDate(inv.issue_date)}, în valoare de <b>${formatLei(inv.total, { decimals: true })}</b>${inv.due_date ? `, cu scadența la ${formatDate(inv.due_date)}` : ""}.</p>
+    ${note ? `<p style="white-space:pre-line">${escapeHtml(note)}</p>` : ""}
+    <p>Pentru orice întrebare, ne puteți răspunde direct la acest email.</p>
+    <p>Cu drag,<br/>Echipa MAVA Studio</p>`;
+  const r = await sendEmail({
+    to,
+    replyTo: ADMIN_EMAIL,
+    subject: `Factura ${label} – MAVA Studio`,
+    html: brandedEmail({ title: `Factura ${label}`, bodyHtml: body }),
+    attachments: [{ filename: `Factura-${label.replace(/\s+/g, "-")}.pdf`, content: pdf.pdf }],
+  });
+  if (!r.ok) back(`err=${encodeURIComponent("Emailul nu a putut fi trimis: " + r.error)}`);
+
+  if (inv.status === "emisa") await s.sb.from("invoices").update({ status: "trimisa" }).eq("id", id);
+  await addActivity(s.sb, { client_id: inv.client_id, project_id: inv.project_id, type: "factura", title: `Factură trimisă ${label}`, description: `Către ${to}`, actor_id: s.userId });
+  await audit(s.sb, { actor_id: s.userId, actor_name: s.profile.full_name, action: `a trimis factura ${label} pe email către ${to}`, entity: "factura", entity_id: id });
+  revalidatePath(`/crm/financiar/facturi/${id}`);
+  back(`sent=${encodeURIComponent(to)}`);
 }

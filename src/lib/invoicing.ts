@@ -128,6 +128,43 @@ async function fgo(cfg: InvoicingSettings["fgo"], c: InvoiceClient, d: InvoiceDr
   return { ok: true, series: json.Factura?.Serie ?? cfg.series, number: String(json.Factura?.Numar ?? ""), url: json.Factura?.Link };
 }
 
+export type IssuedInvoice = { provider: string; series: string | null; number: string | null; external_url: string | null };
+export type PdfResult = { ok: true; pdf: Buffer } | { ok: false; error: string };
+
+/** Descarcă PDF-ul unei facturi emise, direct din programul de facturare în care a fost emisă. */
+export async function downloadInvoicePdf(settings: InvoicingSettings, inv: IssuedInvoice): Promise<PdfResult> {
+  try {
+    if (inv.provider === "smartbill") {
+      const cfg = settings.smartbill;
+      if (!cfg.email || !cfg.token || !cfg.cif) return { ok: false, error: "Datele SmartBill lipsesc din Setări → Integrări." };
+      if (!inv.series || !inv.number) return { ok: false, error: "Factura nu are serie și număr." };
+      const q = new URLSearchParams({ cif: cfg.cif.trim(), seriesname: inv.series, number: inv.number });
+      const res = await fetch(`https://ws.smartbill.ro/SBORO/api/invoice/pdf?${q}`, {
+        headers: { Accept: "application/octet-stream", Authorization: "Basic " + Buffer.from(`${cfg.email.trim()}:${cfg.token.trim()}`).toString("base64") },
+      });
+      const buf = Buffer.from(await res.arrayBuffer());
+      if (!res.ok || buf.subarray(0, 4).toString() !== "%PDF") {
+        let msg = `SmartBill a răspuns cu ${res.status}`;
+        try {
+          msg = JSON.parse(buf.toString()).errorText || msg;
+        } catch {}
+        return { ok: false, error: msg };
+      }
+      return { ok: true, pdf: buf };
+    }
+    // Oblio și FGO întorc la emitere un link direct către PDF.
+    if (inv.external_url) {
+      const res = await fetch(inv.external_url);
+      const buf = Buffer.from(await res.arrayBuffer());
+      if (res.ok && buf.subarray(0, 4).toString() === "%PDF") return { ok: true, pdf: buf };
+      return { ok: false, error: "PDF-ul nu a putut fi descărcat din programul de facturare." };
+    }
+    return { ok: false, error: "Factura nu a fost emisă printr-un program de facturare, deci nu are PDF." };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "Eroare la descărcarea PDF-ului." };
+  }
+}
+
 export async function emitWithProvider(settings: InvoicingSettings, client: InvoiceClient, draft: InvoiceDraft): Promise<EmitResult> {
   try {
     switch (settings.provider) {
