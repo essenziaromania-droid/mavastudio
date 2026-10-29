@@ -12,7 +12,7 @@ O singură aplicație Next.js 14 (TypeScript, Tailwind, Supabase):
 
 ### 1. Supabase
 1. Creează un proiect pe [supabase.com](https://supabase.com) (regiunea Frankfurt).
-2. **SQL Editor** → lipește tot conținutul din `supabase/migrations/0001_init.sql` → **Run**. Apoi, pe rând, `supabase/migrations/0002_i18n.sql` (versiunea în engleză) și `0003_signatures.sql` (semnături desenate pe contracte).
+2. **SQL Editor** → lipește tot conținutul din `supabase/migrations/0001_init.sql` → **Run**. Apoi, pe rând, `supabase/migrations/0002_i18n.sql` (versiunea în engleză) `0003_signatures.sql` (semnături desenate pe contracte) și `0004_service_includes.sql` (ce include fiecare serviciu).
 3. **Authentication → URL Configuration**: Site URL = `https://www.mavastudio.ro`; la Redirect URLs adaugă `https://www.mavastudio.ro/auth/callback` și `http://localhost:3000/auth/callback`.
 4. **Authentication → Providers → Email**: dezactivează „Allow new users to sign up” după ce îți creezi contul (angajații se adaugă doar prin invitație din CRM).
 5. **Authentication → Users → Add user**: creează-ți contul. **Primul utilizator devine automat Administrator.**

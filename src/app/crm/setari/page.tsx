@@ -13,6 +13,8 @@ import { formatDate, formatLei } from "@/lib/utils";
 
 export const metadata = { title: "Setări" };
 
+const INCLUDES_HINT = ["## Pagini", "Acasă", "Despre noi", "Contact", "? Blog", "## Funcționalități", "Formular de contact", "? Versiune în engleză"].join("\n");
+
 const CATS = Object.fromEntries(Object.entries(SERVICE_CATEGORY).map(([k, v]) => [k, v.label]));
 
 export default async function SettingsPage({ searchParams }: { searchParams: { tab?: string; saved?: string } }) {
@@ -211,6 +213,11 @@ export default async function SettingsPage({ searchParams }: { searchParams: { t
                 {c.recurring && <input type="hidden" name="recurring" value="on" />}
                 <SubmitButton className="btn-sm !px-3 !py-1.5">Salvează</SubmitButton>
                 <button formAction={deleteCatalogItem} className="rounded-lg px-2 py-1.5 text-xs text-muted hover:bg-rose-50 hover:text-rose-500" title="Șterge">Șterge</button>
+                <details className="col-span-6 pb-1">
+                  <summary className="cursor-pointer text-xs font-semibold text-brand-blue">Ce include ({(c.includes ?? "").split("\n").filter((l: string) => l.trim() && !l.trim().startsWith("#")).length} elemente)</summary>
+                  <Textarea name="includes" rows={12} defaultValue={c.includes ?? ""} className="mt-2 font-mono text-xs" placeholder={INCLUDES_HINT} />
+                  <p className="mt-1 text-[11px] text-muted">„## Grup” începe un grup · un element pe rând · „? Element” = opțional (apare nebifat în ofertă). Apasă „Salvează” de pe rândul serviciului.</p>
+                </details>
               </form>
             ))}
           </div>
@@ -225,6 +232,7 @@ export default async function SettingsPage({ searchParams }: { searchParams: { t
             </div>
             <Field label="Descriere"><Input name="description" /></Field>
             <label className="flex items-center gap-2 text-sm"><input type="checkbox" name="recurring" className="accent-brand-blue" /> Serviciu lunar</label>
+            <Field label="Ce include" hint="„## Grup”, apoi câte un element pe rând; „? Element” = opțional."><Textarea name="includes" rows={8} className="font-mono text-xs" placeholder={INCLUDES_HINT} /></Field>
             <SubmitButton className="w-full">Adaugă în catalog</SubmitButton>
           </form>
           <p className="mt-4 text-xs text-muted">Exemplu: Website Business — {formatLei(8500)}, SEO — {formatLei(1500)}, Mentenanță — {formatLei(750)}/lună.</p>

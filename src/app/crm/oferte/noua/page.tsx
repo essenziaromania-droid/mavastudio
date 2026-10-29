@@ -15,7 +15,7 @@ export default async function NewOfferPage({ searchParams }: { searchParams: { c
     if (o) {
       initial = {
         ...o,
-        items: [...(o.offer_items ?? [])].sort((a, b) => a.sort - b.sort).map((i) => ({ name: i.name, description: i.description, quantity: Number(i.quantity), unit: i.unit, unit_price: Number(i.unit_price), recurring: i.recurring, category: i.category })),
+        items: [...(o.offer_items ?? [])].sort((a, b) => a.sort - b.sort).map((i) => ({ name: i.name, description: i.description, quantity: Number(i.quantity), unit: i.unit, unit_price: Number(i.unit_price), recurring: i.recurring, category: i.category, includes: i.includes })),
       };
     }
   }

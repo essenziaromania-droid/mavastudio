@@ -1,6 +1,7 @@
 import "server-only";
 import path from "path";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import { asSaved } from "@/lib/includes";
 import { Document, Font, Image, Page, Path, Svg, StyleSheet, Text, View, renderToBuffer, Defs, LinearGradient, Stop } from "@react-pdf/renderer";
 import type { Company } from "@/lib/documents";
 import { formatDate, formatLei } from "@/lib/utils";
@@ -123,6 +124,12 @@ export async function renderOfferPdf(o: any, company: Company): Promise<Buffer> 
               <View style={{ flex: 5, paddingRight: 8 }}>
                 <Text style={{ fontWeight: 700, color: INK }}>{i.name}{i.recurring ? " (lunar)" : ""}</Text>
                 {i.description && <Text style={st.muted}>{i.description}</Text>}
+                {asSaved(i.includes).map((g) => (
+                  <Text key={g.group} style={{ fontSize: 8, color: BODY, marginTop: 2 }}>
+                    <Text style={{ fontWeight: 700, color: INK }}>{g.group}: </Text>
+                    {g.items.join(" · ")}
+                  </Text>
+                ))}
               </View>
               <Text style={{ flex: 1.2, textAlign: "right" }}>{Number(i.quantity)} {i.unit}</Text>
               <Text style={{ flex: 1.8, textAlign: "right" }}>{formatLei(i.unit_price)}</Text>

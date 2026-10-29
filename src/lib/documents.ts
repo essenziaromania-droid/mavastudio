@@ -1,7 +1,8 @@
 import { formatDate, formatLei } from "@/lib/utils";
+import { includesMarkdown } from "@/lib/includes";
 import { ANNEX_KEYS, ANNEX_LABELS, CONTRACT_ANNEXES, CONTRACT_BODY, CONTRACT_DPA, DPA_CATEGORIES, type ContractTemplate } from "@/lib/contract-template";
 
-export type OfferItem = { name: string; description?: string | null; quantity: number; unit: string; unit_price: number; recurring?: boolean; category?: string | null };
+export type OfferItem = { name: string; description?: string | null; quantity: number; unit: string; unit_price: number; recurring?: boolean; category?: string | null; includes?: unknown };
 
 export function computeTotals(items: OfferItem[], discountPercent: number, vatRate: number) {
   const subtotal = round(items.reduce((s, i) => s + Number(i.quantity) * Number(i.unit_price), 0));
@@ -63,7 +64,12 @@ export function buildContractBody({
   if (cats.has("ecommerce")) cats.add("website");
   const annexKeys = ANNEX_KEYS.filter((k) => cats.has(k));
   const withDpa = annexKeys.some((k) => DPA_CATEGORIES.includes(k));
+  // Prima anexă: ce include concret fiecare serviciu, exact cum a fost bifat în ofertă.
+  const specs = includesMarkdown(items);
   const annexes = [
+    ...(specs
+      ? [{ label: "Specificațiile serviciilor", text: `### Specificațiile serviciilor\n\nServiciile prevăzute la Art. 2 includ elementele de mai jos, conform ofertei acceptate. Orice element care nu se regăsește în această listă nu este inclus și poate fi ofertat separat.\n\n${specs}` }]
+      : []),
     ...annexKeys.map((k) => ({ label: ANNEX_LABELS[k], text: template?.annexes?.[k]?.trim() || CONTRACT_ANNEXES[k] })),
     ...(withDpa ? [{ label: "Prelucrarea datelor cu caracter personal", text: template?.dpa?.trim() || CONTRACT_DPA }] : []),
   ];

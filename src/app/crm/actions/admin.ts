@@ -138,6 +138,7 @@ export async function saveCatalogItem(fd: FormData) {
     price: Number(fd.get("price") || 0),
     recurring: fd.get("recurring") === "on",
     active: fd.get("active") !== "off",
+    includes: String(fd.get("includes") ?? "").replace(/\r\n?/g, "\n").trim() || null,
   };
   if (id) await s.sb.from("services_catalog").update(row).eq("id", id);
   else await s.sb.from("services_catalog").insert(row);

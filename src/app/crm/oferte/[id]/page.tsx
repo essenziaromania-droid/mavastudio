@@ -6,6 +6,7 @@ import { contractFromOffer, deleteOffer, duplicateOffer, sendOffer, setOfferStat
 import { Field, Input, KeyVal, PageHeader, Panel, StatusBadge, Textarea, optionsFrom } from "@/components/crm/ui";
 import { AutoSubmitSelect, ConfirmSubmit, CopyButton, SubmitButton } from "@/components/crm/client-ui";
 import { CONTRACT_STATUS, OFFER_STATUS } from "@/lib/crm/constants";
+import { IncludesList } from "@/components/ui/includes-list";
 import { formatDate, formatLei } from "@/lib/utils";
 import { SITE } from "@/content/site";
 
@@ -52,7 +53,7 @@ export default async function OfferPage({ params, searchParams }: { params: { id
             <tbody className="divide-y divide-line">
               {items.map((i) => (
                 <tr key={i.id}>
-                  <td className="py-3"><p className="font-semibold text-ink">{i.name}{i.recurring ? " (lunar)" : ""}</p>{i.description && <p className="text-xs text-muted">{i.description}</p>}</td>
+                  <td className="py-3"><p className="font-semibold text-ink">{i.name}{i.recurring ? " (lunar)" : ""}</p>{i.description && <p className="text-xs text-muted">{i.description}</p>}<IncludesList value={i.includes} /></td>
                   <td className="py-3 text-right">{Number(i.quantity)} {i.unit}</td>
                   <td className="py-3 text-right">{formatLei(i.unit_price)}</td>
                   <td className="py-3 text-right font-semibold text-ink">{formatLei(Number(i.quantity) * Number(i.unit_price))}</td>

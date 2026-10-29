@@ -1,16 +1,18 @@
 "use client";
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Check, Loader2, Plus, Trash2 } from "lucide-react";
+import { Check, ChevronDown, Loader2, Plus, Trash2, X } from "lucide-react";
 import { saveOffer, type OfferInput } from "@/app/crm/actions/offers";
 import { computeTotals } from "@/lib/documents";
 import { SERVICE_CATEGORY } from "@/lib/crm/constants";
 import { Icon } from "@/components/ui/icon";
 import { cn, formatLei } from "@/lib/utils";
 import { inputCls } from "./ui";
+import { asSaved, mergeIncludes, parseIncludes, toSaved, type IncludeGroup } from "@/lib/includes";
+import { IncludesList } from "@/components/ui/includes-list";
 
-type CatalogItem = { id: string; category: string; name: string; description: string | null; unit: string; price: number; recurring: boolean };
-type Item = OfferInput["items"][number] & { key: string };
+type CatalogItem = { id: string; category: string; name: string; description: string | null; unit: string; price: number; recurring: boolean; includes?: string | null };
+type Item = OfferInput["items"][number] & { key: string; groups: IncludeGroup[] };
 
 const CAT_ICON: Record<string, string> = { website: "monitor", ecommerce: "cart", saas: "database", crm: "users", ai: "sparkles", video: "play", social: "megaphone", mentenanta: "settings", altele: "layers" };
 const uid = () => Math.random().toString(36).slice(2);
@@ -28,7 +30,10 @@ export function OfferBuilder({
   const [step, setStep] = useState(initial.id ? 2 : 1);
   const [clientId, setClientId] = useState(initial.client_id ?? "");
   const [title, setTitle] = useState(initial.title ?? "Ofertă servicii digitale");
-  const [items, setItems] = useState<Item[]>((initial.items ?? []).map((i) => ({ ...i, key: uid() })));
+  const [items, setItems] = useState<Item[]>(() =>
+    (initial.items ?? []).map((i) => ({ ...i, key: uid(), groups: mergeIncludes(parseIncludes(catalog.find((c) => c.name === i.name)?.includes), asSaved(i.includes)) })),
+  );
+  const [open, setOpen] = useState<string | null>(null);
   const [discount, setDiscount] = useState(initial.discount_percent ?? 0);
   const [vat, setVat] = useState(initial.vat_rate ?? 21);
   const [delivery, setDelivery] = useState(initial.delivery_term ?? "");
@@ -47,8 +52,16 @@ export function OfferBuilder({
   }, [catalog]);
 
   const addFromCatalog = (c: CatalogItem) =>
-    setItems((xs) => (xs.some((x) => x.name === c.name) ? xs.filter((x) => x.name !== c.name) : [...xs, { key: uid(), category: c.category, name: c.name, description: c.description, quantity: 1, unit: c.unit, unit_price: Number(c.price), recurring: c.recurring }]));
+    setItems((xs) => (xs.some((x) => x.name === c.name) ? xs.filter((x) => x.name !== c.name) : [...xs, { key: uid(), category: c.category, name: c.name, description: c.description, quantity: 1, unit: c.unit, unit_price: Number(c.price), recurring: c.recurring, groups: parseIncludes(c.includes) }]));
   const update = (key: string, patch: Partial<Item>) => setItems((xs) => xs.map((x) => (x.key === key ? { ...x, ...patch } : x)));
+  const setGroups = (key: string, fn: (g: IncludeGroup[]) => IncludeGroup[]) => setItems((xs) => xs.map((x) => (x.key === key ? { ...x, groups: fn(x.groups) } : x)));
+  const toggleOpt = (key: string, gi: number, oi: number) =>
+    setGroups(key, (gs) => gs.map((g, a) => (a !== gi ? g : { ...g, options: g.options.map((o, b) => (b === oi ? { ...o, on: !o.on } : o)) })));
+  const addOpt = (key: string, gi: number, label: string) =>
+    label.trim() && setGroups(key, (gs) => gs.map((g, a) => (a !== gi ? g : { ...g, options: [...g.options, { label: label.trim(), on: true }] })));
+  const removeOpt = (key: string, gi: number, oi: number) =>
+    setGroups(key, (gs) => gs.map((g, a) => (a !== gi ? g : { ...g, options: g.options.filter((_, b) => b !== oi) })).filter((g) => g.options.length));
+  const addGroup = (key: string, name: string) => name.trim() && setGroups(key, (gs) => [...gs, { group: name.trim(), options: [] }]);
 
   const save = () => {
     setError("");
@@ -65,7 +78,7 @@ export function OfferBuilder({
         conditions,
         notes,
         valid_until: validUntil || null,
-        items: items.map(({ key: _k, ...rest }) => rest),
+        items: items.map(({ key: _k, groups, ...rest }) => ({ ...rest, includes: toSaved(groups) })),
       });
       if (r.error) return setError(r.error);
       router.push(`/crm/oferte/${r.id}`);
@@ -131,7 +144,7 @@ export function OfferBuilder({
                 </div>
               </div>
             ))}
-            <button type="button" onClick={() => { setItems((xs) => [...xs, { key: uid(), name: "Serviciu personalizat", quantity: 1, unit: "proiect", unit_price: 0, category: "altele" }]); setStep(2); }} className="btn-ghost btn-sm">
+            <button type="button" onClick={() => { setItems((xs) => [...xs, { key: uid(), name: "Serviciu personalizat", quantity: 1, unit: "proiect", unit_price: 0, category: "altele", groups: [] }]); setStep(2); }} className="btn-ghost btn-sm">
               <Plus className="h-4 w-4" /> Serviciu personalizat
             </button>
             <div><button type="button" onClick={() => setStep(2)} className="btn-primary">Continuă</button></div>
@@ -153,10 +166,57 @@ export function OfferBuilder({
                     <input value={i.unit} onChange={(e) => update(i.key, { unit: e.target.value })} className={inputCls} title="Unitate" />
                     <input type="number" min={0} step="50" value={i.unit_price} onChange={(e) => update(i.key, { unit_price: Number(e.target.value) })} className={inputCls} title="Preț unitar (lei, fără TVA)" />
                     <button type="button" onClick={() => setItems((xs) => xs.filter((x) => x.key !== i.key))} className="self-start rounded-lg p-2.5 text-muted hover:bg-rose-50 hover:text-rose-500"><Trash2 className="h-4 w-4" /></button>
+                    <div className="sm:col-span-5">
+                      <button type="button" onClick={() => setOpen(open === i.key ? null : i.key)} className="flex items-center gap-1.5 text-xs font-semibold text-brand-blue">
+                        <ChevronDown className={cn("h-3.5 w-3.5 transition", open === i.key && "rotate-180")} />
+                        Ce include ({i.groups.reduce((n, g) => n + g.options.filter((o) => o.on).length, 0)} elemente bifate)
+                      </button>
+                      {open === i.key && (
+                        <div className="mt-3 space-y-4 rounded-xl bg-soft/60 p-4">
+                          {i.groups.map((g, gi) => (
+                            <div key={g.group + gi}>
+                              <p className="mb-1.5 text-[11px] font-bold uppercase tracking-wider text-muted">{g.group}</p>
+                              <div className="grid gap-x-4 gap-y-1 sm:grid-cols-2">
+                                {g.options.map((o, oi) => (
+                                  <div key={o.label + oi} className="group flex items-center gap-2 text-sm">
+                                    <label className="flex flex-1 cursor-pointer items-center gap-2">
+                                      <input type="checkbox" checked={o.on} onChange={() => toggleOpt(i.key, gi, oi)} className="accent-brand-blue" />
+                                      <span className={o.on ? "text-ink" : "text-muted"}>{o.label}</span>
+                                    </label>
+                                    <button type="button" onClick={() => removeOpt(i.key, gi, oi)} className="opacity-0 transition group-hover:opacity-100" title="Elimină"><X className="h-3.5 w-3.5 text-muted hover:text-rose-500" /></button>
+                                  </div>
+                                ))}
+                              </div>
+                              <input
+                                placeholder={`+ Adaugă în „${g.group}” și apasă Enter`}
+                                className={cn(inputCls, "mt-1.5 !py-1.5 text-xs")}
+                                onKeyDown={(e) => {
+                                  if (e.key !== "Enter") return;
+                                  e.preventDefault();
+                                  addOpt(i.key, gi, e.currentTarget.value);
+                                  e.currentTarget.value = "";
+                                }}
+                              />
+                            </div>
+                          ))}
+                          <input
+                            placeholder="+ Grup nou (ex. Pagini, Funcționalități) și apasă Enter"
+                            className={cn(inputCls, "!py-1.5 text-xs")}
+                            onKeyDown={(e) => {
+                              if (e.key !== "Enter") return;
+                              e.preventDefault();
+                              addGroup(i.key, e.currentTarget.value);
+                              e.currentTarget.value = "";
+                            }}
+                          />
+                          <p className="text-[11px] text-muted">Clientul vede doar elementele bifate, în ofertă și în anexa contractului. Lista implicită a fiecărui serviciu se editează în Setări → Catalog servicii.</p>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 ))}
                 {!items.length && <p className="py-6 text-center text-sm text-muted">Nu ai ales încă servicii.</p>}
-                <button type="button" onClick={() => setItems((xs) => [...xs, { key: uid(), name: "", quantity: 1, unit: "proiect", unit_price: 0, category: "altele" }])} className="btn-ghost btn-sm"><Plus className="h-4 w-4" /> Adaugă rând</button>
+                <button type="button" onClick={() => setItems((xs) => [...xs, { key: uid(), name: "", quantity: 1, unit: "proiect", unit_price: 0, category: "altele", groups: [] }])} className="btn-ghost btn-sm"><Plus className="h-4 w-4" /> Adaugă rând</button>
                 <p className="text-[11px] text-muted">Prețurile se introduc fără TVA. Cantitate · Unitate · Preț unitar.</p>
               </div>
             </div>
@@ -183,7 +243,7 @@ export function OfferBuilder({
               <tbody className="divide-y divide-line">
                 {items.map((i) => (
                   <tr key={i.key}>
-                    <td className="py-2.5"><p className="font-semibold text-ink">{i.name}{i.recurring ? " (lunar)" : ""}</p>{i.description && <p className="text-xs text-muted">{i.description}</p>}</td>
+                    <td className="py-2.5"><p className="font-semibold text-ink">{i.name}{i.recurring ? " (lunar)" : ""}</p>{i.description && <p className="text-xs text-muted">{i.description}</p>}<IncludesList value={toSaved(i.groups)} /></td>
                     <td className="py-2.5 text-right">{i.quantity} {i.unit}</td>
                     <td className="py-2.5 text-right">{formatLei(i.unit_price)}</td>
                     <td className="py-2.5 text-right font-semibold text-ink">{formatLei(i.quantity * i.unit_price)}</td>

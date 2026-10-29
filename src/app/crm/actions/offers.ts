@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { getSession } from "@/lib/crm/auth";
 import { addActivity, audit, getSetting } from "@/lib/events";
 import { computeTotals, type OfferItem, buildContractBody, type Company } from "@/lib/documents";
+import { asSaved } from "@/lib/includes";
 import type { ContractTemplate } from "@/lib/contract-template";
 import { brandedEmail, escapeHtml, sendEmail } from "@/lib/email";
 import { onOfferAccepted } from "@/lib/automations";
@@ -64,6 +65,7 @@ export async function saveOffer(input: OfferInput): Promise<{ id?: string; error
     items.map((i, idx) => ({
       offer_id: id,
       category: i.category ?? null,
+      includes: asSaved(i.includes),
       name: i.name,
       description: i.description || null,
       quantity: Number(i.quantity) || 1,
