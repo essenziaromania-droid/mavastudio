@@ -129,12 +129,14 @@ export async function onContractSigned(sb: SupabaseClient, contractId: string) {
     const { data: existing } = await sb.from("projects").select("id").eq("contract_id", c.id).maybeSingle();
     if (existing) projectId = existing.id;
     else {
-      const category: string = c.offers?.offer_items?.[0]?.category ?? "website";
+      // Toate tipurile de servicii din ofertă (ex. website + social media) → etapele fiecăruia.
+      const categories = Array.from(new Set(((c.offers?.offer_items ?? []) as { category: string | null }[]).map((i) => i.category).filter(Boolean))) as string[];
       projectId = await createProjectFromTemplate(sb, {
         name: `${c.title} – ${c.clients?.name ?? ""}`.trim(),
         client_id: c.client_id,
         contract_id: c.id,
-        category,
+        category: categories[0] ?? "website",
+        categories,
         value: Number(c.value),
       });
     }
@@ -172,12 +174,17 @@ export async function onContractSigned(sb: SupabaseClient, contractId: string) {
 
 export async function createProjectFromTemplate(
   sb: SupabaseClient,
-  p: { name: string; client_id: string | null; contract_id?: string | null; category: string; value: number; manager_id?: string | null; start?: Date },
+  p: { name: string; client_id: string | null; contract_id?: string | null; category: string; categories?: string[]; value: number; manager_id?: string | null; start?: Date },
 ) {
   const start = p.start ?? new Date();
-  const { data: tpl } = await sb.from("project_templates").select("*").eq("category", p.category).limit(1).maybeSingle();
-  const stages: { title: string; days: number }[] = tpl?.stages ?? [{ title: "Brief", days: 2 }, { title: "Execuție", days: 10 }, { title: "Livrare", days: 1 }];
-  const totalDays = stages.reduce((s, x) => s + Number(x.days || 1), 0);
+  // Un șablon pentru fiecare tip de serviciu din proiect. Serviciile se desfășoară în paralel,
+  // iar etapele fiecăruia se succed; termenul proiectului este cel al serviciului care durează cel mai mult.
+  const cats = p.categories?.length ? p.categories : [p.category];
+  const { data: tpls } = await sb.from("project_templates").select("*").in("category", cats);
+  const found = cats.map((cat) => (tpls ?? []).find((t) => t.category === cat)).filter(Boolean) as { name: string; stages: { title: string; days: number }[] }[];
+  const tracks = found.length ? found : [{ name: "standard", stages: [{ title: "Brief", days: 2 }, { title: "Execuție", days: 10 }, { title: "Livrare", days: 1 }] }];
+  const tpl = tracks.length === 1 ? tracks[0] : { name: tracks.map((t) => t.name).join(" + ") };
+  const totalDays = Math.max(...tracks.map((t) => t.stages.reduce((s, x) => s + Number(x.days || 1), 0)));
 
   const { data: project } = await sb
     .from("projects")
@@ -195,10 +202,15 @@ export async function createProjectFromTemplate(
     .single();
   if (!project) return null;
 
-  let cursor = start;
-  const tasks = stages.map((s, i) => {
-    cursor = addDays(cursor, Number(s.days || 1));
-    return { project_id: project.id, client_id: p.client_id, title: s.title, sort: i, deadline: ymd(cursor), priority: "medie" };
+  let sort = 0;
+  const tasks = tracks.flatMap((t) => {
+    let cursor = start;
+    return t.stages.map((s) => {
+      cursor = addDays(cursor, Number(s.days || 1));
+      // Cu mai multe servicii, task-ul arată și serviciul: „Website · Design UI”.
+      const title = tracks.length > 1 ? `${t.name} · ${s.title}` : s.title;
+      return { project_id: project.id, client_id: p.client_id, title, sort: sort++, deadline: ymd(cursor), priority: "medie" };
+    });
   });
   if (tasks.length) await sb.from("tasks").insert(tasks);
 

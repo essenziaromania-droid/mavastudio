@@ -20,7 +20,7 @@ export async function Footer({ locale }: { locale: Locale }) {
     { key: "LinkedIn", href: s.socials.linkedin, el: <Icon name="linkedin" className="h-4 w-4" /> },
     { key: "YouTube", href: s.socials.youtube, el: <Icon name="youtube" className="h-4 w-4" /> },
     { key: "TikTok", href: s.socials.tiktok, el: <TikTokIcon /> },
-  ];
+  ].filter((x) => x.href);
   return (
     <footer className="bg-white">
       <div className="container border-b border-line pb-8 pt-4">
@@ -36,12 +36,12 @@ export async function Footer({ locale }: { locale: Locale }) {
               </Link>
             ))}
           </nav>
-          <div className="flex gap-3">
+          {socials.length > 0 && <div className="flex gap-3">
             {socials.map((x) => (
               <a
                 key={x.key}
-                href={x.href || "#"}
-                target={x.href ? "_blank" : undefined}
+                href={x.href}
+                target="_blank"
                 rel="noopener noreferrer"
                 aria-label={x.key}
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-line text-ink-2 transition hover:border-brand-blue hover:text-brand-blue"
@@ -49,7 +49,7 @@ export async function Footer({ locale }: { locale: Locale }) {
                 {x.el}
               </a>
             ))}
-          </div>
+          </div>}
         </div>
       </div>
       <div className="container flex flex-col items-center justify-between gap-3 py-5 text-xs text-muted md:flex-row">
