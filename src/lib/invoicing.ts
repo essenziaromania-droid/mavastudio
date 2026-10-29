@@ -26,6 +26,9 @@ export type EmitResult = { ok: true; series: string; number: string; url?: strin
 
 const isCompany = (c: InvoiceClient) => c.type !== "person" && !!c.cui;
 
+/** Cod stabil pentru o linie de factură (unele conturi SmartBill cer cod obligatoriu la produse). */
+const productCode = (name: string) => "MV-" + createHash("sha1").update(name.trim().toLowerCase()).digest("hex").slice(0, 8).toUpperCase();
+
 async function smartbill(cfg: InvoicingSettings["smartbill"], c: InvoiceClient, d: InvoiceDraft): Promise<EmitResult> {
   if (!cfg.email || !cfg.token || !cfg.cif || !cfg.series) return { ok: false, error: "Completează datele SmartBill în Setări → Integrări." };
   const res = await fetch("https://ws.smartbill.ro/SBORO/api/invoice", {
@@ -38,7 +41,7 @@ async function smartbill(cfg: InvoicingSettings["smartbill"], c: InvoiceClient, 
       dueDate: d.dueDate ?? undefined,
       seriesName: cfg.series,
       isDraft: false,
-      products: [{ name: d.description, isDiscount: false, measuringUnitName: "buc", currency: "RON", quantity: 1, price: d.subtotal, isTaxIncluded: false, taxName: d.vatRate ? "Normala" : "SDD", taxPercentage: d.vatRate, isService: true, saveToDb: false }],
+      products: [{ name: d.description, code: productCode(d.description), isDiscount: false, measuringUnitName: "buc", currency: "RON", quantity: 1, price: d.subtotal, isTaxIncluded: false, taxName: d.vatRate ? "Normala" : "SDD", taxPercentage: d.vatRate, isService: true, saveToDb: false }],
     }),
   });
   const json = await res.json().catch(() => ({}));
