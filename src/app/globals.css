@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: light; }
+html { scroll-behavior: smooth; }
+body { @apply bg-white text-body antialiased font-sans; }
+h1, h2, h3, h4 { @apply font-display text-ink tracking-tight; }
+
+@layer components {
+  .text-gradient { @apply bg-brand-text bg-clip-text text-transparent; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed; }
+  .btn-primary { @apply btn bg-brand-gradient text-white shadow-glow hover:brightness-110 hover:-translate-y-0.5; }
+  .btn-outline { @apply btn border-2 border-brand-blue bg-white text-brand-blue hover:bg-brand-blue/5; }
+  .btn-ghost { @apply btn border border-line bg-white text-ink hover:border-brand-blue/40 hover:text-brand-blue; }
+  .btn-sm { @apply px-4 py-2 text-xs rounded-lg; }
+  .card { @apply rounded-2xl border border-line bg-white shadow-card; }
+  .card-hover { @apply transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-hover hover:border-brand-blue/20; }
+  .eyebrow { @apply text-[11px] font-semibold uppercase tracking-[0.25em] text-muted; }
+  .section { @apply py-14 md:py-20; }
+  .section-title { @apply text-3xl md:text-[2.6rem] font-extrabold leading-tight text-center; }
+  .section-sub { @apply mt-3 text-center text-body md:text-lg; }
+  .input { @apply w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-ink placeholder:text-muted/70 outline-none transition focus:border-brand-blue focus:ring-4 focus:ring-brand-blue/10; }
+  .label { @apply mb-1.5 block text-sm font-semibold text-ink; }
+  .icon-tile { @apply flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl; }
+  .arrow-dot { @apply flex h-8 w-8 items-center justify-center rounded-full border border-line text-brand-blue transition group-hover:bg-brand-blue group-hover:text-white group-hover:border-brand-blue; }
+  .prose-mava { @apply text-body leading-relaxed; }
+  .prose-mava h2 { @apply mt-10 mb-4 text-2xl font-bold; }
+  .prose-mava h3 { @apply mt-8 mb-3 text-xl font-bold; }
+  .prose-mava p { @apply mb-5; }
+  .prose-mava ul { @apply mb-5 list-disc pl-6 space-y-1.5; }
+  .prose-mava ol { @apply mb-5 list-decimal pl-6 space-y-1.5; }
+  .prose-mava a { @apply text-brand-blue underline underline-offset-2; }
+  .prose-mava img { @apply my-6 rounded-2xl; }
+  .prose-mava blockquote { @apply my-6 border-l-4 border-brand-blue/40 pl-4 italic; }
+}
+
+/* CRM */
+.crm-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+.crm-scroll::-webkit-scrollbar-thumb { background: #CBD1EA; border-radius: 6px; }
