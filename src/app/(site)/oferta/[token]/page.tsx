@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Download } from "lucide-react";
-import { createAdminClient } from "@/lib/supabase/server";
+import { createAdminClient, createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/supabase/env";
 import { formatDate, formatLei } from "@/lib/utils";
 import { OfferResponse } from "./response";
@@ -14,10 +14,13 @@ export default async function PublicOffer({ params }: { params: { token: string 
   if (!hasSupabase || !/^[0-9a-f-]{36}$/i.test(params.token)) notFound();
   const sb = createAdminClient();
   const { data: o } = await sb.from("offers").select("*, clients(name, contact_name), offer_items(*)").eq("public_token", params.token).maybeSingle();
-  if (!o || o.status === "draft") notFound();
+  // Echipa logată în CRM vede pagina ca previzualizare: și ofertele netrimise, fără a marca vizualizarea clientului.
+  const { data: auth } = await createClient().auth.getUser();
+  const preview = !!auth.user;
+  if (!o || (o.status === "draft" && !preview)) notFound();
 
-  // Prima vizualizare → status „vizualizată” + notificare
-  if (!o.viewed_at) {
+  // Prima vizualizare a clientului → status „vizualizată” + notificare
+  if (!o.viewed_at && !preview) {
     await sb.from("offers").update({ viewed_at: new Date().toISOString(), status: o.status === "trimisa" ? "vizualizata" : o.status }).eq("id", o.id);
     await addActivity(sb, { client_id: o.client_id, type: "oferta", title: `Oferta ${o.number} a fost vizualizată` });
     await notify(sb, { type: "oferta", title: `👀 Oferta ${o.number} a fost vizualizată`, body: o.clients?.name, link: `/crm/oferte/${o.id}` });
@@ -29,6 +32,11 @@ export default async function PublicOffer({ params }: { params: { token: string 
   return (
     <section className="bg-hero-soft">
       <div className="container max-w-4xl py-12">
+        {preview && (
+          <p className="mb-4 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800">
+            Previzualizare din CRM. {o.status === "draft" ? "Clientul poate deschide linkul doar după ce îl trimiți." : "Deschiderea de către tine nu se înregistrează ca vizualizare a clientului."}
+          </p>
+        )}
         <div className="card overflow-hidden">
           <div className="h-1.5 bg-brand-gradient" />
           <div className="p-6 md:p-10">
@@ -74,7 +82,7 @@ export default async function PublicOffer({ params }: { params: { token: string 
             </div>
           </div>
           <div className="border-t border-line bg-soft/60 p-6 md:p-10">
-            <OfferResponse token={params.token} status={o.status} expired={Boolean(expired)} />
+            {preview ? <p className="text-sm text-muted">Aici clientul vede butoanele „Accept oferta” și „Solicit modificări”.</p> : <OfferResponse token={params.token} status={o.status} expired={Boolean(expired)} />}
           </div>
         </div>
       </div>

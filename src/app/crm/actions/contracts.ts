@@ -34,7 +34,11 @@ export async function sendContract(fd: FormData) {
   const { data: c } = await s.sb.from("contracts").select("*, clients(*)").eq("id", id).single();
   if (!c || !to) return;
   const company = await getSetting<Company>(s.sb, "company", {});
-  const pdf = await renderContractPdf(c, company);
+  const pdf = await renderContractPdf(c, company).catch((e) => {
+    console.error("[contract pdf]", e);
+    return null;
+  });
+  if (!pdf) redirect(`/crm/contracte/${id}?err=${encodeURIComponent("PDF-ul contractului nu a putut fi generat. Încearcă din nou.")}`);
   const link = `${SITE.url}/contract/${c.public_token}`;
   const r = await sendEmail({
     to,

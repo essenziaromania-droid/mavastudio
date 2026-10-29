@@ -51,8 +51,6 @@ export async function GET(req: NextRequest, ctx: { params: { kind: string; id: s
     return await handle(req, ctx);
   } catch (e) {
     console.error("[pdf]", e);
-    // TEMPORAR: detaliile erorii, pentru diagnosticare pe Vercel.
-    const detail = req.nextUrl.searchParams.get("debug") === "1" && e instanceof Error ? `\n${e.message}\n${e.stack?.split("\n").slice(0, 6).join("\n")}` : "";
-    return new NextResponse(`PDF-ul nu a putut fi generat.${detail}`, { status: 500, headers: { "Content-Type": "text/plain; charset=utf-8" } });
+    return new NextResponse("PDF-ul nu a putut fi generat. Încearcă din nou.", { status: 500, headers: { "Content-Type": "text/plain; charset=utf-8" } });
   }
 }
