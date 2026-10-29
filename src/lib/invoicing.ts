@@ -26,6 +26,23 @@ export type EmitResult = { ok: true; series: string; number: string; url?: strin
 
 const isCompany = (c: InvoiceClient) => c.type !== "person" && !!c.cui;
 
+/**
+ * Cotele TVA din România (actuale: 21% standard, 11% redusă, 0%; vechi: 19%, 9%, 5%).
+ * Cota dedusă din sume rotunjite (ex. 0,17 / 0,83 = 20,48%) se aliniază la cea mai apropiată cotă legală.
+ */
+const VAT_RATES = [21, 11, 0, 19, 9, 5];
+export function snapVatRate(rate: number) {
+  return VAT_RATES.reduce((best, r) => (Math.abs(r - rate) < Math.abs(best - rate) ? r : best), VAT_RATES[0]!);
+}
+
+/** Denumirea cotei, cum apare în SmartBill. */
+function smartbillTaxName(rate: number) {
+  if (rate === 21) return "Normala";
+  if (rate === 11) return "Redusa";
+  if (rate === 0) return "SDD";
+  return "Veche";
+}
+
 /** Cod stabil pentru o linie de factură (unele conturi SmartBill cer cod obligatoriu la produse). */
 const productCode = (name: string) => "MV-" + createHash("sha1").update(name.trim().toLowerCase()).digest("hex").slice(0, 8).toUpperCase();
 
@@ -41,7 +58,7 @@ async function smartbill(cfg: InvoicingSettings["smartbill"], c: InvoiceClient, 
       dueDate: d.dueDate ?? undefined,
       seriesName: cfg.series,
       isDraft: false,
-      products: [{ name: d.description, code: productCode(d.description), isDiscount: false, measuringUnitName: "buc", currency: "RON", quantity: 1, price: d.subtotal, isTaxIncluded: false, taxName: d.vatRate ? "Normala" : "SDD", taxPercentage: d.vatRate, isService: true, saveToDb: false }],
+      products: [{ name: d.description, code: productCode(d.description), isDiscount: false, measuringUnitName: "buc", currency: "RON", quantity: 1, price: d.subtotal, isTaxIncluded: false, taxName: smartbillTaxName(d.vatRate), taxPercentage: d.vatRate, isService: true, saveToDb: false }],
     }),
   });
   const json = await res.json().catch(() => ({}));

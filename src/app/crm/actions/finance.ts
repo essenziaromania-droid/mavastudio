@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/crm/auth";
 import { addActivity, audit, getSetting } from "@/lib/events";
-import { DEFAULT_INVOICING, emitWithProvider, type InvoicingSettings } from "@/lib/invoicing";
+import { DEFAULT_INVOICING, emitWithProvider, snapVatRate, type InvoicingSettings } from "@/lib/invoicing";
 import { onInvoicePaid } from "@/lib/automations";
 import { createAdminClient } from "@/lib/supabase/server";
 import { formatLei } from "@/lib/utils";
@@ -58,7 +58,7 @@ export async function emitInvoice(fd: FormData) {
   if (!inv) return;
   if (!inv.clients) redirect(`/crm/financiar/facturi/${id}?err=${encodeURIComponent("Factura nu are client asociat.")}`);
   const settings = await getSetting<InvoicingSettings>(createAdminClient(), "invoicing", DEFAULT_INVOICING);
-  const vatRate = Number(inv.subtotal) ? Math.round((Number(inv.vat_amount) / Number(inv.subtotal)) * 100) : 0;
+  const vatRate = Number(inv.subtotal) ? snapVatRate((Number(inv.vat_amount) / Number(inv.subtotal)) * 100) : 0;
   const r = await emitWithProvider(settings, inv.clients, { description: inv.description ?? "Servicii digitale", subtotal: Number(inv.subtotal), vatRate, issueDate: inv.issue_date, dueDate: inv.due_date });
   if (!r.ok) redirect(`/crm/financiar/facturi/${id}?err=${encodeURIComponent(r.error)}`);
   await s.sb.from("invoices").update({ provider: settings.provider, series: r.series, number: r.number, external_url: r.url ?? null, external_id: r.externalId ?? null, status: "emisa" }).eq("id", id);
