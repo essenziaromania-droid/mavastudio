@@ -20,7 +20,7 @@ export async function updateContract(fd: FormData) {
       value: Number(fd.get("value") || 0),
       start_date: String(fd.get("start_date") || "") || null,
       end_date: String(fd.get("end_date") || "") || null,
-      body: String(fd.get("body") ?? ""),
+      body: String(fd.get("body") ?? "").replace(/\r\n?/g, "\n"),
     })
     .eq("id", id);
   await audit(s.sb, { actor_id: s.userId, actor_name: s.profile.full_name, action: "a modificat contractul", entity: "contract", entity_id: id });

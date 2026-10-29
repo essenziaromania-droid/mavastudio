@@ -1,5 +1,6 @@
 import "server-only";
 import path from "path";
+import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import { Document, Font, Image, Page, Path, Svg, StyleSheet, Text, View, renderToBuffer, Defs, LinearGradient, Stop } from "@react-pdf/renderer";
 import type { Company } from "@/lib/documents";
 import { formatDate, formatLei } from "@/lib/utils";
@@ -86,7 +87,7 @@ export async function renderOfferPdf(o: any, company: Company): Promise<Buffer> 
         <View style={st.header}>
           <Brand />
           <View style={{ alignItems: "flex-end" }}>
-            <Text style={st.h1}>Ofertă</Text>
+            <Text style={[st.h1, { lineHeight: 1.2, marginBottom: 4 }]}>Ofertă</Text>
             <Text style={{ color: BLUE, fontWeight: 700 }}>{o.number}</Text>
             <Text style={st.muted}>Data: {formatDate(o.created_at)}{o.valid_until ? ` · Valabilă până la ${formatDate(o.valid_until)}` : ""}</Text>
           </View>
@@ -156,83 +157,133 @@ export async function renderOfferPdf(o: any, company: Company): Promise<Buffer> 
 
         <View style={st.footer} fixed>
           <Text>MAVA Studio · www.mavastudio.ro · contact@mavastudio.ro</Text>
-          <Text render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`} />
         </View>
       </Page>
     </Document>
   );
-  return renderToBuffer(doc);
+  return addPageNumbers(await renderToBuffer(doc));
 }
 
-/** Transformă markdown simplu (#, ##, -, **bold**) în elemente react-pdf. */
-function Md({ text }: { text: string }) {
-  const blocks = text.split(/\n{2,}/);
-  const inline = (s: string) =>
-    s.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
-      part.startsWith("**") ? <Text key={i} style={{ fontWeight: 700, color: INK }}>{part.slice(2, -2)}</Text> : <Text key={i}>{part}</Text>,
-    );
+/* ───────────── Contract: text sobru, de document juridic ───────────── */
+
+const ct = StyleSheet.create({
+  page: { fontFamily: "Jakarta", fontSize: 9.5, color: "#1F2433", paddingTop: 40, paddingBottom: 60, paddingHorizontal: 56, lineHeight: 1.5 },
+  title: { fontSize: 15, fontWeight: 800, color: INK, textAlign: "center", marginTop: 6, marginBottom: 14 },
+  annexTitle: { fontSize: 13, fontWeight: 800, color: INK, textAlign: "center", marginBottom: 4 },
+  annexSub: { fontSize: 10.5, fontWeight: 700, color: INK, textAlign: "center", marginBottom: 14 },
+  art: { fontSize: 10.5, fontWeight: 700, color: INK, marginTop: 12, marginBottom: 5 },
+  p: { marginBottom: 6, textAlign: "justify" },
+  li: { flexDirection: "row", marginBottom: 3, paddingLeft: 8 },
+  bullet: { width: 14 },
+  liText: { flex: 1, textAlign: "justify" },
+  signTitle: { fontWeight: 700, color: INK, marginBottom: 4 },
+  signLine: { borderBottomWidth: 1, borderBottomColor: "#9AA1B9", height: 34, marginTop: 6, marginBottom: 4 },
+  footerLeft: { position: "absolute", bottom: 28, left: 56, fontSize: 8, color: MUTED },
+});
+
+/** Textul contractului fără marcaje: fără ** și fără diezi; doar titlurile sunt îngroșate. */
+function ContractText({ text }: { text: string }) {
+  const plain = (s: string) => s.replace(/\*\*/g, "").replace(/\s*\n\s*/g, " ").trim();
+  const blocks = text.split(/\n{2,}/).map((b) => b.trim()).filter(Boolean);
+  let first = true;
   return (
     <>
-      {blocks.map((b, i) => {
-        const t = b.trim();
-        // Anexele contractului încep pe pagină nouă.
-        if (t.startsWith("# Anexa")) return <Text key={i} break style={[st.h1, { fontSize: 16, marginBottom: 10 }]}>{t.slice(2)}</Text>;
-        if (t.startsWith("# ")) return <Text key={i} style={[st.h1, { fontSize: 16, marginBottom: 10 }]}>{t.slice(2)}</Text>;
-        if (t.startsWith("## ")) return <Text key={i} style={st.h2}>{t.slice(3)}</Text>;
-        if (t.startsWith("### ")) return <Text key={i} style={[st.h2, { fontSize: 11.5, marginTop: 4 }]}>{t.slice(4)}</Text>;
-        const lines = t.split("\n");
-        if (lines.every((l) => /^(-|\d+\.)\s/.test(l))) {
+      {blocks.map((t, i) => {
+        if (t.startsWith("# Anexa")) return <Text key={i} break style={ct.annexTitle}>{plain(t.slice(2))}</Text>;
+        if (t.startsWith("# ")) {
+          const style = first ? ct.title : ct.annexTitle;
+          first = false;
+          return <Text key={i} style={style}>{plain(t.slice(2))}</Text>;
+        }
+        if (t.startsWith("### ")) return <Text key={i} style={ct.annexSub}>{plain(t.slice(4))}</Text>;
+        if (t.startsWith("## ")) return <Text key={i} style={ct.art} minPresenceAhead={40}>{plain(t.slice(3))}</Text>;
+        const lines = t.split("\n").map((l) => l.trim());
+        // Liste (- sau 1.), eventual precedate de un rând de introducere.
+        const listStart = lines.findIndex((l) => /^(-|\d+\.)\s/.test(l));
+        if (listStart !== -1 && lines.slice(listStart).every((l) => /^(-|\d+\.)\s/.test(l))) {
           return (
             <View key={i} style={{ marginBottom: 6 }}>
-              {lines.map((l, j) => (
-                <View key={j} style={st.row}>
-                  <Text style={{ width: 14 }}>{l.startsWith("-") ? "•" : l.split(" ")[0]}</Text>
-                  <Text style={{ flex: 1 }}>{inline(l.replace(/^(-|\d+\.)\s/, ""))}</Text>
+              {listStart > 0 && <Text style={ct.p}>{plain(lines.slice(0, listStart).join(" "))}</Text>}
+              {lines.slice(listStart).map((l, j) => (
+                <View key={j} style={ct.li} wrap={false}>
+                  <Text style={ct.bullet}>{l.startsWith("-") ? "•" : l.split(" ")[0]}</Text>
+                  <Text style={ct.liText}>{plain(l.replace(/^(-|\d+\.)\s/, ""))}</Text>
                 </View>
               ))}
             </View>
           );
         }
-        return <Text key={i} style={{ marginBottom: 6 }}>{inline(t.replace(/\n/g, " "))}</Text>;
+        return <Text key={i} style={ct.p}>{plain(t)}</Text>;
       })}
     </>
   );
 }
 
+function Signatures({ c, company }: { c: any; company: Company }) {
+  return (
+    <View style={[st.row, { gap: 36, marginTop: 26 }]} wrap={false}>
+      <View style={{ flex: 1 }}>
+        <Text style={ct.signTitle}>PRESTATOR</Text>
+        <Text>{company.legal_name || company.name || "MAVA Studio"}</Text>
+        <View style={ct.signLine} />
+        <Text style={st.muted}>Semnătura și data</Text>
+      </View>
+      <View style={{ flex: 1 }}>
+        <Text style={ct.signTitle}>BENEFICIAR</Text>
+        <Text>{c.clients?.name}</Text>
+        {c.signed_at ? (
+          <View style={{ marginTop: 6, padding: 8, borderWidth: 1, borderColor: "#A7F3D0", backgroundColor: "#ECFDF5", borderRadius: 6 }}>
+            <Text style={{ color: "#047857", fontWeight: 700 }}>Semnat electronic</Text>
+            <Text style={{ color: "#065F46" }}>{c.signed_by_name}</Text>
+            <Text style={{ color: "#065F46" }}>{formatDate(c.signed_at, true)}{c.signed_ip ? ` · IP ${c.signed_ip}` : ""}</Text>
+          </View>
+        ) : (
+          <>
+            <View style={ct.signLine} />
+            <Text style={st.muted}>Semnătura și data</Text>
+          </>
+        )}
+      </View>
+    </View>
+  );
+}
+
 export async function renderContractPdf(c: any, company: Company): Promise<Buffer> {
+  const body = String(c.body ?? "").replace(/\r\n?/g, "\n");
+  // Semnăturile vin la finalul contractului, înaintea anexelor.
+  const cut = body.search(/^# Anexa/m);
+  const main = cut === -1 ? body : body.slice(0, cut);
+  const annexes = cut === -1 ? "" : body.slice(cut);
   const doc = (
     <Document title={`Contract ${c.number}`} author="MAVA Studio">
-      <Page size="A4" style={st.page}>
+      <Page size="A4" style={ct.page}>
         <GradientBar />
-        <View style={st.header}>
+        <Text style={ct.footerLeft} fixed>Contract nr. {c.number}</Text>
+        <View style={[st.header, { marginBottom: 18 }]}>
           <Brand />
           <View style={{ alignItems: "flex-end" }}>
             <Text style={{ color: BLUE, fontWeight: 700 }}>{c.number}</Text>
             <Text style={st.muted}>{formatDate(c.start_date ?? c.created_at)}</Text>
           </View>
         </View>
-        <Md text={c.body ?? ""} />
-        <View style={[st.row, { gap: 24, marginTop: 28 }]} wrap={false}>
-          <View style={{ flex: 1 }}>
-            <Text style={{ fontWeight: 700, color: INK }}>Prestator</Text>
-            <Text>{company.legal_name || company.name || "MAVA Studio"}</Text>
-          </View>
-          <View style={{ flex: 1 }}>
-            <Text style={{ fontWeight: 700, color: INK }}>Beneficiar</Text>
-            <Text>{c.clients?.name}</Text>
-            {c.signed_at && (
-              <Text style={{ marginTop: 6, color: "#059669" }}>
-                Semnat electronic de {c.signed_by_name} la {formatDate(c.signed_at, true)}{c.signed_ip ? ` (IP ${c.signed_ip})` : ""}
-              </Text>
-            )}
-          </View>
-        </View>
-        <View style={st.footer} fixed>
-          <Text>Contract {c.number} · MAVA Studio</Text>
-          <Text render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`} />
-        </View>
+        <ContractText text={main} />
+        <Signatures c={c} company={company} />
+        {annexes && <ContractText text={annexes} />}
       </Page>
     </Document>
   );
-  return renderToBuffer(doc);
+  return addPageNumbers(await renderToBuffer(doc));
+}
+
+/** Scrie „Pagina X din Y” în colțul din dreapta-jos al fiecărei pagini. */
+async function addPageNumbers(buf: Buffer): Promise<Buffer> {
+  const pdf = await PDFDocument.load(buf);
+  const font = await pdf.embedFont(StandardFonts.Helvetica);
+  const pages = pdf.getPages();
+  pages.forEach((page, i) => {
+    const text = `Pagina ${i + 1} din ${pages.length}`;
+    const size = 8;
+    page.drawText(text, { x: page.getWidth() - 56 - font.widthOfTextAtSize(text, size), y: 31, size, font, color: rgb(0.48, 0.51, 0.62) });
+  });
+  return Buffer.from(await pdf.save());
 }
