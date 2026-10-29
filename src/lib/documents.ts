@@ -1,4 +1,5 @@
 import { formatDate, formatLei } from "@/lib/utils";
+import { ANNEX_KEYS, ANNEX_LABELS, CONTRACT_ANNEXES, CONTRACT_BODY, CONTRACT_DPA, DPA_CATEGORIES, type ContractTemplate } from "@/lib/contract-template";
 
 export type OfferItem = { name: string; description?: string | null; quantity: number; unit: string; unit_price: number; recurring?: boolean; category?: string | null };
 
@@ -27,7 +28,7 @@ function party(c: { name?: string; legal_name?: string; cui?: string | null; reg
   return parts.join(", ");
 }
 
-/** Generează textul contractului (markdown) din ofertă. Poate fi editat în CRM înainte de trimitere. */
+/** Generează textul contractului (markdown) din ofertă, pe baza șablonului (Setări → Contract). Poate fi editat în CRM înainte de trimitere. */
 export function buildContractBody({
   number,
   company,
@@ -38,6 +39,8 @@ export function buildContractBody({
   deliveryTerm,
   paymentTerms,
   startDate,
+  offerNumber,
+  template,
 }: {
   number: string;
   company: Company;
@@ -48,59 +51,75 @@ export function buildContractBody({
   deliveryTerm?: string | null;
   paymentTerms?: string | null;
   startDate?: string | null;
+  offerNumber?: string | null;
+  template?: ContractTemplate | null;
 }) {
-  const lines = items.map((i) => `- ${i.name}${i.description ? ` – ${i.description}` : ""}: ${i.quantity} ${i.unit} × ${formatLei(i.unit_price)}${i.recurring ? " / lună" : ""}`).join("\n");
-  return `# Contract de prestări servicii nr. ${number}
+  const services = items
+    .map((i) => `- **${i.name}**${i.description ? ` – ${i.description}` : ""}: ${i.quantity} ${i.unit} × ${formatLei(i.unit_price)}${i.recurring ? " / lună" : ""}`)
+    .join("\n");
 
-Încheiat astăzi, ${formatDate(startDate ?? new Date())}, între:
+  // Anexele: câte una pentru fiecare tip de serviciu din ofertă (magazinul online primește și anexa de website).
+  const cats = new Set(items.map((i) => i.category).filter(Boolean) as string[]);
+  if (cats.has("ecommerce")) cats.add("website");
+  const annexKeys = ANNEX_KEYS.filter((k) => cats.has(k));
+  const withDpa = annexKeys.some((k) => DPA_CATEGORIES.includes(k));
+  const annexes = [
+    ...annexKeys.map((k) => ({ label: ANNEX_LABELS[k], text: template?.annexes?.[k]?.trim() || CONTRACT_ANNEXES[k] })),
+    ...(withDpa ? [{ label: "Prelucrarea datelor cu caracter personal", text: template?.dpa?.trim() || CONTRACT_DPA }] : []),
+  ];
+  const annexList = annexes.length ? annexes.map((a, i) => `Anexa ${i + 1} – ${a.label}`).join("; ") : "nu este cazul";
 
-1. ${party(company, "MAVA Studio")}, în calitate de **Prestator**, și
-2. ${party(client, client.name)}, în calitate de **Beneficiar**${client.contact_name ? `, reprezentat prin ${client.contact_name}` : ""}.
+  const recurring = items.some((i) => i.recurring);
+  const oneOff = !items.length || items.some((i) => !i.recurring);
+  const vars: Record<string, string> = {
+    numar: number,
+    data: formatDate(startDate ?? new Date()),
+    prestator: party(company, "MAVA Studio"),
+    beneficiar: party(client, client.name),
+    reprezentant: client.contact_name && client.type !== "person" ? `, reprezentată prin ${client.contact_name}` : "",
+    oferta: offerNumber || "—",
+    servicii: services || "- conform ofertei",
+    valoare: formatLei(total, { decimals: true }),
+    tva: `${vatRate}%`,
+    plata: paymentTerms?.trim() || "50% avans la semnare, 30% la livrarea versiunii beta, 20% la lansare",
+    termen: deliveryTerm?.trim() || "conform ofertei, începând de la data prevăzută la Art. 5.2",
+    cont_bancar: company.iban ? `, în contul ${company.iban}${company.bank ? ` deschis la ${company.bank}` : ""}` : "",
+    email_prestator: company.email || "contact@mavastudio.ro",
+    email_beneficiar: client.email || "comunicată de Beneficiar",
+    anexe: annexList,
+  };
 
-## 1. Obiectul contractului
+  const fill = (text: string) =>
+    text
+      .replace(/\{\{#abonament\}\}([\s\S]*?)\{\{\/abonament\}\}/g, (_, t: string) => (recurring ? t : ""))
+      .replace(/\{\{#proiect\}\}([\s\S]*?)\{\{\/proiect\}\}/g, (_, t: string) => (oneOff ? t : ""))
+      .replace(/\{\{\s*([a-z_]+)\s*\}\}/g, (m, k: string) => vars[k] ?? m);
 
-Prestatorul se obligă să realizeze pentru Beneficiar următoarele servicii:
+  const body = fill(template?.body?.trim() || CONTRACT_BODY);
+  const annexText = annexes.map((a, i) => `# Anexa ${i + 1} la Contractul nr. ${number}\n\n${fill(a.text)}`).join("\n\n");
+  return renumber(`${body.trim()}\n\n${annexText}`).replace(/\n{3,}/g, "\n\n").trim() + "\n";
+}
 
-${lines}
-
-## 2. Valoarea contractului
-
-Valoarea totală a contractului este de **${formatLei(total)}** (TVA ${vatRate}% inclus, unde este cazul).
-
-## 3. Modalitatea de plată
-
-${paymentTerms || "50% avans la semnare, 30% la livrarea versiunii beta, 20% la lansare."}
-
-Plata se face prin transfer bancar, în termen de 5 zile lucrătoare de la emiterea facturii${company.iban ? `, în contul ${company.iban}${company.bank ? ` deschis la ${company.bank}` : ""}` : ""}.
-
-## 4. Termen de realizare
-
-${deliveryTerm || "Termenul de realizare este cel stabilit în ofertă și începe să curgă de la primirea avansului și a materialelor necesare."}
-
-## 5. Obligațiile părților
-
-**Prestatorul** se obligă să realizeze serviciile la standarde profesionale, să informeze Beneficiarul despre stadiul proiectului și să păstreze confidențialitatea informațiilor primite.
-
-**Beneficiarul** se obligă să furnizeze la timp materialele și informațiile necesare, să ofere feedback în termen de 5 zile lucrătoare de la fiecare livrare și să achite contravaloarea serviciilor la termen.
-
-## 6. Revizii și modificări
-
-Sunt incluse două runde de revizii pentru fiecare etapă. Modificările care depășesc obiectul contractului se ofertează separat.
-
-## 7. Drepturi de proprietate intelectuală
-
-După plata integrală, drepturile patrimoniale asupra livrabilelor finale se transferă Beneficiarului. Prestatorul poate prezenta proiectul în portofoliul propriu, cu excepția cazului în care părțile convin altfel în scris.
-
-## 8. Confidențialitate și date personale
-
-Părțile se obligă să păstreze confidențialitatea informațiilor primite și să respecte Regulamentul (UE) 2016/679 (GDPR).
-
-## 9. Încetarea contractului
-
-Contractul încetează prin îndeplinirea obligațiilor, prin acordul părților sau prin reziliere, cu notificare scrisă de 15 zile, în cazul neîndeplinirii obligațiilor de către una dintre părți.
-
-## 10. Dispoziții finale
-
-Eventualele litigii se soluționează pe cale amiabilă, iar în caz contrar de instanțele competente. Contractul poate fi semnat electronic, iar semnătura electronică are aceeași valoare ca semnătura olografă.
-`;
+/**
+ * Renumerotează punctele articolelor (ex. **4.3.** → **4.2.**) după eliminarea clauzelor condiționale
+ * și actualizează trimiterile de tipul „Art. 4.5” din tot documentul.
+ */
+function renumber(md: string) {
+  const map = new Map<string, string>();
+  let art = "";
+  let n = 0;
+  for (const line of md.split("\n")) {
+    const a = /^## Art\. (\d+)\./.exec(line);
+    if (a) {
+      art = a[1]!;
+      n = 0;
+      continue;
+    }
+    if (line.startsWith("# ")) art = "";
+    const p = /^\*\*(\d+)\.(\d+)\.\*\*/.exec(line);
+    if (p && art && p[1] === art) map.set(`${p[1]}.${p[2]}`, `${art}.${++n}`);
+  }
+  return md
+    .replace(/^\*\*(\d+\.\d+)\.\*\*/gm, (m, k: string) => (map.has(k) ? `**${map.get(k)}.**` : m))
+    .replace(/Art\. (\d+\.\d+)/g, (m, k: string) => (map.has(k) ? `Art. ${map.get(k)}` : m));
 }

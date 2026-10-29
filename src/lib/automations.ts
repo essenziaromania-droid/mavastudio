@@ -3,6 +3,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { addDays, format } from "date-fns";
 import { addActivity, audit, DEFAULT_AUTOMATIONS, getSetting, notify, type AutomationSettings } from "@/lib/events";
 import { ADMIN_EMAIL, brandedEmail, escapeHtml, sendEmail } from "@/lib/email";
+import type { ContractTemplate } from "@/lib/contract-template";
 import { buildContractBody, type Company } from "@/lib/documents";
 import { formatLei } from "@/lib/utils";
 import { SITE } from "@/content/site";
@@ -93,6 +94,8 @@ export async function onOfferAccepted(sb: SupabaseClient, offerId: string) {
     vatRate: Number(offer.vat_rate),
     deliveryTerm: offer.delivery_term,
     paymentTerms: offer.payment_terms,
+    offerNumber: offer.number,
+    template: await getSetting<ContractTemplate>(sb, "contract_template", {}),
   });
   const { data: contract } = await sb
     .from("contracts")

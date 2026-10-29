@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { getSession } from "@/lib/crm/auth";
 import { addActivity, audit, getSetting } from "@/lib/events";
 import { computeTotals, type OfferItem, buildContractBody, type Company } from "@/lib/documents";
+import type { ContractTemplate } from "@/lib/contract-template";
 import { brandedEmail, escapeHtml, sendEmail } from "@/lib/email";
 import { onOfferAccepted } from "@/lib/automations";
 import { createAdminClient } from "@/lib/supabase/server";
@@ -180,6 +181,8 @@ export async function contractFromOffer(fd: FormData) {
     vatRate: Number(o.vat_rate),
     deliveryTerm: o.delivery_term,
     paymentTerms: o.payment_terms,
+    offerNumber: o.number,
+    template: await getSetting<ContractTemplate>(s.sb, "contract_template", {}),
   });
   const { data: c, error } = await s.sb
     .from("contracts")

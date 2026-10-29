@@ -6,6 +6,7 @@ import { getSession } from "@/lib/crm/auth";
 import { audit } from "@/lib/events";
 import { createAdminClient } from "@/lib/supabase/server";
 import { ROLES } from "@/lib/crm/constants";
+import { ANNEX_KEYS, CONTRACT_ANNEXES, CONTRACT_BODY, CONTRACT_DPA, type ContractTemplate } from "@/lib/contract-template";
 
 const str = (fd: FormData, k: string) => {
   const v = String(fd.get(k) ?? "").trim();
@@ -176,4 +177,37 @@ export async function markAllRead() {
   await s.sb.from("notifications").update({ read_at: now }).eq("user_id", s.userId).is("read_at", null);
   if (s.isAdmin) await s.sb.from("notifications").update({ read_at: now }).is("user_id", null).is("read_at", null);
   revalidatePath("/crm", "layout");
+}
+
+/**
+ * Salvează șablonul de contract. Se păstrează doar textele modificate față de varianta implicită,
+ * ca îmbunătățirile viitoare ale textului implicit să se aplice în continuare pentru restul.
+ */
+export async function saveContractTemplate(fd: FormData) {
+  const s = await getSession();
+  if (!s.can("setari")) return;
+  const norm = (t: string) => t.replace(/\r\n/g, "\n").trim();
+  const changed = (field: string, def: string) => {
+    const v = norm(String(fd.get(field) ?? ""));
+    return v && v !== norm(def) ? v : undefined;
+  };
+  const value: ContractTemplate = {
+    body: changed("body", CONTRACT_BODY),
+    dpa: changed("dpa", CONTRACT_DPA),
+    annexes: Object.fromEntries(ANNEX_KEYS.map((k) => [k, changed(`annex_${k}`, CONTRACT_ANNEXES[k])]).filter(([, v]) => v)),
+  };
+  await s.sb.from("settings").upsert({ key: "contract_template", value: JSON.parse(JSON.stringify(value)), updated_at: new Date().toISOString() });
+  await audit(s.sb, { actor_id: s.userId, actor_name: s.profile.full_name, action: "a modificat șablonul de contract", entity: "setari", entity_id: "contract_template" });
+  revalidatePath("/crm/setari");
+  redirect("/crm/setari?tab=contract&saved=1");
+}
+
+/** Revine la textul implicit al contractului (șterge toate modificările). */
+export async function resetContractTemplate() {
+  const s = await getSession();
+  if (!s.can("setari")) return;
+  await s.sb.from("settings").delete().eq("key", "contract_template");
+  await audit(s.sb, { actor_id: s.userId, actor_name: s.profile.full_name, action: "a resetat șablonul de contract la varianta implicită", entity: "setari", entity_id: "contract_template" });
+  revalidatePath("/crm/setari");
+  redirect("/crm/setari?tab=contract&saved=1");
 }

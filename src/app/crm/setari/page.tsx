@@ -3,7 +3,9 @@ import { requireModule } from "@/lib/crm/auth";
 import { Field, Input, PageHeader, Panel, Select, Table, Td, Tabs, Textarea } from "@/components/crm/ui";
 import { SubmitButton } from "@/components/crm/client-ui";
 import { MODULES, ROLES, SERVICE_CATEGORY } from "@/lib/crm/constants";
-import { deleteCatalogItem, saveCatalogItem, savePermissions, saveSettings, saveTemplate } from "../actions/admin";
+import { deleteCatalogItem, resetContractTemplate, saveCatalogItem, saveContractTemplate, savePermissions, saveSettings, saveTemplate } from "../actions/admin";
+import { ConfirmSubmit } from "@/components/crm/client-ui";
+import { ANNEX_KEYS, ANNEX_LABELS, CONTRACT_ANNEXES, CONTRACT_BODY, CONTRACT_DPA, CONTRACT_VARIABLES, DPA_CATEGORIES, type ContractTemplate } from "@/lib/contract-template";
 import { DEFAULT_AUTOMATIONS, getSetting, type AutomationSettings } from "@/lib/events";
 import { DEFAULT_INVOICING, type InvoicingSettings } from "@/lib/invoicing";
 import type { Company } from "@/lib/documents";
@@ -30,6 +32,7 @@ export default async function SettingsPage({ searchParams }: { searchParams: { t
           ["integrari", "Integrări"],
           ["automatizari", "Automatizări"],
           ["catalog", "Catalog servicii"],
+          ["contract", "Contract"],
           ["sabloane", "Șabloane proiecte"],
           ["audit", "Audit log"],
         ].map(([k, l]) => ({ key: k, label: l, href: `/crm/setari?tab=${k}` }))}
@@ -41,6 +44,7 @@ export default async function SettingsPage({ searchParams }: { searchParams: { t
       {tab === "integrari" && <IntegrationsTab />}
       {tab === "automatizari" && <AutomationsTab />}
       {tab === "catalog" && <CatalogTab />}
+      {tab === "contract" && <ContractTab />}
       {tab === "sabloane" && <TemplatesTab />}
       {tab === "audit" && <AuditTab />}
     </>
@@ -225,6 +229,55 @@ export default async function SettingsPage({ searchParams }: { searchParams: { t
           </form>
           <p className="mt-4 text-xs text-muted">Exemplu: Website Business — {formatLei(8500)}, SEO — {formatLei(1500)}, Mentenanță — {formatLei(750)}/lună.</p>
         </Panel>
+      </div>
+    );
+  }
+
+  async function ContractTab() {
+    const t = await getSetting<ContractTemplate>(sb, "contract_template", {});
+    const customized = [t.body && "contractul-cadru", t.dpa && "anexa GDPR", ...ANNEX_KEYS.filter((k) => t.annexes?.[k]).map((k) => ANNEX_LABELS[k])].filter(Boolean);
+    const area = "font-mono text-[12.5px] leading-relaxed";
+    return (
+      <div className="space-y-6">
+        <Panel title="Cum funcționează">
+          <div className="space-y-2 text-sm text-body">
+            <p>La fiecare contract generat dintr-o ofertă, CRM-ul folosește <b className="text-ink">contractul-cadru</b> de mai jos și adaugă automat câte o <b className="text-ink">anexă cu condiții specifice</b> pentru fiecare tip de serviciu din ofertă, plus <b className="text-ink">anexa GDPR</b> când serviciile implică date personale ({DPA_CATEGORIES.map((k) => ANNEX_LABELS[k].toLowerCase()).join(", ")}).</p>
+            <p>Modificările făcute aici se aplică doar contractelor generate de acum înainte. Fiecare contract poate fi ajustat și individual, înainte de trimitere, din pagina lui.</p>
+            <p className="text-xs text-muted">Textul implicit a fost redactat ca model pentru o agenție digitală din România. Recomandăm verificarea lui de către un avocat înainte de utilizare.</p>
+          </div>
+          {customized.length > 0 && <p className="mt-3 rounded-xl bg-amber-50 px-4 py-2.5 text-xs text-amber-800">Texte modificate față de varianta implicită: {customized.join(", ")}.</p>}
+          <details className="mt-4">
+            <summary className="cursor-pointer text-sm font-semibold text-brand-blue">Variabile disponibile</summary>
+            <div className="mt-3 grid gap-x-6 gap-y-1.5 text-xs sm:grid-cols-2">
+              {CONTRACT_VARIABLES.map(([v, d]) => (
+                <div key={v}><code className="rounded bg-soft px-1.5 py-0.5 font-mono text-ink">{v}</code> <span className="text-muted">– {d}</span></div>
+              ))}
+            </div>
+          </details>
+        </Panel>
+        <form action={saveContractTemplate} className="space-y-6">
+          <Panel title="Contractul-cadru (toate serviciile)">
+            <Textarea name="body" rows={30} defaultValue={t.body ?? CONTRACT_BODY} className={area} />
+          </Panel>
+          <div className="grid gap-6 xl:grid-cols-2">
+            {ANNEX_KEYS.map((k) => (
+              <Panel key={k} title={`Anexă · ${ANNEX_LABELS[k]}`}>
+                <Textarea name={`annex_${k}`} rows={14} defaultValue={t.annexes?.[k] ?? CONTRACT_ANNEXES[k]} className={area} />
+              </Panel>
+            ))}
+            <Panel title="Anexă · Prelucrarea datelor (GDPR art. 28)">
+              <Textarea name="dpa" rows={14} defaultValue={t.dpa ?? CONTRACT_DPA} className={area} />
+            </Panel>
+          </div>
+          <div className="sticky bottom-4 z-10 flex justify-end">
+            <SubmitButton className="shadow-card-hover">Salvează șablonul de contract</SubmitButton>
+          </div>
+        </form>
+        {customized.length > 0 && (
+          <form action={resetContractTemplate}>
+            <ConfirmSubmit message="Revii la textul implicit? Toate modificările din șablon se pierd.">Revino la textul implicit</ConfirmSubmit>
+          </form>
+        )}
       </div>
     );
   }

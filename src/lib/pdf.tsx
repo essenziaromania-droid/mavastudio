@@ -175,8 +175,11 @@ function Md({ text }: { text: string }) {
     <>
       {blocks.map((b, i) => {
         const t = b.trim();
+        // Anexele contractului încep pe pagină nouă.
+        if (t.startsWith("# Anexa")) return <Text key={i} break style={[st.h1, { fontSize: 16, marginBottom: 10 }]}>{t.slice(2)}</Text>;
         if (t.startsWith("# ")) return <Text key={i} style={[st.h1, { fontSize: 16, marginBottom: 10 }]}>{t.slice(2)}</Text>;
         if (t.startsWith("## ")) return <Text key={i} style={st.h2}>{t.slice(3)}</Text>;
+        if (t.startsWith("### ")) return <Text key={i} style={[st.h2, { fontSize: 11.5, marginTop: 4 }]}>{t.slice(4)}</Text>;
         const lines = t.split("\n");
         if (lines.every((l) => /^(-|\d+\.)\s/.test(l))) {
           return (
