@@ -219,41 +219,62 @@ function ContractText({ text }: { text: string }) {
   );
 }
 
-function Signatures({ c, company }: { c: any; company: Company }) {
+type Party = { title: string; entity: string; signer?: string | null; at?: string | null; ip?: string | null; image?: string | null };
+
+/** O parte semnatară: denumire, semnătura desenată (dacă există) și datele semnării electronice. */
+function SignBox({ p, compact }: { p: Party; compact?: boolean }) {
+  const h = compact ? 30 : 40;
   return (
-    <View style={[st.row, { gap: 36, marginTop: 26 }]} wrap={false}>
-      <View style={{ flex: 1 }}>
-        <Text style={ct.signTitle}>PRESTATOR</Text>
-        <Text>{company.legal_name || company.name || "MAVA Studio"}</Text>
-        <View style={ct.signLine} />
-        <Text style={st.muted}>Semnătura și data</Text>
-      </View>
-      <View style={{ flex: 1 }}>
-        <Text style={ct.signTitle}>BENEFICIAR</Text>
-        <Text>{c.clients?.name}</Text>
-        {c.signed_at ? (
-          <View style={{ marginTop: 6, padding: 8, borderWidth: 1, borderColor: "#A7F3D0", backgroundColor: "#ECFDF5", borderRadius: 6 }}>
-            <Text style={{ color: "#047857", fontWeight: 700 }}>Semnat electronic</Text>
-            <Text style={{ color: "#065F46" }}>{c.signed_by_name}</Text>
-            <Text style={{ color: "#065F46" }}>{formatDate(c.signed_at, true)}{c.signed_ip ? ` · IP ${c.signed_ip}` : ""}</Text>
+    <View style={{ flex: 1 }}>
+      <Text style={ct.signTitle}>{p.title}</Text>
+      <Text>{p.entity}</Text>
+      {p.at ? (
+        <>
+          {p.image ? (
+            // eslint-disable-next-line jsx-a11y/alt-text
+            <Image src={p.image} style={{ height: h, width: h * 3, objectFit: "contain", objectPositionX: 0, marginTop: 4 }} />
+          ) : (
+            <View style={{ height: h }} />
+          )}
+          <View style={{ borderTopWidth: 1, borderTopColor: "#9AA1B9", paddingTop: 3 }}>
+            <Text style={{ fontSize: 8.5, color: INK }}>{p.signer}</Text>
+            <Text style={{ fontSize: 7.5, color: "#047857" }}>Semnat electronic · {formatDate(p.at, true)}{p.ip ? ` · IP ${p.ip}` : ""}</Text>
           </View>
-        ) : (
-          <>
-            <View style={ct.signLine} />
-            <Text style={st.muted}>Semnătura și data</Text>
-          </>
-        )}
-      </View>
+        </>
+      ) : (
+        <>
+          <View style={[ct.signLine, { height: h }]} />
+          <Text style={st.muted}>Semnătura și data</Text>
+        </>
+      )}
+    </View>
+  );
+}
+
+function Signatures({ c, company, compact }: { c: any; company: Company; compact?: boolean }) {
+  const provider: Party = {
+    title: "PRESTATOR",
+    entity: company.legal_name || company.name || "MAVA Studio",
+    signer: c.provider_signed_by,
+    at: c.provider_signed_at,
+    ip: c.provider_signed_ip,
+    image: c.provider_signature,
+  };
+  const client: Party = { title: "BENEFICIAR", entity: c.clients?.name ?? "", signer: c.signed_by_name, at: c.signed_at, ip: c.signed_ip, image: c.client_signature };
+  return (
+    <View style={[st.row, { gap: 36, marginTop: compact ? 18 : 26 }]} wrap={false}>
+      <SignBox p={provider} compact={compact} />
+      <SignBox p={client} compact={compact} />
     </View>
   );
 }
 
 export async function renderContractPdf(c: any, company: Company): Promise<Buffer> {
   const body = String(c.body ?? "").replace(/\r\n?/g, "\n");
-  // Semnăturile vin la finalul contractului, înaintea anexelor.
-  const cut = body.search(/^# Anexa/m);
-  const main = cut === -1 ? body : body.slice(0, cut);
-  const annexes = cut === -1 ? "" : body.slice(cut);
+  // Semnăturile vin la finalul contractului și la finalul fiecărei anexe.
+  const parts = body.split(/^(?=# Anexa)/m);
+  const main = parts[0] ?? "";
+  const annexes = parts.slice(1);
   const doc = (
     <Document title={`Contract ${c.number}`} author="MAVA Studio">
       <Page size="A4" style={ct.page}>
@@ -268,7 +289,12 @@ export async function renderContractPdf(c: any, company: Company): Promise<Buffe
         </View>
         <ContractText text={main} />
         <Signatures c={c} company={company} />
-        {annexes && <ContractText text={annexes} />}
+        {annexes.map((a, i) => (
+          <View key={i}>
+            <ContractText text={a} />
+            <Signatures c={c} company={company} compact />
+          </View>
+        ))}
       </Page>
     </Document>
   );

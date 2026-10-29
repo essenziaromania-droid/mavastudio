@@ -39,9 +39,31 @@ export default async function PublicContract({ params }: { params: { token: stri
             <a href={`/api/pdf/contract/${params.token}?public=1&download=1`} className="btn-ghost btn-sm"><Download className="h-4 w-4" /> PDF</a>
           </div>
           <div className="prose-mava p-6 text-[15px] md:p-10" dangerouslySetInnerHTML={{ __html: renderMarkdown(c.body ?? "") }} />
+          <div className="grid gap-6 border-t border-line p-6 sm:grid-cols-2 md:px-10">
+            {[
+              { title: "Prestator", entity: "MAVA Studio", by: c.provider_signed_by, at: c.provider_signed_at, img: c.provider_signature },
+              { title: "Beneficiar", entity: c.clients?.name, by: c.signed_by_name, at: c.signed_at, img: c.client_signature },
+            ].map((x) => (
+              <div key={x.title}>
+                <p className="text-xs font-bold uppercase tracking-wider text-muted">{x.title}</p>
+                <p className="text-sm font-semibold text-ink">{x.entity}</p>
+                {x.at ? (
+                  <div className="mt-2">
+                    {x.img && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={x.img} alt={`Semnătura ${x.title.toLowerCase()}`} className="h-16 w-auto" />
+                    )}
+                    <p className="border-t border-line pt-1 text-xs text-emerald-700">✓ {x.by} · {formatDate(x.at, true)}</p>
+                  </div>
+                ) : (
+                  <p className="mt-2 text-sm text-muted">În așteptarea semnăturii</p>
+                )}
+              </div>
+            ))}
+          </div>
           <div className="border-t border-line bg-soft/60 p-6 md:p-10">
             {c.status === "semnat" ? (
-              <p className="font-semibold text-emerald-700">✓ Semnat electronic de {c.signed_by_name} la {formatDate(c.signed_at, true)}.</p>
+              <p className="font-semibold text-emerald-700">✓ Ați semnat contractul electronic la {formatDate(c.signed_at, true)}.{c.provider_signed_at ? " Exemplarul final, semnat de ambele părți, v-a fost trimis pe email." : ""}</p>
             ) : preview ? (
               <p className="text-sm text-muted">Aici clientul vede formularul de semnare electronică.</p>
             ) : (

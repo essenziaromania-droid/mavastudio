@@ -2,6 +2,7 @@
 import { useFormState, useFormStatus } from "react-dom";
 import { Loader2, PenLine } from "lucide-react";
 import { signContract, type PublicState } from "../../public-actions";
+import { SignaturePad } from "@/components/ui/signature-pad";
 
 function Btn() {
   const { pending } = useFormStatus();
@@ -19,13 +20,17 @@ export function SignForm({ token }: { token: string }) {
         <span className="label">Numele complet al semnatarului *</span>
         <input name="name" required className="input max-w-md font-serif text-lg italic" placeholder="Prenume Nume" />
       </label>
+      <div>
+        <span className="label">Semnătura *</span>
+        <SignaturePad name="signature" />
+      </div>
       <label className="flex items-start gap-3 text-sm text-body">
         <input type="checkbox" name="agree" required className="mt-0.5 h-4 w-4 accent-brand-blue" />
         Am citit contractul, sunt de acord cu termenii lui și am dreptul să semnez în numele beneficiarului. Înțeleg că semnătura electronică are aceeași valoare ca semnătura olografă.
       </label>
       {state.error && <p className="text-sm text-rose-600">{state.error}</p>}
       <Btn />
-      <p className="text-xs text-muted">Pentru dovada semnării înregistrăm numele, data, ora și adresa IP.</p>
+      <p className="text-xs text-muted">Pentru dovada semnării înregistrăm numele, semnătura, data, ora și adresa IP. După semnare primești pe email exemplarul final, semnat de ambele părți.</p>
     </form>
   );
 }

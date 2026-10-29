@@ -5,6 +5,7 @@ import { createAdminClient } from "@/lib/supabase/server";
 import { onContractSigned, onOfferAccepted } from "@/lib/automations";
 import { addActivity, audit, notify } from "@/lib/events";
 import { ADMIN_EMAIL, brandedEmail, escapeHtml, sendEmail } from "@/lib/email";
+import { requestIp, sendSignedCopy, validSignature } from "@/lib/signatures";
 
 const isToken = (t: string) => /^[0-9a-f-]{36}$/i.test(t);
 
@@ -48,16 +49,23 @@ export async function signContract(_: PublicState, fd: FormData): Promise<Public
   if (!isToken(token)) return { error: "Link invalid." };
   if (name.length < 3) return { error: "Scrie numele complet al semnatarului." };
   if (fd.get("agree") !== "on") return { error: "Confirmă că ai citit și accepți contractul." };
+  const signature = validSignature(fd.get("signature"));
+  if (!signature) return { error: "Desenează semnătura în chenarul de semnătură." };
   const sb = createAdminClient();
   const { data: c } = await sb.from("contracts").select("id, status, number").eq("public_token", token).maybeSingle();
   if (!c) return { error: "Contractul nu a fost găsit." };
   if (c.status === "semnat") return { ok: true };
   if (["expirat", "anulat"].includes(c.status)) return { error: "Contractul nu mai este disponibil pentru semnare." };
-  const h = headers();
-  const ip = (h.get("x-forwarded-for") ?? "").split(",")[0]?.trim() || "necunoscut";
-  await sb.from("contracts").update({ status: "semnat", signed_at: new Date().toISOString(), signed_by_name: name, signed_ip: ip }).eq("id", c.id);
+  const ip = requestIp(headers());
+  const { error } = await sb.from("contracts").update({ status: "semnat", signed_at: new Date().toISOString(), signed_by_name: name, signed_ip: ip, client_signature: signature }).eq("id", c.id);
+  if (error) return { error: "Semnătura nu a putut fi salvată. Te rugăm să încerci din nou." };
   await audit(sb, { actor_name: name, action: `a semnat electronic contractul (IP ${ip})`, entity: "contract", entity_id: c.number });
   await onContractSigned(sb, c.id);
+  try {
+    await sendSignedCopy(sb, c.id);
+  } catch (e) {
+    console.error("[contract] copie semnată", e);
+  }
   revalidatePath(`/contract/${token}`);
   return { ok: true };
 }

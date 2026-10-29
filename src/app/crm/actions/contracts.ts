@@ -1,6 +1,8 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
+import { requestIp, sendSignedCopy, validSignature } from "@/lib/signatures";
 import { getSession } from "@/lib/crm/auth";
 import { addActivity, audit, getSetting } from "@/lib/events";
 import { brandedEmail, escapeHtml, sendEmail } from "@/lib/email";
@@ -13,6 +15,9 @@ import { SITE } from "@/content/site";
 export async function updateContract(fd: FormData) {
   const s = await getSession();
   const id = String(fd.get("id"));
+  // Textul semnat (de prestator sau de client) nu mai poate fi modificat.
+  const { data: cur } = await s.sb.from("contracts").select("status, provider_signed_at").eq("id", id).single();
+  if (cur?.status === "semnat" || cur?.provider_signed_at) redirect(`/crm/contracte/${id}?err=${encodeURIComponent("Contractul este semnat și nu mai poate fi modificat. Retrage semnătura prestatorului ca să-l editezi.")}`);
   await s.sb
     .from("contracts")
     .update({
@@ -93,4 +98,59 @@ export async function deleteContract(fd: FormData) {
   await s.sb.from("contracts").delete().eq("id", id);
   await audit(s.sb, { actor_id: s.userId, actor_name: s.profile.full_name, action: "a șters un contract", entity: "contract", entity_id: id });
   redirect("/crm/contracte");
+}
+
+/** Semnătura prestatorului (MAVA Studio), aplicată din CRM. Blochează textul contractului. */
+export async function signAsProvider(fd: FormData) {
+  const s = await getSession();
+  if (!s.can("contracte")) return;
+  const id = String(fd.get("id"));
+  const back = (q: string) => redirect(`/crm/contracte/${id}?${q}`);
+  const name = String(fd.get("name") ?? "").trim().slice(0, 120);
+  if (name.length < 3) back(`err=${encodeURIComponent("Scrie numele complet al semnatarului.")}`);
+
+  const { data: me } = await s.sb.from("profiles").select("signature").eq("id", s.userId).maybeSingle();
+  const drawn = validSignature(fd.get("signature"));
+  const signature = drawn ?? (fd.get("use_saved") === "on" ? validSignature(me?.signature) : null);
+  if (!signature) back(`err=${encodeURIComponent("Desenează semnătura sau alege semnătura salvată.")}`);
+
+  const { data: c } = await s.sb.from("contracts").select("id, number, client_id, provider_signed_at").eq("id", id).single();
+  if (!c || c.provider_signed_at) back("");
+  const ip = requestIp(headers());
+  const { error } = await s.sb
+    .from("contracts")
+    .update({ provider_signed_at: new Date().toISOString(), provider_signed_by: name, provider_signed_ip: ip, provider_signature: signature })
+    .eq("id", id);
+  if (error) back(`err=${encodeURIComponent(error.message.includes("provider_") ? "Rulează migrarea supabase/migrations/0003_signatures.sql în Supabase." : error.message)}`);
+  if (drawn && fd.get("remember") === "on") await s.sb.from("profiles").update({ signature: drawn }).eq("id", s.userId);
+
+  await addActivity(s.sb, { client_id: c!.client_id, type: "contract", title: `Contract semnat de prestator – ${c!.number}`, description: `Semnat de ${name}`, actor_id: s.userId });
+  await audit(s.sb, { actor_id: s.userId, actor_name: s.profile.full_name, action: `a semnat contractul ${c!.number} ca prestator (IP ${ip})`, entity: "contract", entity_id: id });
+  try {
+    await sendSignedCopy(createAdminClient(), id);
+  } catch (e) {
+    console.error("[contract] copie semnată", e);
+  }
+  revalidatePath(`/crm/contracte/${id}`);
+  back("signed=1");
+}
+
+/** Retrage semnătura prestatorului, ca textul să poată fi modificat. Posibil doar înainte de semnarea clientului. */
+export async function withdrawProviderSignature(fd: FormData) {
+  const s = await getSession();
+  if (!s.can("contracte")) return;
+  const id = String(fd.get("id"));
+  const { data: c } = await s.sb.from("contracts").select("number, signed_at").eq("id", id).single();
+  if (!c || c.signed_at) redirect(`/crm/contracte/${id}?err=${encodeURIComponent("Contractul a fost semnat de client; semnătura nu mai poate fi retrasă.")}`);
+  await s.sb.from("contracts").update({ provider_signed_at: null, provider_signed_by: null, provider_signed_ip: null, provider_signature: null }).eq("id", id);
+  await audit(s.sb, { actor_id: s.userId, actor_name: s.profile.full_name, action: `a retras semnătura prestatorului de pe contractul ${c!.number}`, entity: "contract", entity_id: id });
+  revalidatePath(`/crm/contracte/${id}`);
+  redirect(`/crm/contracte/${id}`);
+}
+
+/** Șterge semnătura salvată în profilul utilizatorului. */
+export async function clearSavedSignature(fd: FormData) {
+  const s = await getSession();
+  await s.sb.from("profiles").update({ signature: null }).eq("id", s.userId);
+  redirect(`/crm/contracte/${String(fd.get("id"))}`);
 }
