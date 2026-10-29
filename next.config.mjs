@@ -3,6 +3,11 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ["@react-pdf/renderer"],
     serverActions: { bodySizeLimit: "10mb" },
+    // Pe Vercel, folderul public nu e copiat în funcțiile de server. PDF-urile (fonturi, siglă)
+    // și pagina Despre noi (fotografiile echipei) citesc aceste fișiere de pe disc.
+    outputFileTracingIncludes: {
+      "/**/*": ["./public/fonts/**/*", "./public/logo-mark.png", "./public/images/**/*"],
+    },
   },
   images: { remotePatterns: [{ protocol: "https", hostname: "**.supabase.co" }] },
   async headers() {
