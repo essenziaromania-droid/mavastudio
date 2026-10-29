@@ -11,7 +11,7 @@ export const runtime = "nodejs";
  * /api/pdf/oferta/{token}?public=1 – link public al clientului (după token)
  * idem pentru /api/pdf/contract/...
  */
-export async function GET(req: NextRequest, { params }: { params: { kind: string; id: string } }) {
+async function handle(req: NextRequest, { params }: { params: { kind: string; id: string } }) {
   const isPublic = req.nextUrl.searchParams.get("public") === "1";
   if (!/^[0-9a-f-]{36}$/i.test(params.id)) return new NextResponse("Not found", { status: 404 });
   const sb = isPublic ? createAdminClient() : createClient();
@@ -44,4 +44,15 @@ export async function GET(req: NextRequest, { params }: { params: { kind: string
       "Cache-Control": "private, no-store",
     },
   });
+}
+
+export async function GET(req: NextRequest, ctx: { params: { kind: string; id: string } }) {
+  try {
+    return await handle(req, ctx);
+  } catch (e) {
+    console.error("[pdf]", e);
+    // TEMPORAR: detaliile erorii, pentru diagnosticare pe Vercel.
+    const detail = req.nextUrl.searchParams.get("debug") === "1" && e instanceof Error ? `\n${e.message}\n${e.stack?.split("\n").slice(0, 6).join("\n")}` : "";
+    return new NextResponse(`PDF-ul nu a putut fi generat.${detail}`, { status: 500, headers: { "Content-Type": "text/plain; charset=utf-8" } });
+  }
 }
