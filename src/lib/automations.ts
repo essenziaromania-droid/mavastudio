@@ -4,6 +4,7 @@ import { addDays, format } from "date-fns";
 import { addActivity, audit, DEFAULT_AUTOMATIONS, getSetting, notify, type AutomationSettings } from "@/lib/events";
 import { ADMIN_EMAIL, brandedEmail, escapeHtml, sendEmail } from "@/lib/email";
 import type { ContractTemplate } from "@/lib/contract-template";
+import { archiveLeadBrief } from "@/lib/archive";
 import { buildContractBody, type Company } from "@/lib/documents";
 import { formatLei } from "@/lib/utils";
 import { SITE } from "@/content/site";
@@ -71,7 +72,10 @@ export async function onOfferAccepted(sb: SupabaseClient, offerId: string) {
   await addActivity(sb, { client_id: offer.client_id, type: "oferta", title: `Ofertă acceptată – ${offer.number}`, description: formatLei(offer.total) });
   await notify(sb, { type: "oferta", title: `Oferta ${offer.number} a fost acceptată 🎉`, body: offer.clients?.name, link: `/crm/oferte/${offer.id}` });
   await audit(sb, { actor_name: offer.clients?.name ?? "Client", action: "a acceptat oferta", entity: "oferta", entity_id: offer.number });
-  if (offer.lead_id) await sb.from("leads").update({ status: "castigat", client_id: offer.client_id, updated_at: new Date().toISOString() }).eq("id", offer.lead_id);
+  if (offer.lead_id) {
+    await sb.from("leads").update({ status: "castigat", client_id: offer.client_id, updated_at: new Date().toISOString() }).eq("id", offer.lead_id);
+    if (offer.client_id) await archiveLeadBrief(sb, offer.lead_id, offer.client_id);
+  }
   await sendEmail({
     to: ADMIN_EMAIL,
     subject: `✅ Oferta ${offer.number} a fost acceptată`,

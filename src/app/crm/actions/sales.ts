@@ -2,6 +2,8 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/crm/auth";
+import { archiveLeadBrief } from "@/lib/archive";
+import { createAdminClient } from "@/lib/supabase/server";
 import { addActivity, audit } from "@/lib/events";
 import { LEAD_STATUS } from "@/lib/crm/constants";
 
@@ -117,6 +119,7 @@ export async function convertLeadToClient(fd: FormData) {
     // mută istoricul lead-ului pe client
     await s.sb.from("activities").update({ client_id: clientId }).eq("lead_id", id);
     await addActivity(s.sb, { client_id: clientId, lead_id: id, type: "client", title: "Lead convertit în client", actor_id: s.userId });
+    await archiveLeadBrief(createAdminClient(), id, clientId!);
     await audit(s.sb, { actor_id: s.userId, actor_name: s.profile.full_name, action: "a convertit lead-ul în client", entity: "client", entity_id: clientId });
   }
   const then = String(fd.get("then") ?? "client");

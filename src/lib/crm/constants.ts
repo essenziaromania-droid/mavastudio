@@ -145,7 +145,7 @@ export const MODULES: { key: string; label: string; hint?: string }[] = [
   { key: "setari", label: "Setări" },
 ];
 
-export const DRIVE_FOLDERS = ["01 Brief", "02 Contract", "03 Assets", "04 Design", "05 Foto", "06 Video", "07 Development", "08 Social Media", "09 Livrabile"];
+export const DRIVE_FOLDERS = ["01 Brief", "02 Contract", "03 Assets", "04 Design", "05 Foto", "06 Video", "07 Development", "08 Social Media", "09 Livrabile", "10 Facturi"];
 
 export const PORTFOLIO_CATEGORIES: Record<string, string> = {
   website: "Website",

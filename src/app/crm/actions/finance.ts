@@ -8,6 +8,7 @@ import { ADMIN_EMAIL, brandedEmail, escapeHtml, sendEmail } from "@/lib/email";
 import { onInvoicePaid } from "@/lib/automations";
 import { createAdminClient } from "@/lib/supabase/server";
 import { formatDate, formatLei } from "@/lib/utils";
+import { archiveBuffer } from "@/lib/archive";
 
 const str = (fd: FormData, k: string) => {
   const v = String(fd.get(k) ?? "").trim();
@@ -64,6 +65,9 @@ export async function emitInvoice(fd: FormData) {
   if (!r.ok) redirect(`/crm/financiar/facturi/${id}?err=${encodeURIComponent(r.error)}`);
   await s.sb.from("invoices").update({ provider: settings.provider, series: r.series, number: r.number, external_url: r.url ?? null, external_id: r.externalId ?? null, status: "emisa" }).eq("id", id);
   await s.sb.from("payment_milestones").update({ status: "facturata" }).eq("invoice_id", id);
+  // Arhivează PDF-ul facturii în Fișiere → 10 Facturi, la clientul și proiectul ei.
+  const pdf = await downloadInvoicePdf(settings, { provider: settings.provider, series: r.series, number: r.number, external_url: r.url ?? null });
+  if (pdf.ok) await archiveBuffer(createAdminClient(), { client_id: inv.client_id, project_id: inv.project_id, folder: "10 Facturi", name: `Factura-${r.series}-${r.number}.pdf`, buf: pdf.pdf, mime: "application/pdf" });
   await addActivity(s.sb, { client_id: inv.client_id, project_id: inv.project_id, type: "factura", title: `Factură emisă ${r.series} ${r.number}`, description: formatLei(inv.total), actor_id: s.userId });
   await audit(s.sb, { actor_id: s.userId, actor_name: s.profile.full_name, action: `a emis factura ${r.series} ${r.number} în ${settings.provider}`, entity: "factura", entity_id: id });
   redirect(`/crm/financiar/facturi/${id}?ok=1`);

@@ -5,6 +5,7 @@ import { getSetting } from "@/lib/events";
 import { renderContractPdf } from "@/lib/pdf";
 import type { Company } from "@/lib/documents";
 import { formatDate } from "@/lib/utils";
+import { archiveBuffer } from "@/lib/archive";
 
 const PREFIX = "data:image/png;base64,";
 
@@ -29,6 +30,8 @@ export async function sendSignedCopy(sb: SupabaseClient, contractId: string) {
   if (!c || !c.signed_at || !c.provider_signed_at || c.signed_copy_sent_at) return;
   const company = await getSetting<Company>(sb, "company", {});
   const pdf = await renderContractPdf(c, company);
+  const { data: project } = await sb.from("projects").select("id").eq("contract_id", c.id).limit(1).maybeSingle();
+  await archiveBuffer(sb, { client_id: c.client_id, project_id: project?.id ?? null, folder: "02 Contract", name: `Contract-${c.number}-semnat.pdf`, buf: pdf, mime: "application/pdf" });
   const to = [c.clients?.contact_email || c.clients?.email, ADMIN_EMAIL].filter(Boolean) as string[];
   const greet = c.clients?.contact_name || c.signed_by_name || "";
   const r = await sendEmail({
