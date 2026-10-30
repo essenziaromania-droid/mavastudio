@@ -11,7 +11,8 @@ export const CONSENT_KEY = "mava-cookie-consent";
 export const CONSENT_EVENT = "mava-consent-change";
 export const OPEN_CONSENT_EVENT = "mava-open-consent";
 
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+// ID-ul de măsurare nu este secret (apare oricum în codul paginii). Poate fi suprascris din Vercel.
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-WD8694LCZB";
 
 declare global {
   interface Window {
