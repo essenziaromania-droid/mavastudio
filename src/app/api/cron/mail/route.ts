@@ -3,6 +3,7 @@ import { syncMailbox } from "@/lib/mailbox";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
+export const dynamic = "force-dynamic";
 
 /**
  * Verifică emailurile noi. Rulată zilnic de Vercel Cron; poate fi apelată mai des

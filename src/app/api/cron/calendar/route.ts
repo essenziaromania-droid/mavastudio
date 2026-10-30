@@ -3,6 +3,7 @@ import { syncCalendar } from "@/lib/google-calendar";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
+export const dynamic = "force-dynamic";
 
 /** Rulată zilnic de Vercel Cron: aduce Google Calendar la zi (ce a scăpat sincronizării automate). */
 export async function GET(req: NextRequest) {
