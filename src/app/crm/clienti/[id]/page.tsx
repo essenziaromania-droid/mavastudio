@@ -43,6 +43,7 @@ export default async function ClientProfile({ params, searchParams }: { params: 
         sub={`Client din ${formatDate(c.created_at)}`}
         actions={
           <>
+            {c.drive_folder_url && <a href={c.drive_folder_url} target="_blank" className="btn-ghost !py-2.5"><ExternalLink className="h-4 w-4" /> Dosar Drive</a>}
             <Link href={`${base}/editare`} className="btn-ghost !py-2.5"><Pencil className="h-4 w-4" /> Editează</Link>
             {s.can("oferte") && <Link href={`/crm/oferte/noua?client=${c.id}`} className="btn-outline !py-2.5"><FileText className="h-4 w-4" /> Generează ofertă</Link>}
             {s.can("financiar") && <Link href={`/crm/financiar/facturi/noua?client=${c.id}`} className="btn-primary !py-2.5"><Receipt className="h-4 w-4" /> Emite factură</Link>}

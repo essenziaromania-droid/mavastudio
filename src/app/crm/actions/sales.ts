@@ -3,6 +3,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/crm/auth";
 import { archiveLeadBrief } from "@/lib/archive";
+import { waitUntil } from "@vercel/functions";
+import { ensureClientFolder } from "@/lib/google-drive";
 import { createAdminClient } from "@/lib/supabase/server";
 import { addActivity, audit } from "@/lib/events";
 import { LEAD_STATUS } from "@/lib/crm/constants";
@@ -119,7 +121,7 @@ export async function convertLeadToClient(fd: FormData) {
     // mută istoricul lead-ului pe client
     await s.sb.from("activities").update({ client_id: clientId }).eq("lead_id", id);
     await addActivity(s.sb, { client_id: clientId, lead_id: id, type: "client", title: "Lead convertit în client", actor_id: s.userId });
-    await archiveLeadBrief(createAdminClient(), id, clientId!);
+    waitUntil(ensureClientFolder(clientId!).then(() => archiveLeadBrief(createAdminClient(), id, clientId!)));
     await audit(s.sb, { actor_id: s.userId, actor_name: s.profile.full_name, action: "a convertit lead-ul în client", entity: "client", entity_id: clientId });
   }
   const then = String(fd.get("then") ?? "client");
@@ -163,6 +165,7 @@ function clientPayload(fd: FormData) {
 export async function createClientAction(fd: FormData) {
   const s = await getSession();
   const { data, error } = await s.sb.from("clients").insert({ ...clientPayload(fd), created_by: s.userId }).select("id").single();
+  if (data) waitUntil(ensureClientFolder(data.id).catch((e) => console.error("[drive] dosar client", e)));
   if (error) throw new Error(error.message);
   await addActivity(s.sb, { client_id: data.id, type: "client", title: "Client adăugat", actor_id: s.userId });
   await audit(s.sb, { actor_id: s.userId, actor_name: s.profile.full_name, action: "a adăugat clientul", entity: "client", entity_id: data.id });

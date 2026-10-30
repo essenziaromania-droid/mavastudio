@@ -8,6 +8,9 @@ import { ConfirmSubmit } from "@/components/crm/client-ui";
 import { ANNEX_KEYS, ANNEX_LABELS, CONTRACT_ANNEXES, CONTRACT_BODY, CONTRACT_DPA, CONTRACT_VARIABLES, DPA_CATEGORIES, type ContractTemplate } from "@/lib/contract-template";
 import { DEFAULT_AUTOMATIONS, getSetting, type AutomationSettings } from "@/lib/events";
 import { DEFAULT_INVOICING, type InvoicingSettings } from "@/lib/invoicing";
+import { getDriveConnection, googleConfigured, googleRedirectUri } from "@/lib/google-drive";
+import { disconnectGoogle, runDriveSync } from "../actions/drive";
+import { createAdminClient } from "@/lib/supabase/server";
 import type { Company } from "@/lib/documents";
 import { formatDate, formatLei } from "@/lib/utils";
 
@@ -17,7 +20,7 @@ const INCLUDES_HINT = ["## Pagini", "Acasă", "Despre noi", "Contact", "? Blog",
 
 const CATS = Object.fromEntries(Object.entries(SERVICE_CATEGORY).map(([k, v]) => [k, v.label]));
 
-export default async function SettingsPage({ searchParams }: { searchParams: { tab?: string; saved?: string } }) {
+export default async function SettingsPage({ searchParams }: { searchParams: { tab?: string; saved?: string; google_ok?: string; google_err?: string; google_off?: string; drive_sync?: string } }) {
   const s = await requireModule("setari");
   const { sb } = s;
   const tab = searchParams.tab ?? "firma";
@@ -151,12 +154,12 @@ export default async function SettingsPage({ searchParams }: { searchParams: { t
           </form>
         </Panel>
         <div className="space-y-6">
+          <DrivePanel />
           <Panel title="Email (Resend)">
             <p className="text-sm text-body">Emailurile (notificări lead, oferte, contracte, auto-răspuns) se trimit de pe <b>contact@mavastudio.ro</b> prin Resend. Status: {process.env.RESEND_API_KEY ? <b className="text-emerald-600">configurat</b> : <b className="text-rose-500">lipsește RESEND_API_KEY</b>}.</p>
           </Panel>
           <Panel title="În curând">
             <ul className="space-y-2 text-sm text-body">
-              <li>• <b>Google Drive</b> – creare automată a folderelor client/proiect (01 Brief … 09 Livrabile). Până atunci, fișierele se stochează în CRM, în aceeași structură.</li>
               <li>• <b>Google Calendar</b> – sincronizare întâlniri și deadline-uri.</li>
               <li>• <b>Stripe</b>, <b>WhatsApp Business</b>, <b>Make / n8n</b> (webhook-uri).</li>
               <li>• Semnătură electronică calificată (furnizor extern). Acum: semnare electronică simplă cu nume, dată și IP.</li>
@@ -164,6 +167,49 @@ export default async function SettingsPage({ searchParams }: { searchParams: { t
           </Panel>
         </div>
       </div>
+    );
+  }
+
+  async function DrivePanel() {
+    const conn = s.isAdmin ? await getDriveConnection().catch(() => null) : null;
+    const ready = googleConfigured();
+    let pending = 0;
+    if (conn) {
+      const { count } = await createAdminClient().from("files").select("id", { count: "exact", head: true }).is("drive_file_id", null);
+      pending = count ?? 0;
+    }
+    const sync = searchParams.drive_sync?.split("-").map(Number);
+    return (
+      <Panel title="Google Drive">
+        {searchParams.google_ok && <p className="mb-3 rounded-lg bg-emerald-50 px-3 py-2 text-xs text-emerald-700">Google Drive a fost conectat. Apasă „Sincronizează acum” ca să creezi dosarele clienților existenți.</p>}
+        {searchParams.google_err && <p className="mb-3 rounded-lg bg-rose-50 px-3 py-2 text-xs text-rose-600">{searchParams.google_err}</p>}
+        {searchParams.google_off && <p className="mb-3 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800">Google Drive a fost deconectat. Dosarele și fișierele deja copiate rămân în Drive.</p>}
+        {sync && <p className="mb-3 rounded-lg bg-emerald-50 px-3 py-2 text-xs text-emerald-700">Sincronizare: {sync[0]} dosare de client create, {sync[1]} fișiere copiate.{sync[2] ? ` Mai sunt ${sync[2]} fișiere – apasă din nou „Sincronizează acum”.` : " Totul este sincronizat."}</p>}
+        {!s.isAdmin ? (
+          <p className="text-sm text-body">Doar administratorul poate administra conexiunea cu Google Drive.</p>
+        ) : !ready ? (
+          <div className="space-y-2 text-sm text-body">
+            <p>Pentru conectare sunt necesare cheile aplicației Google în Vercel: <code className="rounded bg-soft px-1">GOOGLE_CLIENT_ID</code> și <code className="rounded bg-soft px-1">GOOGLE_CLIENT_SECRET</code>.</p>
+            <p className="text-xs text-muted">Adresa de redirecționare de trecut în Google Cloud: <code className="break-all rounded bg-soft px-1">{googleRedirectUri()}</code></p>
+          </div>
+        ) : conn ? (
+          <div className="space-y-3 text-sm text-body">
+            <p>Conectat cu <b className="text-ink">{conn.account_email ?? "contul Google"}</b>. Fiecare client are un dosar cu subfolderele 01 Brief … 10 Facturi, iar fișierele din CRM se copiază automat acolo.</p>
+            {conn.data.root_url && <a href={conn.data.root_url} target="_blank" className="btn-ghost btn-sm">Deschide „MAVA Studio – CRM” în Drive</a>}
+            <p className="text-xs text-muted">{pending ? `${pending} fișiere încă necopiate în Drive.` : "Toate fișierele sunt copiate în Drive."}</p>
+            <div className="flex flex-wrap gap-2">
+              <form action={runDriveSync}><SubmitButton className="btn-sm" pendingText="Se sincronizează...">Sincronizează acum</SubmitButton></form>
+              <form action={disconnectGoogle}><ConfirmSubmit message="Deconectezi Google Drive? Fișierele deja copiate rămân în Drive.">Deconectează</ConfirmSubmit></form>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-3 text-sm text-body">
+            <p>Conectează Google Drive-ul firmei: CRM-ul va crea automat un dosar pentru fiecare client (01 Brief … 10 Facturi) și va copia acolo fișierele, contractele semnate și facturile.</p>
+            <p className="text-xs text-muted">CRM-ul primește acces doar la fișierele și dosarele create de el, nu la restul Drive-ului.</p>
+            <a href="/api/google/connect" className="btn-primary btn-sm">Conectează Google Drive</a>
+          </div>
+        )}
+      </Panel>
     );
   }
 

@@ -15,7 +15,7 @@ function size(n?: number | null) {
 
 export async function FilesBrowser({ clientId, projectId, clientName, folder }: { clientId?: string | null; projectId?: string | null; clientName?: string; folder?: string }) {
   const s = await getSession();
-  let q = s.sb.from("files").select("id, name, path, mime, size, folder, created_at, visible_to_client, review_status, profiles:uploaded_by(full_name), file_comments(id, author_type, resolved)").order("created_at", { ascending: false }).limit(500);
+  let q = s.sb.from("files").select("id, name, path, mime, size, folder, created_at, visible_to_client, review_status, drive_url, profiles:uploaded_by(full_name), file_comments(id, author_type, resolved)").order("created_at", { ascending: false }).limit(500);
   if (projectId) q = q.eq("project_id", projectId);
   else if (clientId) q = q.eq("client_id", clientId);
   if (folder) q = q.eq("folder", folder);
@@ -84,6 +84,11 @@ export async function FilesBrowser({ clientId, projectId, clientName, folder }: 
                       {visible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
                     </button>
                   </form>
+                )}
+                {f.drive_url && (
+                  <a href={f.drive_url} target="_blank" className="rounded-lg p-1.5 text-muted hover:bg-soft hover:text-brand-blue" title="Deschide în Google Drive">
+                    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden><path d="M7.7 3.5h8.6l5.2 9-4.3 7.5H6.8L2.5 12.5zm1.2 2L4.8 12.5l2.9 5h8.6l2.9-5-4.1-7z" /></svg>
+                  </a>
                 )}
                 {url && <a href={url} target="_blank" className="rounded-lg p-1.5 text-muted hover:bg-soft hover:text-brand-blue" title="Descarcă"><Download className="h-4 w-4" /></a>}
                 {s.can("fisiere") && (
