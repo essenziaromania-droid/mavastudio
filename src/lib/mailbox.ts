@@ -37,8 +37,14 @@ export async function testImap(cfg: ImapConfig) {
     try {
       c.close();
     } catch {}
-    const msg = e instanceof Error ? e.message : String(e);
-    return { ok: false as const, error: /auth|login|credentials/i.test(msg) ? "Utilizatorul sau parola nu sunt corecte." : `Nu m-am putut conecta la server: ${msg}` };
+    // imapflow pune detaliile în câmpuri separate; „Command failed” singur nu spune nimic.
+    const err = e as { message?: string; authenticationFailed?: boolean; responseText?: string; serverResponseCode?: string; code?: string };
+    const detail = [err.responseText, err.serverResponseCode, err.code].filter(Boolean).join(" · ");
+    const text = `${err.message ?? ""} ${detail}`;
+    if (err.authenticationFailed || /auth|login|credentials|password/i.test(text)) {
+      return { ok: false as const, error: `Serverul a refuzat autentificarea: adresa sau parola nu sunt corecte${detail ? ` (${detail})` : ""}.` };
+    }
+    return { ok: false as const, error: `Nu m-am putut conecta la server: ${err.message ?? String(e)}${detail ? ` (${detail})` : ""}` };
   }
 }
 
