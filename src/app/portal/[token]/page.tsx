@@ -250,7 +250,7 @@ function SocialTab({ token, base, month, months, posts }: { token: string; base:
           return (
             <article key={p.id} className="card flex flex-col overflow-hidden">
               <div className="flex items-center justify-between gap-2 border-b border-line px-4 py-2.5">
-                <p className="text-xs font-semibold capitalize text-ink">{fmt.format(new Date(p.scheduled_at))}</p>
+                <p className="text-xs font-semibold text-ink first-letter:uppercase">{fmt.format(new Date(p.scheduled_at))}</p>
                 <span className={cn("shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold", st[1])}>{st[0]}</span>
               </div>
               <div className="relative aspect-square bg-soft">
