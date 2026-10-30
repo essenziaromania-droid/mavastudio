@@ -8,7 +8,7 @@ Cookie-urile sunt fișiere mici salvate în browser, care ajută site-ul să fun
 ## Ce cookie-uri folosim
 
 - **Esențiale** – necesare pentru funcționarea site-ului, pentru a reține limba aleasă (cookie-ul \`mava_lang\`, valabil 1 an) și alegerea ta privind cookie-urile. Nu pot fi dezactivate.
-- **De analiză** – Google Analytics 4 (cookie-urile `_ga` și `_ga_*`, valabile până la 2 ani), furnizat de Google Ireland Limited. Ne arată, în mod agregat, ce pagini sunt vizitate și de unde vin vizitatorii. Se activează doar dacă alegi „Accept toate”.
+- **De analiză** – Google Analytics 4 (cookie-urile \`_ga\` și \`_ga_*\`, valabile până la 2 ani), furnizat de Google Ireland Limited. Ne arată, în mod agregat, ce pagini sunt vizitate și de unde vin vizitatorii. Se activează doar dacă alegi „Accept toate”.
 
 ## Cum îți gestionezi preferințele
 
@@ -25,7 +25,7 @@ Cookies are small files stored in your browser that help the site work and show 
 ## Which cookies we use
 
 - **Essential** – needed for the site to work, to remember your chosen language (the \`mava_lang\` cookie, valid for 1 year) and your cookie choice. They cannot be switched off.
-- **Analytics** – Google Analytics 4 (the `_ga` and `_ga_*` cookies, valid for up to 2 years), provided by Google Ireland Limited. It shows us, in aggregate, which pages are visited and where visitors come from. It is only enabled if you choose "Accept all".
+- **Analytics** – Google Analytics 4 (the \`_ga\` and \`_ga_*\` cookies, valid for up to 2 years), provided by Google Ireland Limited. It shows us, in aggregate, which pages are visited and where visitors come from. It is only enabled if you choose "Accept all".
 
 ## Managing your preferences
 
