@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { localePath } from "@/lib/i18n";
 import { useLocale } from "./locale-provider";
 
-import { CONSENT_EVENT, CONSENT_KEY, OPEN_CONSENT_EVENT } from "./analytics";
+import { CONSENT_EVENT, CONSENT_KEY, OPEN_CONSENT_EVENT } from "@/lib/consent";
 
 const KEY = CONSENT_KEY;
 

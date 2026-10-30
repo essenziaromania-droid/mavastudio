@@ -1,18 +1,11 @@
 "use client";
 import { useEffect } from "react";
+import { CONSENT_EVENT, CONSENT_KEY, OPEN_CONSENT_EVENT } from "@/lib/consent";
 
 /**
- * Google Analytics 4, încărcat DOAR după ce vizitatorul acceptă cookie-urile de analiză
- * („Accept toate” în bannerul de cookies). ID-ul se setează în Vercel: NEXT_PUBLIC_GA_ID (G-XXXXXXX).
- * GA4 înregistrează singur schimbările de pagină din site (navigarea fără reîncărcare).
+ * Actualizează acordul în Google Analytics (Consent Mode v2) când vizitatorul alege în bannerul de cookies.
+ * Eticheta propriu-zisă e în HTML (ga-tag.tsx), cu stocarea dezactivată implicit.
  */
-
-export const CONSENT_KEY = "mava-cookie-consent";
-export const CONSENT_EVENT = "mava-consent-change";
-export const OPEN_CONSENT_EVENT = "mava-open-consent";
-
-// ID-ul de măsurare nu este secret (apare oricum în codul paginii). Poate fi suprascris din Vercel.
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-J0RES2TDBH";
 
 declare global {
   interface Window {
@@ -21,7 +14,7 @@ declare global {
   }
 }
 
-function consented() {
+function granted() {
   try {
     return localStorage.getItem(CONSENT_KEY) === "all";
   } catch {
@@ -29,26 +22,8 @@ function consented() {
   }
 }
 
-function load() {
-  if (!GA_ID || document.getElementById("ga4")) return;
-  window.dataLayer = window.dataLayer || [];
-  window.gtag = function gtag() {
-    // eslint-disable-next-line prefer-rest-params
-    window.dataLayer!.push(arguments);
-  };
-  window.gtag("js", new Date());
-  window.gtag("config", GA_ID);
-  const s = document.createElement("script");
-  s.id = "ga4";
-  s.async = true;
-  s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
-  document.head.appendChild(s);
-}
-
-/** Retrage acordul: oprește colectarea și șterge cookie-urile Google Analytics. */
-function unload() {
-  if (!GA_ID) return;
-  (window as unknown as Record<string, boolean>)[`ga-disable-${GA_ID}`] = true;
+/** La retragerea acordului: oprește stocarea și șterge cookie-urile Google Analytics. */
+function clearGaCookies() {
   const domain = location.hostname.replace(/^www\./, "");
   document.cookie.split(";").forEach((c) => {
     const name = c.split("=")[0]!.trim();
@@ -61,8 +36,11 @@ function unload() {
 
 export function Analytics() {
   useEffect(() => {
-    if (consented()) load();
-    const onChange = () => (consented() ? load() : unload());
+    const onChange = () => {
+      const ok = granted();
+      window.gtag?.("consent", "update", { analytics_storage: ok ? "granted" : "denied" });
+      if (!ok) clearGaCookies();
+    };
     window.addEventListener(CONSENT_EVENT, onChange);
     return () => window.removeEventListener(CONSENT_EVENT, onChange);
   }, []);
