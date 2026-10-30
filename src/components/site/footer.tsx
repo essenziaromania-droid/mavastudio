@@ -9,8 +9,8 @@ import { CookieSettingsLink } from "./analytics";
 import { LEGAL } from "@/content/legal";
 
 const T = {
-  ro: { anpc: "Protecția consumatorilor – ANPC", rights: "Toate drepturile rezervate.", privacy: "Confidențialitate", terms: "Termeni", cookies: "Cookies", cookieSettings: "Setări cookies", motto: ["Soluții digitale", "Conținut", "Creștere"] },
-  en: { anpc: "Consumer protection – ANPC", rights: "All rights reserved.", privacy: "Privacy", terms: "Terms", cookies: "Cookies", cookieSettings: "Cookie settings", motto: ["Digital solutions", "Content", "Growth"] },
+  ro: { anpc: "Protecția consumatorilor – ANPC", rights: "Toate drepturile rezervate.", privacy: "Confidențialitate", terms: "Termeni", cookies: "Cookies", cookieSettings: "Setări cookies" },
+  en: { anpc: "Consumer protection – ANPC", rights: "All rights reserved.", privacy: "Privacy", terms: "Terms", cookies: "Cookies", cookieSettings: "Cookie settings" },
 };
 
 export async function Footer({ locale }: { locale: Locale }) {
@@ -62,18 +62,13 @@ export async function Footer({ locale }: { locale: Locale }) {
           <Link href={l("/politica-cookies")} className="hover:text-brand-blue">{t.cookies}</Link>
           <CookieSettingsLink label={t.cookieSettings} className="hover:text-brand-blue" />
           <span className="hidden text-line md:inline">|</span>
-          <span>
-            {t.motto[0]} <span className="mx-1.5">•</span> {t.motto[1]} <span className="mx-1.5">•</span> {t.motto[2]}
-          </span>
+          {/* Informare obligatorie pentru consumatori (Ordinul ANPC nr. 449/2022). */}
+          <a href="https://reclamatiisal.anpc.ro/" target="_blank" rel="nofollow noopener noreferrer" title="ANPC – Soluționarea alternativă a litigiilor (SAL)">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/anpc-sal.svg" alt="ANPC – Soluționarea alternativă a litigiilor" width={250} height={50} loading="lazy" />
+          </a>
+          <a href="https://www.anpc.ro/" target="_blank" rel="nofollow noopener noreferrer" className="hover:text-brand-blue">{t.anpc}</a>
         </div>
-      </div>
-      {/* Informare obligatorie pentru consumatori (Ordinul ANPC nr. 449/2022): soluționarea alternativă a litigiilor. */}
-      <div className="container flex flex-wrap items-center justify-center gap-4 border-t border-line py-4 md:justify-start">
-        <a href="https://anpc.ro/ce-este-sal/" target="_blank" rel="nofollow noopener noreferrer" title="Soluționarea alternativă a litigiilor (SAL)">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/anpc-sal.svg" alt="ANPC – Soluționarea alternativă a litigiilor" width={250} height={50} loading="lazy" />
-        </a>
-        <a href="https://anpc.ro/" target="_blank" rel="nofollow noopener noreferrer" className="text-xs text-muted hover:text-brand-blue">{t.anpc}</a>
       </div>
     </footer>
   );
