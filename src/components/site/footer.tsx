@@ -5,10 +5,11 @@ import { blogLabel, nav, siteCopy } from "@/content/site";
 import { getSiteSettings } from "@/lib/public-data";
 import { TikTokIcon } from "@/components/ui/brand-icons";
 import { localePath, type Locale } from "@/lib/i18n";
+import { CookieSettingsLink } from "./analytics";
 
 const T = {
-  ro: { rights: "Toate drepturile rezervate.", privacy: "Confidențialitate", terms: "Termeni", cookies: "Cookies", motto: ["Soluții digitale", "Conținut", "Creștere"] },
-  en: { rights: "All rights reserved.", privacy: "Privacy", terms: "Terms", cookies: "Cookies", motto: ["Digital solutions", "Content", "Growth"] },
+  ro: { rights: "Toate drepturile rezervate.", privacy: "Confidențialitate", terms: "Termeni", cookies: "Cookies", cookieSettings: "Setări cookies", motto: ["Soluții digitale", "Conținut", "Creștere"] },
+  en: { rights: "All rights reserved.", privacy: "Privacy", terms: "Terms", cookies: "Cookies", cookieSettings: "Cookie settings", motto: ["Digital solutions", "Content", "Growth"] },
 };
 
 export async function Footer({ locale }: { locale: Locale }) {
@@ -58,6 +59,7 @@ export async function Footer({ locale }: { locale: Locale }) {
           <Link href={l("/politica-de-confidentialitate")} className="hover:text-brand-blue">{t.privacy}</Link>
           <Link href={l("/termeni-si-conditii")} className="hover:text-brand-blue">{t.terms}</Link>
           <Link href={l("/politica-cookies")} className="hover:text-brand-blue">{t.cookies}</Link>
+          <CookieSettingsLink label={t.cookieSettings} className="hover:text-brand-blue" />
           <span className="hidden text-line md:inline">|</span>
           <span>
             {t.motto[0]} <span className="mx-1.5">•</span> {t.motto[1]} <span className="mx-1.5">•</span> {t.motto[2]}

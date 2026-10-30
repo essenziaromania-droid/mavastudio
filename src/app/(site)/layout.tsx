@@ -1,6 +1,7 @@
 import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
 import { CookieBanner } from "@/components/site/cookie-banner";
+import { Analytics } from "@/components/site/analytics";
 import { LocaleProvider } from "@/components/site/locale-provider";
 import { getLocale } from "@/lib/i18n-server";
 
@@ -12,6 +13,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       <main>{children}</main>
       <Footer locale={locale} />
       <CookieBanner />
+      <Analytics />
     </LocaleProvider>
   );
 }

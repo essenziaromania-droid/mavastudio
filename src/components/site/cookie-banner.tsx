@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import { localePath } from "@/lib/i18n";
 import { useLocale } from "./locale-provider";
 
-const KEY = "mava-cookie-consent";
+import { CONSENT_EVENT, CONSENT_KEY, OPEN_CONSENT_EVENT } from "./analytics";
+
+const KEY = CONSENT_KEY;
 
 const T = {
   ro: { text: "Folosim cookie-uri esențiale pentru funcționarea site-ului și, cu acordul tău, cookie-uri de analiză.", more: "Detalii", all: "Accept toate", essential: "Doar esențiale" },
@@ -21,12 +23,17 @@ export function CookieBanner() {
     } catch {
       /* storage blocat */
     }
+    // „Setări cookies” din subsol redeschide bannerul.
+    const open = () => setShow(true);
+    window.addEventListener(OPEN_CONSENT_EVENT, open);
+    return () => window.removeEventListener(OPEN_CONSENT_EVENT, open);
   }, []);
   if (!show) return null;
   const choose = (v: string) => {
     try {
       localStorage.setItem(KEY, v);
     } catch {}
+    window.dispatchEvent(new Event(CONSENT_EVENT));
     setShow(false);
   };
   return (
