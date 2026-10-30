@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import { getSession } from "@/lib/crm/auth";
 import { addActivity, audit } from "@/lib/events";
 
-export async function registerFile(f: { client_id?: string | null; project_id?: string | null; folder: string; name: string; path: string; mime?: string; size?: number }) {
+export async function registerFile(f: { client_id?: string | null; project_id?: string | null; social_post_id?: string | null; folder: string; name: string; path: string; mime?: string; size?: number }) {
   const s = await getSession();
   const { error } = await s.sb.from("files").insert({ ...f, uploaded_by: s.userId });
   if (error) return { error: error.message };

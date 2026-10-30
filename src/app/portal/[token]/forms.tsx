@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { Check, Loader2, Pencil, Send } from "lucide-react";
-import { portalMessage, portalReview, type PortalState } from "../actions";
+import { portalApproveMonth, portalMessage, portalPostReview, portalReview, type PortalState } from "../actions";
 import { cn } from "@/lib/utils";
 
 function Btn({ children, className }: { children: React.ReactNode; className?: string }) {
@@ -66,5 +66,46 @@ export function ReviewForm({ token, fileId, status }: { token: string; fileId: s
         </form>
       )}
     </div>
+  );
+}
+
+/* ───────── Social media ───────── */
+
+export function PostReview({ token, postId, status }: { token: string; postId: string; status: string }) {
+  const [state, action] = useFormState<PortalState, FormData>(portalPostReview, {});
+  const [mode, setMode] = useState<"aprobat" | "modificari" | null>(null);
+  if (state.ok) return <p className="text-sm font-semibold text-emerald-700">✓ Mulțumim! Echipa a fost anunțată.</p>;
+  if (!mode)
+    return (
+      <div className="flex flex-wrap gap-2">
+        {status !== "aprobat" && <button type="button" onClick={() => setMode("aprobat")} className="btn-primary btn-sm"><Check className="h-4 w-4" /> Aprob</button>}
+        <button type="button" onClick={() => setMode("modificari")} className="btn-outline btn-sm"><Pencil className="h-4 w-4" /> {status === "aprobat" ? "Vreau totuși modificări" : "Cer modificări"}</button>
+      </div>
+    );
+  return (
+    <form action={action} className="space-y-2">
+      <input type="hidden" name="token" value={token} />
+      <input type="hidden" name="post_id" value={postId} />
+      <input type="hidden" name="decision" value={mode} />
+      <textarea name="note" rows={3} maxLength={2000} required={mode === "modificari"} className="input text-sm" placeholder={mode === "aprobat" ? "Un mesaj pentru echipă (opțional)" : "Ce ai vrea să schimbăm? (text, imagine, dată...)"} />
+      <Err s={state} />
+      <div className="flex gap-2">
+        <Btn className="btn-sm">{mode === "aprobat" ? "Confirm aprobarea" : "Trimite"}</Btn>
+        <button type="button" onClick={() => setMode(null)} className="btn-ghost btn-sm">Înapoi</button>
+      </div>
+    </form>
+  );
+}
+
+export function ApproveMonth({ token, ids }: { token: string; ids: string[] }) {
+  const [state, action] = useFormState<PortalState, FormData>(portalApproveMonth, {});
+  if (state.ok) return <p className="text-sm font-semibold text-emerald-700">✓ Toate postările au fost aprobate. Mulțumim!</p>;
+  return (
+    <form action={action}>
+      <input type="hidden" name="token" value={token} />
+      <input type="hidden" name="ids" value={ids.join(",")} />
+      <Err s={state} />
+      <Btn><Check className="h-4 w-4" /> Aprob toate cele {ids.length} postări</Btn>
+    </form>
   );
 }

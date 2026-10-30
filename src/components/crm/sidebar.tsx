@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   LayoutDashboard, Filter, Users, FileText, PenLine, FolderKanban, ListChecks, CalendarDays, Wallet, HardDrive, UserCog, PieChart,
-  Globe, Settings, Menu, X, ExternalLink,
+  Globe, Settings, Menu, X, ExternalLink, Megaphone,
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { cn } from "@/lib/utils";
@@ -18,6 +18,7 @@ const ITEMS = [
   { href: "/crm/proiecte", label: "Proiecte", icon: FolderKanban, module: "proiecte" },
   { href: "/crm/taskuri", label: "Task-uri", icon: ListChecks, module: "*" },
   { href: "/crm/calendar", label: "Calendar", icon: CalendarDays, module: "calendar" },
+  { href: "/crm/social", label: "Social media", icon: Megaphone, module: "social" },
   { href: "/crm/financiar", label: "Financiar", icon: Wallet, module: "financiar" },
   { href: "/crm/fisiere", label: "Fișiere", icon: HardDrive, module: "fisiere" },
   { href: "/crm/angajati", label: "Angajați", icon: UserCog, module: "angajati" },

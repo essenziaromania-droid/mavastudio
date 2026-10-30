@@ -141,6 +141,7 @@ export const MODULES: { key: string; label: string; hint?: string }[] = [
   { key: "fisiere", label: "Fișiere" },
   { key: "angajati", label: "Angajați" },
   { key: "rapoarte", label: "Rapoarte" },
+  { key: "social", label: "Social media (calendar postări)" },
   { key: "website", label: "Website (blog, portofoliu)" },
   { key: "setari", label: "Setări" },
 ];
@@ -155,3 +156,19 @@ export const PORTFOLIO_CATEGORIES: Record<string, string> = {
   social: "Social Media",
   video: "Video",
 };
+
+
+/* ───────── Social media ───────── */
+
+export const SOCIAL_STATUS = m({
+  idee: { label: "Idee", tone: "gray" },
+  in_lucru: { label: "În lucru", tone: "blue" },
+  de_aprobat: { label: "La client", tone: "purple" },
+  modificari: { label: "Modificări", tone: "orange" },
+  aprobat: { label: "Aprobat", tone: "green" },
+  programat: { label: "Programat", tone: "cyan" },
+  publicat: { label: "Publicat", tone: "green" },
+});
+
+export const SOCIAL_PLATFORMS: Record<string, string> = { facebook: "Facebook", instagram: "Instagram", tiktok: "TikTok", linkedin: "LinkedIn", youtube: "YouTube" };
+export const SOCIAL_FORMATS: Record<string, string> = { postare: "Postare", carusel: "Carusel", reel: "Reel", story: "Story", video: "Video" };

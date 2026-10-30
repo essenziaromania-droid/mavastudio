@@ -86,3 +86,55 @@ export async function touchPortal(clientId: string, lastSeen: string | null) {
   if (lastSeen && Date.now() - new Date(lastSeen).getTime() < 10 * 60 * 1000) return;
   await createAdminClient().from("clients").update({ portal_last_seen: new Date().toISOString() }).eq("id", clientId);
 }
+
+/* ───────── Social media ───────── */
+
+/** Statusurile în care clientul vede postarea (ideile și postările în lucru rămân interne). */
+export const CLIENT_SOCIAL_STATUSES = ["de_aprobat", "modificari", "aprobat", "programat", "publicat"];
+
+export type PortalPost = {
+  id: string;
+  scheduled_at: string;
+  platforms: string[];
+  format: string;
+  caption: string | null;
+  hashtags: string | null;
+  status: string;
+  client_note: string | null;
+  published_url: string | null;
+  media: { id: string; url: string | null; mime: string | null; name: string }[];
+};
+
+/** Lunile (AAAA-LL, ora României) în care clientul are postări vizibile. */
+export async function portalSocialMonths(clientId: string): Promise<string[]> {
+  const { data } = await createAdminClient().from("social_posts").select("scheduled_at").eq("client_id", clientId).in("status", CLIENT_SOCIAL_STATUSES);
+  const fmt = new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Bucharest" });
+  return Array.from(new Set((data ?? []).map((p) => fmt.format(new Date(p.scheduled_at)).slice(0, 7)))).sort();
+}
+
+/** Postările vizibile clientului dintr-o lună, cu imaginile/video-urile lor (linkuri temporare). */
+export async function portalSocialPosts(clientId: string, month: string): Promise<PortalPost[]> {
+  const sb = createAdminClient();
+  const [y, m] = month.split("-").map(Number) as [number, number];
+  const from = new Date(Date.UTC(y, m - 1, 1) - 864e5).toISOString();
+  const to = new Date(Date.UTC(y, m, 1) + 864e5).toISOString();
+  const { data: posts } = await sb
+    .from("social_posts")
+    .select("id, scheduled_at, platforms, format, caption, hashtags, status, client_note, published_url")
+    .eq("client_id", clientId)
+    .in("status", CLIENT_SOCIAL_STATUSES)
+    .gte("scheduled_at", from)
+    .lt("scheduled_at", to)
+    .order("scheduled_at");
+  const fmt = new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Bucharest" });
+  const list = (posts ?? []).filter((p) => fmt.format(new Date(p.scheduled_at)).startsWith(month));
+  if (!list.length) return [];
+  const { data: files } = await sb.from("files").select("id, name, path, mime, social_post_id").in("social_post_id", list.map((p) => p.id)).order("created_at");
+  const signed = files?.length ? (await sb.storage.from("crm-files").createSignedUrls(files.map((f) => f.path), 3600)).data ?? [] : [];
+  const urlOf = new Map(signed.map((s) => [s.path, s.signedUrl]));
+  return list.map((p) => ({
+    ...p,
+    platforms: (p.platforms as string[]) ?? [],
+    media: (files ?? []).filter((f) => f.social_post_id === p.id).map((f) => ({ id: f.id, url: urlOf.get(f.path) ?? null, mime: f.mime, name: f.name })),
+  }));
+}

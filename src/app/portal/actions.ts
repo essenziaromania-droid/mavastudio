@@ -99,3 +99,52 @@ export async function portalMessage(_: PortalState, fd: FormData): Promise<Porta
   await alertTeam({ clientId: client.id, clientName: client.name, title: `Mesaj nou din portal de la ${client.name}`, body, link: `/crm/clienti/${client.id}?tab=activitate` });
   return { ok: true };
 }
+
+/* ───────── Social media ───────── */
+
+const REVIEWABLE_POSTS = ["de_aprobat", "modificari", "aprobat"];
+
+/** Clientul aprobă o postare sau cere modificări. */
+export async function portalPostReview(_: PortalState, fd: FormData): Promise<PortalState> {
+  const token = clean(fd.get("token"), 40);
+  const client = await clientByToken(token);
+  if (!client) return { error: "Link invalid." };
+  const id = clean(fd.get("post_id"), 40);
+  const decision = fd.get("decision") === "aprobat" ? "aprobat" : "modificari";
+  const note = clean(fd.get("note"), 2000);
+  if (decision === "modificari" && note.length < 3) return { error: "Descrie pe scurt ce ai vrea să schimbăm." };
+  const sb = createAdminClient();
+  const { data: post } = await sb.from("social_posts").select("id, status, scheduled_at, title, format").eq("id", id).eq("client_id", client.id).maybeSingle();
+  if (!post || !REVIEWABLE_POSTS.includes(post.status)) return { error: "Postarea nu mai poate fi modificată." };
+  await sb.from("social_posts").update({ status: decision, client_note: note || null, reviewed_at: new Date().toISOString(), updated_at: new Date().toISOString() }).eq("id", id);
+  const when = new Intl.DateTimeFormat("ro-RO", { timeZone: "Europe/Bucharest", day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }).format(new Date(post.scheduled_at));
+  await alertTeam({
+    clientId: client.id,
+    clientName: client.name,
+    title: decision === "aprobat" ? `✅ Postare aprobată (${when})` : `✏️ Modificări cerute la postarea din ${when}`,
+    body: note || "Postarea a fost aprobată.",
+    link: `/crm/social/${id}`,
+  });
+  revalidatePath(`/portal/${token}`);
+  return { ok: true };
+}
+
+/** Clientul aprobă dintr-un clic toate postările lunii care îi așteaptă aprobarea. */
+export async function portalApproveMonth(_: PortalState, fd: FormData): Promise<PortalState> {
+  const token = clean(fd.get("token"), 40);
+  const client = await clientByToken(token);
+  if (!client) return { error: "Link invalid." };
+  const ids = clean(fd.get("ids"), 4000).split(",").filter((x) => /^[0-9a-f-]{36}$/i.test(x));
+  if (!ids.length) return { error: "Nu există postări de aprobat." };
+  const sb = createAdminClient();
+  const { data } = await sb
+    .from("social_posts")
+    .update({ status: "aprobat", reviewed_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+    .in("id", ids)
+    .eq("client_id", client.id)
+    .eq("status", "de_aprobat")
+    .select("id");
+  await alertTeam({ clientId: client.id, clientName: client.name, title: `✅ ${data?.length ?? 0} postări aprobate de ${client.name}`, body: "Clientul a aprobat toate postările lunii din portal.", link: `/crm/social?client=${client.id}` });
+  revalidatePath(`/portal/${token}`);
+  return { ok: true };
+}
