@@ -142,6 +142,7 @@ export const MODULES: { key: string; label: string; hint?: string }[] = [
   { key: "angajati", label: "Angajați" },
   { key: "rapoarte", label: "Rapoarte" },
   { key: "social", label: "Social media (calendar postări)" },
+  { key: "mesaje", label: "Mesaje (emailuri cu clienții)" },
   { key: "website", label: "Website (blog, portofoliu)" },
   { key: "setari", label: "Setări" },
 ];

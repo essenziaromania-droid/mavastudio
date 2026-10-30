@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    serverComponentsExternalPackages: ["@react-pdf/renderer"],
+    serverComponentsExternalPackages: ["@react-pdf/renderer", "imapflow", "mailparser"],
     serverActions: { bodySizeLimit: "10mb" },
     // Pe Vercel, folderul public nu e copiat în funcțiile de server. PDF-urile (fonturi, siglă)
     // și pagina Despre noi (fotografiile echipei) citesc aceste fișiere de pe disc.

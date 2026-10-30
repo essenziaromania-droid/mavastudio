@@ -10,6 +10,8 @@ import { DEFAULT_AUTOMATIONS, getSetting, type AutomationSettings } from "@/lib/
 import { DEFAULT_INVOICING, type InvoicingSettings } from "@/lib/invoicing";
 import { getDriveConnection, googleConfigured, googleRedirectUri } from "@/lib/google-drive";
 import { disconnectGoogle, runCalendarSync, runDriveSync, saveCalendarTypes } from "../actions/drive";
+import { disconnectImap, runMailSync, saveImapSettings } from "../actions/messages";
+import { getMailConnection } from "@/lib/mailbox";
 import { CAL_TYPE_LABELS, DEFAULT_CAL_TYPES, calendarUrl, hasCalendarScope } from "@/lib/google-calendar";
 import { createAdminClient } from "@/lib/supabase/server";
 import type { Company } from "@/lib/documents";
@@ -21,7 +23,7 @@ const INCLUDES_HINT = ["## Pagini", "Acasă", "Despre noi", "Contact", "? Blog",
 
 const CATS = Object.fromEntries(Object.entries(SERVICE_CATEGORY).map(([k, v]) => [k, v.label]));
 
-export default async function SettingsPage({ searchParams }: { searchParams: { tab?: string; saved?: string; google_ok?: string; google_err?: string; google_off?: string; drive_sync?: string; cal_sync?: string } }) {
+export default async function SettingsPage({ searchParams }: { searchParams: { tab?: string; saved?: string; google_ok?: string; google_err?: string; google_off?: string; drive_sync?: string; cal_sync?: string; mail_ok?: string; mail_err?: string; mail_off?: string } }) {
   const s = await requireModule("setari");
   const { sb } = s;
   const tab = searchParams.tab ?? "firma";
@@ -156,6 +158,7 @@ export default async function SettingsPage({ searchParams }: { searchParams: { t
         </Panel>
         <div className="space-y-6">
           <DrivePanel />
+          <MailPanel />
           <Panel title="Email (Resend)">
             <p className="text-sm text-body">Emailurile (notificări lead, oferte, contracte, auto-răspuns) se trimit de pe <b>contact@mavastudio.ro</b> prin Resend. Status: {process.env.RESEND_API_KEY ? <b className="text-emerald-600">configurat</b> : <b className="text-rose-500">lipsește RESEND_API_KEY</b>}.</p>
           </Panel>
@@ -168,6 +171,44 @@ export default async function SettingsPage({ searchParams }: { searchParams: { t
           </Panel>
         </div>
       </div>
+    );
+  }
+
+  async function MailPanel() {
+    const conn = s.isAdmin ? await getMailConnection().catch(() => null) : null;
+    return (
+      <Panel title="Căsuța de email (mesaje cu clienții)">
+        {searchParams.mail_ok && <p className="mb-3 rounded-lg bg-emerald-50 px-3 py-2 text-xs text-emerald-700">Căsuța a fost conectată. {Number(searchParams.mail_ok) ? `${searchParams.mail_ok} emailuri cu clienții au fost importate (ultimele 30 de zile).` : "Nu am găsit emailuri cu clienții în ultimele 30 de zile."}</p>}
+        {searchParams.mail_err && <p className="mb-3 rounded-lg bg-rose-50 px-3 py-2 text-xs text-rose-600">{searchParams.mail_err}</p>}
+        {searchParams.mail_off && <p className="mb-3 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800">Căsuța a fost deconectată. Mesajele deja importate rămân în CRM.</p>}
+        {!s.isAdmin ? (
+          <p className="text-sm text-body">Doar administratorul poate conecta căsuța de email.</p>
+        ) : (
+          <div className="space-y-3 text-sm text-body">
+            <p>CRM-ul citește căsuța firmei și păstrează <b className="text-ink">doar emailurile cu clienții și lead-urile</b>, în fișa fiecăruia (tab-ul „Mesaje”) și în modulul Mesaje.</p>
+            {conn && (
+              <p className="rounded-xl bg-soft px-3 py-2 text-xs">
+                Conectat: <b className="text-ink">{conn.config.user}</b> · {conn.last_sync ? `ultima verificare ${formatDate(conn.last_sync, true)}` : "încă neverificat"}
+                {conn.last_error && <span className="block text-rose-600">Ultima eroare: {conn.last_error}</span>}
+              </p>
+            )}
+            <form action={saveImapSettings} className="grid gap-3 sm:grid-cols-2">
+              <Field label="Adresa de email"><Input name="user" type="email" required defaultValue={conn?.config.user ?? "contact@mavastudio.ro"} /></Field>
+              <Field label="Parola căsuței" hint={conn ? "Salvată. Lasă gol pentru a o păstra." : "Parola cu care intri în webmail."}><Input name="password" type="password" autoComplete="new-password" required={!conn} /></Field>
+              <Field label="Server IMAP" hint="Hostico: glc44.hostico.ro"><Input name="host" defaultValue={conn?.config.host ?? "glc44.hostico.ro"} /></Field>
+              <Field label="Port"><Input name="port" type="number" defaultValue={String(conn?.config.port ?? 993)} /></Field>
+              <div className="sm:col-span-2"><SubmitButton className="btn-sm" pendingText="Se verifică conexiunea...">{conn ? "Salvează" : "Conectează căsuța"}</SubmitButton></div>
+            </form>
+            {conn && (
+              <div className="flex flex-wrap gap-2 border-t border-line pt-3">
+                <form action={runMailSync}><input type="hidden" name="back" value="/crm/setari?tab=integrari" /><SubmitButton className="btn-sm" pendingText="Se verifică...">Verifică emailuri noi</SubmitButton></form>
+                <form action={disconnectImap}><ConfirmSubmit message="Deconectezi căsuța? Mesajele importate rămân în CRM.">Deconectează</ConfirmSubmit></form>
+              </div>
+            )}
+            <p className="text-[11px] text-muted">Parola se păstrează într-o zonă protejată, accesibilă doar serverului; nu o pot vedea alți utilizatori ai CRM-ului.</p>
+          </div>
+        )}
+      </Panel>
     );
   }
 

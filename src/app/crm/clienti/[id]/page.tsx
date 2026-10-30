@@ -10,10 +10,11 @@ import { NoteForm, Timeline, type ActivityRow } from "@/components/crm/timeline"
 import { CLIENT_STATUS, CONTRACT_STATUS, EVENT_TYPE, INVOICE_STATUS, OFFER_STATUS, PROJECT_STATUS, SERVICE_CATEGORY } from "@/lib/crm/constants";
 import { formatDate, formatLei } from "@/lib/utils";
 import { FilesBrowser } from "@/components/crm/files-browser";
+import { MessageThread, type MessageRow } from "@/components/crm/messages";
 
 export const metadata = { title: "Profil client" };
 
-export default async function ClientProfile({ params, searchParams }: { params: { id: string }; searchParams: { tab?: string; portal_sent?: string; portal_err?: string; portal_new?: string } }) {
+export default async function ClientProfile({ params, searchParams }: { params: { id: string }; searchParams: { tab?: string; portal_sent?: string; portal_err?: string; portal_new?: string; replied?: string; err?: string } }) {
   const s = await getSession();
   if (!s.can("clienti") && !s.can("proiecte")) notFound();
   const { sb } = s;
@@ -29,6 +30,14 @@ export default async function ClientProfile({ params, searchParams }: { params: 
     sb.from("activities").select("id, type, title, description, created_at, profiles:actor_id(full_name)").eq("client_id", c.id).order("created_at", { ascending: false }).limit(100),
     sb.from("events").select("id, title, start_at, type").eq("client_id", c.id).gte("start_at", new Date().toISOString()).order("start_at").limit(1).maybeSingle(),
   ]);
+
+  const canMail = s.can("mesaje");
+  const msgs = canMail
+    ? await sb.from("messages").select("id, direction, source, from_email, from_name, to_emails, subject, body_text, attachment_names, sent_at, read, message_id").eq("client_id", c.id).order("sent_at", { ascending: false }).limit(200)
+    : { data: [] as MessageRow[] };
+  const unreadMsgs = (msgs.data ?? []).filter((m) => !m.read && m.direction === "in").length;
+  // La deschiderea tab-ului, mesajele clientului devin citite (rămân evidențiate doar acum).
+  if (tab === "mesaje" && unreadMsgs) await sb.from("messages").update({ read: true }).eq("client_id", c.id).eq("read", false);
 
   const signedValue = (contracts.data ?? []).filter((x) => x.status === "semnat").reduce((a, x) => a + Number(x.value), 0);
   const invoiced = (invoices.data ?? []).filter((i) => !["draft", "anulata"].includes(i.status)).reduce((a, i) => a + Number(i.total), 0);
@@ -58,6 +67,7 @@ export default async function ClientProfile({ params, searchParams }: { params: 
           { key: "contracte", label: "Contracte", href: `${base}?tab=contracte`, count: contracts.data?.length },
           { key: "proiecte", label: "Proiecte", href: `${base}?tab=proiecte`, count: projects.data?.length },
           { key: "facturi", label: "Facturi", href: `${base}?tab=facturi`, count: invoices.data?.length },
+          ...(canMail ? [{ key: "mesaje", label: unreadMsgs ? `Mesaje · ${unreadMsgs} noi` : "Mesaje", href: `${base}?tab=mesaje`, count: msgs.data?.length }] : []),
           { key: "fisiere", label: "Fișiere", href: `${base}?tab=fisiere` },
           { key: "activitate", label: "Activitate", href: `${base}?tab=activitate` },
         ]}
@@ -223,6 +233,13 @@ export default async function ClientProfile({ params, searchParams }: { params: 
       )}
 
       {tab === "fisiere" && <FilesBrowser clientId={c.id} clientName={c.name} />}
+      {tab === "mesaje" && canMail && (
+        <>
+          {searchParams.replied && <p className="mb-4 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">Emailul a fost trimis.</p>}
+          {searchParams.err && <p className="mb-4 rounded-xl bg-rose-50 px-4 py-3 text-sm text-rose-600">{searchParams.err}</p>}
+          <MessageThread messages={(msgs.data ?? []) as MessageRow[]} back={`${base}?tab=mesaje`} replyTo={c.contact_email || c.email} />
+        </>
+      )}
 
       {tab === "activitate" && (
         <Panel title="Timeline client" className="max-w-3xl">

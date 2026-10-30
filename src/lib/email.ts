@@ -1,4 +1,5 @@
 import "server-only";
+import { logOutgoing } from "@/lib/mailbox";
 import { Resend } from "resend";
 
 const FROM = process.env.EMAIL_FROM ?? "MAVA Studio <contact@mavastudio.ro>";
@@ -24,7 +25,7 @@ export function brandedEmail({ title, bodyHtml, cta, lang = "ro" }: { title: str
 
 export { esc as escapeHtml };
 
-export async function sendEmail(opts: { to: string | string[]; subject: string; html: string; replyTo?: string; attachments?: { filename: string; content: Buffer }[] }) {
+export async function sendEmail(opts: { to: string | string[]; subject: string; html: string; replyTo?: string; attachments?: { filename: string; content: Buffer }[]; headers?: Record<string, string> }) {
   const key = process.env.RESEND_API_KEY;
   if (!key) {
     console.warn("[email] RESEND_API_KEY lipsește – email netrimis:", opts.subject);
@@ -32,8 +33,11 @@ export async function sendEmail(opts: { to: string | string[]; subject: string; 
   }
   try {
     const resend = new Resend(key);
-    const { error } = await resend.emails.send({ from: FROM, to: opts.to, subject: opts.subject, html: opts.html, replyTo: opts.replyTo, attachments: opts.attachments });
+    const { data, error } = await resend.emails.send({ from: FROM, to: opts.to, subject: opts.subject, html: opts.html, replyTo: opts.replyTo, attachments: opts.attachments, headers: opts.headers });
     if (error) return { ok: false as const, error: error.message };
+    // Emailurile către clienți/lead-uri apar și în tab-ul „Mesaje” al clientului.
+    const to = (Array.isArray(opts.to) ? opts.to : [opts.to]).filter((x) => x.toLowerCase() !== ADMIN_EMAIL.toLowerCase());
+    if (to.length) await logOutgoing({ to, subject: opts.subject, html: opts.html, messageId: data?.id ? `resend:${data.id}` : null });
     return { ok: true as const };
   } catch (e) {
     return { ok: false as const, error: e instanceof Error ? e.message : "Eroare email" };
