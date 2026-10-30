@@ -63,10 +63,7 @@ export async function Footer({ locale }: { locale: Locale }) {
           <CookieSettingsLink label={t.cookieSettings} className="hover:text-brand-blue" />
           <span className="hidden text-line md:inline">|</span>
           {/* Informare obligatorie pentru consumatori (Ordinul ANPC nr. 449/2022). */}
-          <a href="https://reclamatiisal.anpc.ro/" target="_blank" rel="nofollow noopener noreferrer" title="ANPC – Soluționarea alternativă a litigiilor (SAL)">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/anpc-sal.svg" alt="ANPC – Soluționarea alternativă a litigiilor" width={250} height={50} loading="lazy" />
-          </a>
+          <a href="https://reclamatiisal.anpc.ro/" target="_blank" rel="nofollow noopener noreferrer" title="ANPC – Soluționarea alternativă a litigiilor (SAL)" className="hover:text-brand-blue">ANPC SAL</a>
           <a href="https://www.anpc.ro/" target="_blank" rel="nofollow noopener noreferrer" className="hover:text-brand-blue">{t.anpc}</a>
         </div>
       </div>
