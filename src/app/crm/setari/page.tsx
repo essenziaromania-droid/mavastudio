@@ -9,7 +9,8 @@ import { ANNEX_KEYS, ANNEX_LABELS, CONTRACT_ANNEXES, CONTRACT_BODY, CONTRACT_DPA
 import { DEFAULT_AUTOMATIONS, getSetting, type AutomationSettings } from "@/lib/events";
 import { DEFAULT_INVOICING, type InvoicingSettings } from "@/lib/invoicing";
 import { getDriveConnection, googleConfigured, googleRedirectUri } from "@/lib/google-drive";
-import { disconnectGoogle, runDriveSync } from "../actions/drive";
+import { disconnectGoogle, runCalendarSync, runDriveSync, saveCalendarTypes } from "../actions/drive";
+import { CAL_TYPE_LABELS, DEFAULT_CAL_TYPES, calendarUrl, hasCalendarScope } from "@/lib/google-calendar";
 import { createAdminClient } from "@/lib/supabase/server";
 import type { Company } from "@/lib/documents";
 import { formatDate, formatLei } from "@/lib/utils";
@@ -20,7 +21,7 @@ const INCLUDES_HINT = ["## Pagini", "Acasă", "Despre noi", "Contact", "? Blog",
 
 const CATS = Object.fromEntries(Object.entries(SERVICE_CATEGORY).map(([k, v]) => [k, v.label]));
 
-export default async function SettingsPage({ searchParams }: { searchParams: { tab?: string; saved?: string; google_ok?: string; google_err?: string; google_off?: string; drive_sync?: string } }) {
+export default async function SettingsPage({ searchParams }: { searchParams: { tab?: string; saved?: string; google_ok?: string; google_err?: string; google_off?: string; drive_sync?: string; cal_sync?: string } }) {
   const s = await requireModule("setari");
   const { sb } = s;
   const tab = searchParams.tab ?? "firma";
@@ -179,8 +180,11 @@ export default async function SettingsPage({ searchParams }: { searchParams: { t
       pending = count ?? 0;
     }
     const sync = searchParams.drive_sync?.split("-").map(Number);
+    const cal = searchParams.cal_sync?.split("-").map(Number);
+    const calOn = hasCalendarScope(conn);
+    const types = { ...DEFAULT_CAL_TYPES, ...(conn?.data.cal_types ?? {}) };
     return (
-      <Panel title="Google Drive">
+      <Panel title="Google Drive și Calendar">
         {searchParams.google_ok && <p className="mb-3 rounded-lg bg-emerald-50 px-3 py-2 text-xs text-emerald-700">Google Drive a fost conectat. Apasă „Sincronizează acum” ca să creezi dosarele clienților existenți.</p>}
         {searchParams.google_err && <p className="mb-3 rounded-lg bg-rose-50 px-3 py-2 text-xs text-rose-600">{searchParams.google_err}</p>}
         {searchParams.google_off && <p className="mb-3 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800">Google Drive a fost deconectat. Dosarele și fișierele deja copiate rămân în Drive.</p>}
@@ -197,10 +201,32 @@ export default async function SettingsPage({ searchParams }: { searchParams: { t
             <p>Conectat cu <b className="text-ink">{conn.account_email ?? "contul Google"}</b>. Fiecare client are un dosar cu subfolderele 01 Brief … 10 Facturi, iar fișierele din CRM se copiază automat acolo.</p>
             {conn.data.root_url && <a href={conn.data.root_url} target="_blank" className="btn-ghost btn-sm">Deschide „MAVA Studio – CRM” în Drive</a>}
             <p className="text-xs text-muted">{pending ? `${pending} fișiere încă necopiate în Drive.` : "Toate fișierele sunt copiate în Drive."}</p>
-            <div className="flex flex-wrap gap-2">
-              <form action={runDriveSync}><SubmitButton className="btn-sm" pendingText="Se sincronizează...">Sincronizează acum</SubmitButton></form>
-              <form action={disconnectGoogle}><ConfirmSubmit message="Deconectezi Google Drive? Fișierele deja copiate rămân în Drive.">Deconectează</ConfirmSubmit></form>
+            <form action={runDriveSync}><SubmitButton className="btn-sm" pendingText="Se sincronizează...">Sincronizează Drive acum</SubmitButton></form>
+
+            <div className="border-t border-line pt-4">
+              <p className="font-bold text-ink">Google Calendar</p>
+              {cal && <p className="mt-2 rounded-lg bg-emerald-50 px-3 py-2 text-xs text-emerald-700">Calendar sincronizat: {cal[0]} adăugate, {cal[1]} actualizate, {cal[2]} șterse.{cal[3] ? ` Mai sunt ${cal[3]} – apasă din nou „Sincronizează calendarul”.` : ""}</p>}
+              {calOn ? (
+                <div className="mt-2 space-y-3">
+                  <p>Calendarul separat <b className="text-ink">„MAVA Studio – CRM”</b> se actualizează automat la fiecare modificare din CRM (și zilnic, ca rezervă).</p>
+                  {conn.data.calendar_id && <a href={calendarUrl(conn.data.calendar_id)} target="_blank" className="btn-ghost btn-sm">Deschide în Google Calendar</a>}
+                  <form action={saveCalendarTypes} className="space-y-1.5 rounded-xl bg-soft p-3">
+                    <p className="text-xs font-semibold text-ink">Ce apare în calendar:</p>
+                    {(Object.keys(CAL_TYPE_LABELS) as (keyof typeof CAL_TYPE_LABELS)[]).map((k) => (
+                      <label key={k} className="flex items-center gap-2 text-sm"><input type="checkbox" name={k} defaultChecked={types[k]} className="accent-brand-blue" /> {CAL_TYPE_LABELS[k]}</label>
+                    ))}
+                    <SubmitButton className="btn-sm mt-2" pendingText="Se salvează...">Salvează și sincronizează</SubmitButton>
+                  </form>
+                  <form action={runCalendarSync}><SubmitButton className="btn-sm" pendingText="Se sincronizează...">Sincronizează calendarul</SubmitButton></form>
+                </div>
+              ) : (
+                <div className="mt-2 space-y-2">
+                  <p>Reconectează contul Google ca să activezi și sincronizarea cu Google Calendar (întâlniri, termene, postări). Drive-ul rămâne exact cum este.</p>
+                  <a href="/api/google/connect" className="btn-primary btn-sm">Activează Google Calendar</a>
+                </div>
+              )}
             </div>
+            <form action={disconnectGoogle} className="border-t border-line pt-3"><ConfirmSubmit message="Deconectezi contul Google? Fișierele și evenimentele deja copiate rămân în Google.">Deconectează contul Google</ConfirmSubmit></form>
           </div>
         ) : (
           <div className="space-y-3 text-sm text-body">

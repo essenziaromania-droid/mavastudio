@@ -2,9 +2,11 @@
 import { revalidatePath } from "next/cache";
 import { getSession } from "@/lib/crm/auth";
 import { addActivity } from "@/lib/events";
+import { scheduleCalendarSync } from "@/lib/google-calendar";
 
 export async function createEvent(fd: FormData) {
   const s = await getSession();
+  scheduleCalendarSync();
   const date = String(fd.get("date"));
   const time = String(fd.get("time") || "");
   const allDay = !time;
@@ -30,6 +32,7 @@ export async function createEvent(fd: FormData) {
 
 export async function deleteEvent(fd: FormData) {
   const s = await getSession();
+  scheduleCalendarSync();
   await s.sb.from("events").delete().eq("id", String(fd.get("id")));
   revalidatePath("/crm/calendar");
 }

@@ -5,6 +5,7 @@ import { addActivity, audit, DEFAULT_AUTOMATIONS, getSetting, notify, type Autom
 import { ADMIN_EMAIL, brandedEmail, escapeHtml, sendEmail } from "@/lib/email";
 import type { ContractTemplate } from "@/lib/contract-template";
 import { archiveLeadBrief } from "@/lib/archive";
+import { scheduleCalendarSync } from "@/lib/google-calendar";
 import { buildContractBody, type Company } from "@/lib/documents";
 import { formatLei } from "@/lib/utils";
 import { SITE } from "@/content/site";
@@ -139,6 +140,7 @@ export async function onContractSigned(sb: SupabaseClient, contractId: string) {
         categories,
         value: Number(c.value),
       });
+      scheduleCalendarSync();
     }
   }
 

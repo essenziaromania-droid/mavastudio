@@ -6,6 +6,7 @@ import { ADMIN_EMAIL, brandedEmail, escapeHtml, sendEmail } from "@/lib/email";
 import { SITE } from "@/content/site";
 import { clientByToken, portalFile, reviewable } from "@/lib/portal";
 import { formatTimecode } from "@/lib/timecode";
+import { scheduleCalendarSync } from "@/lib/google-calendar";
 
 export type PortalState = { ok?: boolean; error?: string };
 
@@ -56,6 +57,7 @@ export async function portalComment(_: PortalState, fd: FormData): Promise<Porta
 export async function portalReview(_: PortalState, fd: FormData): Promise<PortalState> {
   const token = clean(fd.get("token"), 40);
   const client = await clientByToken(token);
+  scheduleCalendarSync();
   if (!client) return { error: "Link invalid." };
   const file = await portalFile(client.id, clean(fd.get("file_id"), 40));
   if (!file || !reviewable(file.folder)) return { error: "Fișierul nu a fost găsit." };
@@ -108,6 +110,7 @@ const REVIEWABLE_POSTS = ["de_aprobat", "modificari", "aprobat"];
 export async function portalPostReview(_: PortalState, fd: FormData): Promise<PortalState> {
   const token = clean(fd.get("token"), 40);
   const client = await clientByToken(token);
+  scheduleCalendarSync();
   if (!client) return { error: "Link invalid." };
   const id = clean(fd.get("post_id"), 40);
   const decision = fd.get("decision") === "aprobat" ? "aprobat" : "modificari";
@@ -133,6 +136,7 @@ export async function portalPostReview(_: PortalState, fd: FormData): Promise<Po
 export async function portalApproveMonth(_: PortalState, fd: FormData): Promise<PortalState> {
   const token = clean(fd.get("token"), 40);
   const client = await clientByToken(token);
+  scheduleCalendarSync();
   if (!client) return { error: "Link invalid." };
   const ids = clean(fd.get("ids"), 4000).split(",").filter((x) => /^[0-9a-f-]{36}$/i.test(x));
   if (!ids.length) return { error: "Nu există postări de aprobat." };

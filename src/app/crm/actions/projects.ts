@@ -6,6 +6,7 @@ import { addActivity, audit, notify } from "@/lib/events";
 import { createProjectFromTemplate } from "@/lib/automations";
 import { TASK_STATUS } from "@/lib/crm/constants";
 import { recalcProgress } from "@/lib/crm/progress";
+import { scheduleCalendarSync } from "@/lib/google-calendar";
 
 const str = (fd: FormData, k: string) => {
   const v = String(fd.get(k) ?? "").trim();
@@ -16,6 +17,7 @@ const str = (fd: FormData, k: string) => {
 
 export async function createProject(fd: FormData) {
   const s = await getSession();
+  scheduleCalendarSync();
   const name = str(fd, "name") ?? "Proiect nou";
   const category = str(fd, "category") ?? "website";
   const useTemplate = fd.get("template") === "on";
@@ -49,6 +51,7 @@ export async function createProject(fd: FormData) {
 
 export async function updateProject(fd: FormData) {
   const s = await getSession();
+  scheduleCalendarSync();
   const id = String(fd.get("id"));
   await s.sb
     .from("projects")
@@ -71,6 +74,7 @@ export async function updateProject(fd: FormData) {
 
 export async function setProjectStatus(fd: FormData) {
   const s = await getSession();
+  scheduleCalendarSync();
   const id = String(fd.get("id"));
   const status = String(fd.get("status"));
   await s.sb.from("projects").update({ status, ...(status === "finalizat" ? { progress: 100 } : {}) }).eq("id", id);
@@ -91,6 +95,7 @@ export async function setMembers(fd: FormData) {
 
 export async function deleteProject(fd: FormData) {
   const s = await getSession();
+  scheduleCalendarSync();
   const id = String(fd.get("id"));
   await s.sb.from("projects").delete().eq("id", id);
   await audit(s.sb, { actor_id: s.userId, actor_name: s.profile.full_name, action: "a șters un proiect", entity: "proiect", entity_id: id });
@@ -114,6 +119,7 @@ export async function deleteMilestone(fd: FormData) {
 
 export async function createTask(fd: FormData) {
   const s = await getSession();
+  scheduleCalendarSync();
   const projectId = str(fd, "project_id");
   let clientId: string | null = null;
   if (projectId) clientId = (await s.sb.from("projects").select("client_id").eq("id", projectId).single()).data?.client_id ?? null;
@@ -146,6 +152,7 @@ export async function createTask(fd: FormData) {
 
 export async function updateTask(fd: FormData) {
   const s = await getSession();
+  scheduleCalendarSync();
   const id = String(fd.get("id"));
   const { data: before } = await s.sb.from("tasks").select("assignee_id, title").eq("id", id).single();
   const assignee = str(fd, "assignee_id");
@@ -173,6 +180,7 @@ export async function updateTask(fd: FormData) {
  */
 export async function setTaskStatus(fd: FormData) {
   const s = await getSession();
+  scheduleCalendarSync();
   const id = String(fd.get("id"));
   let status = String(fd.get("status"));
   const isManager = s.can("proiecte_toate");
@@ -193,6 +201,7 @@ export async function setTaskStatus(fd: FormData) {
 
 export async function reviewTask(fd: FormData) {
   const s = await getSession();
+  scheduleCalendarSync();
   if (!s.can("proiecte_toate")) return;
   const id = String(fd.get("id"));
   const decision = String(fd.get("decision"));
@@ -234,6 +243,7 @@ export async function logTime(fd: FormData) {
 
 export async function deleteTask(fd: FormData) {
   const s = await getSession();
+  scheduleCalendarSync();
   const id = String(fd.get("id"));
   const { data: t } = await s.sb.from("tasks").select("project_id").eq("id", id).single();
   await s.sb.from("tasks").delete().eq("id", id);

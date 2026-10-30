@@ -6,6 +6,7 @@ import { addActivity, audit } from "@/lib/events";
 import { ADMIN_EMAIL, brandedEmail, escapeHtml, sendEmail } from "@/lib/email";
 import { SITE } from "@/content/site";
 import { SOCIAL_FORMATS, SOCIAL_PLATFORMS, SOCIAL_STATUS } from "@/lib/crm/constants";
+import { scheduleCalendarSync } from "@/lib/google-calendar";
 
 const str = (fd: FormData, k: string) => {
   const v = String(fd.get(k) ?? "").trim();
@@ -23,6 +24,7 @@ function bucharestToIso(date: string, time: string) {
 
 export async function saveSocialPost(fd: FormData) {
   const s = await getSession();
+  scheduleCalendarSync();
   if (!s.can("social")) return;
   const id = str(fd, "id");
   const back = (q: string) => redirect(`/crm/social/${id ?? "nou"}?${q}`);
@@ -57,6 +59,7 @@ export async function saveSocialPost(fd: FormData) {
 
 export async function setSocialStatus(fd: FormData) {
   const s = await getSession();
+  scheduleCalendarSync();
   if (!s.can("social")) return;
   const id = String(fd.get("id"));
   const status = String(fd.get("status"));
@@ -68,6 +71,7 @@ export async function setSocialStatus(fd: FormData) {
 
 export async function deleteSocialPost(fd: FormData) {
   const s = await getSession();
+  scheduleCalendarSync();
   if (!s.can("social")) return;
   const id = String(fd.get("id"));
   await s.sb.from("social_posts").delete().eq("id", id);
@@ -91,6 +95,7 @@ export async function detachSocialMedia(fd: FormData) {
  */
 export async function sendMonthForApproval(fd: FormData) {
   const s = await getSession();
+  scheduleCalendarSync();
   if (!s.can("social")) return;
   const clientId = String(fd.get("client_id"));
   const month = String(fd.get("month")); // AAAA-LL

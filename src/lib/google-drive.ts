@@ -14,7 +14,7 @@ import { DRIVE_FOLDERS } from "@/lib/crm/constants";
  * Toate funcțiile sunt „best effort”: dacă Drive nu e conectat sau dă eroare, CRM-ul merge normal.
  */
 
-export const GOOGLE_SCOPES = ["https://www.googleapis.com/auth/drive.file", "openid", "email"];
+export const GOOGLE_SCOPES = ["https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/calendar.app.created", "openid", "email"];
 export const googleRedirectUri = () => `${SITE.url}/api/google/callback`;
 export const googleConfigured = () => !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
 
@@ -22,7 +22,20 @@ const FOLDER = "application/vnd.google-apps.folder";
 const API = "https://www.googleapis.com/drive/v3";
 const UPLOAD = "https://www.googleapis.com/upload/drive/v3";
 
-type DriveConn = { refresh_token: string; account_email: string | null; data: { root_id?: string; root_url?: string; clients_id?: string; intern_id?: string } };
+export type DriveConn = {
+  refresh_token: string;
+  account_email: string | null;
+  data: {
+    root_id?: string;
+    root_url?: string;
+    clients_id?: string;
+    intern_id?: string;
+    /** Permisiunile acordate de Google (separate prin spațiu). */
+    scopes?: string;
+    calendar_id?: string;
+    cal_types?: Partial<Record<"events" | "tasks" | "projects" | "social", boolean>>;
+  };
+};
 
 export async function getDriveConnection(): Promise<DriveConn | null> {
   const { data } = await createAdminClient().from("integrations").select("refresh_token, account_email, data").eq("provider", "google").maybeSingle();
@@ -57,12 +70,12 @@ export async function exchangeCode(code: string) {
   try {
     email = JSON.parse(Buffer.from(String(j.id_token).split(".")[1]!, "base64url").toString()).email ?? null;
   } catch {}
-  return { refresh_token: j.refresh_token as string, access_token: j.access_token as string, email };
+  return { refresh_token: j.refresh_token as string, access_token: j.access_token as string, email, scope: String(j.scope ?? "") };
 }
 
 let cached: { token: string; exp: number } | null = null;
 
-async function accessToken(conn: DriveConn) {
+export async function accessToken(conn: DriveConn) {
   if (cached && cached.exp > Date.now() + 60_000) return cached.token;
   const res = await fetch("https://oauth2.googleapis.com/token", {
     method: "POST",
