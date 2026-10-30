@@ -16,7 +16,9 @@ const nextConfig = {
       ],
     },
   },
-  images: { remotePatterns: [{ protocol: "https", hostname: "**.supabase.co" }] },
+  // Site-ul afișează imaginile direct (<img>), fără optimizatorul Next.js. Îl dezactivăm complet,
+  // pentru că în Next 14 are vulnerabilități critice reparate doar în versiunile 15.5+ / 16.
+  images: { unoptimized: true, remotePatterns: [] },
   async headers() {
     return [
       {
