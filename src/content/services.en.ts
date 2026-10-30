@@ -82,7 +82,7 @@ export const SERVICES_EN: Service[] = [
     eyebrow: ["Digital solutions", "SaaS platforms"],
     title: { before: "SaaS platforms that grow with", highlight: "your business." },
     lead: "We develop custom, scalable and secure SaaS platforms that turn your ideas into successful digital products.",
-    secondary: { label: "View demo", href: "/proiecte/flowr" },
+    secondary: { label: "View portfolio", href: "/proiecte" },
     stats: [
       { value: "50+", label: "Platforms built" },
       { value: "98%", label: "Happy clients" },

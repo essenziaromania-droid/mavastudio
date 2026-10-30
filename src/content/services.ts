@@ -111,7 +111,7 @@ export const SERVICES: Service[] = [
     eyebrow: ["Soluții digitale", "Platforme SaaS"],
     title: { before: "Platforme SaaS care cresc odată cu", highlight: "afacerea ta." },
     lead: "Dezvoltăm platforme SaaS personalizate, scalabile și sigure, care transformă ideile tale în produse digitale de succes.",
-    secondary: { label: "Vezi demo", href: "/proiecte/flowr" },
+    secondary: { label: "Vezi portofoliul", href: "/proiecte" },
     stats: [
       { value: "50+", label: "Platforme dezvoltate" },
       { value: "98%", label: "Clienți mulțumiți" },
