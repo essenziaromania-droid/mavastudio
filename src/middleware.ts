@@ -7,7 +7,7 @@ import {
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
 const BOT = /bot|crawl|spider|slurp|facebookexternalhit|bingpreview|lighthouse|embedly|whatsapp|telegram|preview/i;
-const NOT_SITE = ["/crm", "/login", "/auth", "/api", "/oferta", "/contract"];
+const NOT_SITE = ["/crm", "/login", "/auth", "/api", "/oferta", "/contract", "/portal"];
 
 /** Limba preferată a vizitatorului: alegerea salvată → țara (Vercel) → limba browserului. */
 function preferredLocale(req: NextRequest): Locale {

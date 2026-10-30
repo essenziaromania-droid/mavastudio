@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CalendarDays, FileText, Pencil, Receipt } from "lucide-react";
+import { CalendarDays, ExternalLink, FileText, Mail, Pencil, Receipt } from "lucide-react";
+import { ConfirmSubmit, CopyButton, SubmitButton } from "@/components/crm/client-ui";
+import { regeneratePortalLink, sendPortalLink } from "../../actions/portal";
+import { SITE } from "@/content/site";
 import { getSession } from "@/lib/crm/auth";
 import { Avatar, KeyVal, PageHeader, Panel, ProgressBar, StatusBadge, Table, Td, Tabs } from "@/components/crm/ui";
 import { NoteForm, Timeline, type ActivityRow } from "@/components/crm/timeline";
@@ -10,7 +13,7 @@ import { FilesBrowser } from "@/components/crm/files-browser";
 
 export const metadata = { title: "Profil client" };
 
-export default async function ClientProfile({ params, searchParams }: { params: { id: string }; searchParams: { tab?: string } }) {
+export default async function ClientProfile({ params, searchParams }: { params: { id: string }; searchParams: { tab?: string; portal_sent?: string; portal_err?: string; portal_new?: string } }) {
   const s = await getSession();
   if (!s.can("clienti") && !s.can("proiecte")) notFound();
   const { sb } = s;
@@ -96,6 +99,31 @@ export default async function ClientProfile({ params, searchParams }: { params: 
             </Panel>
           </div>
           <div className="space-y-6">
+            <Panel title="Portal client">
+              {searchParams.portal_sent && <p className="mb-3 rounded-lg bg-emerald-50 px-3 py-2 text-xs text-emerald-700">Linkul a fost trimis la {searchParams.portal_sent}.</p>}
+              {searchParams.portal_err && <p className="mb-3 rounded-lg bg-rose-50 px-3 py-2 text-xs text-rose-600">{searchParams.portal_err}</p>}
+              {searchParams.portal_new && <p className="mb-3 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800">Link nou generat. Cel vechi nu mai funcționează; trimite-l pe cel nou clientului.</p>}
+              <p className="text-sm text-body">Clientul vede proiectele, materialele de aprobat, contractele și facturile lui.</p>
+              <p className="mt-2 text-xs text-muted">{c.portal_last_seen ? `Ultima vizită: ${formatDate(c.portal_last_seen, true)}` : "Clientul nu a deschis încă portalul."}</p>
+              {c.portal_token && (
+                <>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <CopyButton text={`${SITE.url}/portal/${c.portal_token}`} />
+                    <a href={`${SITE.url}/portal/${c.portal_token}`} target="_blank" className="btn-ghost btn-sm"><ExternalLink className="h-4 w-4" /> Deschide</a>
+                  </div>
+                  <form action={sendPortalLink} className="mt-3 flex gap-2">
+                    <input type="hidden" name="id" value={c.id} />
+                    <input name="to" type="email" required defaultValue={c.contact_email || c.email || ""} placeholder="email client" className="input !py-2 text-sm" />
+                    <SubmitButton className="btn-sm shrink-0" pendingText="..."><Mail className="h-4 w-4" /> Trimite</SubmitButton>
+                  </form>
+                  <form action={regeneratePortalLink} className="mt-3">
+                    <input type="hidden" name="id" value={c.id} />
+                    <ConfirmSubmit message="Generezi un link nou? Cel vechi nu va mai funcționa.">Regenerează linkul</ConfirmSubmit>
+                  </form>
+                </>
+              )}
+              {!c.portal_token && <p className="mt-3 text-xs text-amber-700">Rulează migrarea 0005_client_portal.sql în Supabase pentru a activa portalul.</p>}
+            </Panel>
             {c.type === "company" && (
               <Panel title="Persoană de contact">
                 <div className="flex items-center gap-3">
