@@ -4,7 +4,7 @@ import { Bell, LogOut, Search } from "lucide-react";
 import { getSession } from "@/lib/crm/auth";
 import { Sidebar } from "@/components/crm/sidebar";
 import { Avatar } from "@/components/crm/ui";
-import { ROLES } from "@/lib/crm/constants";
+import { MODULES, ROLES } from "@/lib/crm/constants";
 import { signOut } from "./actions/auth";
 
 export const metadata: Metadata = { title: { default: "CRM", template: "%s · CRM MAVA Studio" }, robots: { index: false, follow: false } };
@@ -12,7 +12,8 @@ export const dynamic = "force-dynamic";
 
 export default async function CrmLayout({ children }: { children: React.ReactNode }) {
   const s = await getSession();
-  const allowed = s.isAdmin ? ["dashboard", "leads", "clienti", "oferte", "contracte", "proiecte", "proiecte_toate", "taskuri", "calendar", "financiar", "fisiere", "angajati", "rapoarte", "website", "setari"] : Array.from(s.perms);
+  // Administratorul vede toate modulele (lista vine din MODULES, ca modulele noi să apară automat).
+  const allowed = s.isAdmin ? MODULES.map((m) => m.key) : Array.from(s.perms);
 
   let unreadQuery = s.sb.from("notifications").select("id", { count: "exact", head: true }).is("read_at", null);
   unreadQuery = s.isAdmin ? unreadQuery.or(`user_id.eq.${s.userId},user_id.is.null`) : unreadQuery.eq("user_id", s.userId);
