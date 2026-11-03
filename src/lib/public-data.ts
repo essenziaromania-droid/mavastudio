@@ -36,14 +36,28 @@ export const DEFAULT_SITE: SiteSettings = {
     { value: "98%", label: "Happy clients" },
     { value: "6", label: "Core services" },
   ],
-  socials: {},
+  socials: {
+    instagram: "https://www.instagram.com/mavastudioproduction?obrf=MW0zajNkNnBpaG9tcg==",
+    linkedin: "https://www.linkedin.com/company/145406052",
+    facebook: "https://www.facebook.com/profile.php?id=61596430070424",
+  },
 };
 
 export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
   if (!hasSupabase) return DEFAULT_SITE;
   try {
     const { data } = await createPublicClient().from("settings").select("value").eq("key", "site").maybeSingle();
-    return { ...DEFAULT_SITE, ...((data?.value as Partial<SiteSettings>) ?? {}) };
+    const stored = (data?.value as Partial<SiteSettings>) ?? {};
+    return {
+      ...DEFAULT_SITE,
+      ...stored,
+      socials: {
+        ...stored.socials,
+        instagram: stored.socials?.instagram || DEFAULT_SITE.socials.instagram,
+        linkedin: stored.socials?.linkedin || DEFAULT_SITE.socials.linkedin,
+        facebook: stored.socials?.facebook || DEFAULT_SITE.socials.facebook,
+      },
+    };
   } catch {
     return DEFAULT_SITE;
   }

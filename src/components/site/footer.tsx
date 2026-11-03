@@ -20,6 +20,7 @@ export async function Footer({ locale }: { locale: Locale }) {
   const socials = [
     { key: "Instagram", href: s.socials.instagram, el: <Icon name="instagram" className="h-4 w-4" /> },
     { key: "LinkedIn", href: s.socials.linkedin, el: <Icon name="linkedin" className="h-4 w-4" /> },
+    { key: "Facebook", href: s.socials.facebook, el: <Icon name="facebook" className="h-4 w-4" /> },
     { key: "YouTube", href: s.socials.youtube, el: <Icon name="youtube" className="h-4 w-4" /> },
     { key: "TikTok", href: s.socials.tiktok, el: <TikTokIcon /> },
   ].filter((x) => x.href);
