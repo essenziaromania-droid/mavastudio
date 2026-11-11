@@ -19,5 +19,55 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "What a CRM is and why even a small business needs one",
       "category": "CRM & automation"
     }
+  },
+  "fotografie-de-produs-cu-ai": {
+    "ro": {
+      "title": "Fotografia de produs cu AI: când merită, când nu și cum arată un rezultat bun",
+      "category": "Conținut AI"
+    },
+    "en": {
+      "title": "AI product photography: when it's worth it, when it isn't, and what a good result looks like",
+      "category": "AI content"
+    }
+  },
+  "cat-costa-administrarea-social-media": {
+    "ro": {
+      "title": "Cât costă administrarea social media în 2026 și ce ar trebui să primești pe bani",
+      "category": "Social media"
+    },
+    "en": {
+      "title": "How much does social media management cost in 2026, and what should you get for the money?",
+      "category": "Social media"
+    }
+  },
+  "obligatii-legale-site-romania": {
+    "ro": {
+      "title": "Obligațiile legale ale unui site în România: GDPR, cookie-uri, ANPC și datele firmei",
+      "category": "Site-uri"
+    },
+    "en": {
+      "title": "Legal requirements for a business website in Romania: GDPR, cookies, ANPC and company details",
+      "category": "Websites"
+    }
+  },
+  "seo-local-google-business-profile": {
+    "ro": {
+      "title": "SEO local: cum apari în Google Maps și în căutările din orașul tău",
+      "category": "SEO & GEO"
+    },
+    "en": {
+      "title": "Local SEO: how to show up in Google Maps and local searches in your city",
+      "category": "SEO & GEO"
+    }
+  },
+  "landing-page-sau-site-de-prezentare": {
+    "ro": {
+      "title": "Landing page sau site de prezentare: ce alegi pentru afacerea ta",
+      "category": "Site-uri"
+    },
+    "en": {
+      "title": "Landing page or business website: which one is right for your business?",
+      "category": "Websites"
+    }
   }
 };
