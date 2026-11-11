@@ -15,6 +15,7 @@ export const LOCALE_COOKIE = "mava_lang";
 /** Prima parte a adresei: română → engleză. */
 const PAGE_MAP: Record<string, string> = {
   servicii: "services",
+  preturi: "pricing",
   proiecte: "projects",
   "despre-noi": "about",
   contact: "contact",

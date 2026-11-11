@@ -16,7 +16,7 @@ ${companyBlock("ro")}
 
 Prin Site, ${LEGAL.tradeName} își prezintă serviciile: dezvoltare de website-uri și magazine online, platforme SaaS, sisteme CRM și automatizări, fotografie și video de produs realizate cu ajutorul inteligenței artificiale, editare video și administrare social media.
 
-Informațiile de pe Site au caracter general și de prezentare. **Nu constituie o ofertă fermă.** Prețurile, termenele, conținutul exact al serviciilor și condițiile colaborării se stabilesc doar prin oferta personalizată și contractul transmise individual fiecărui client. Cifrele, rezultatele și exemplele din portofoliu ilustrează proiecte anterioare și nu garantează rezultate identice.
+Informațiile de pe Site au caracter general și de prezentare. **Nu constituie o ofertă fermă.** Prețurile, termenele, conținutul exact al serviciilor și condițiile colaborării se stabilesc doar prin oferta personalizată și contractul transmise individual fiecărui client. Prețurile afișate pe pagina Prețuri sunt prețuri de pornire, orientative. ${LEGAL.legalName} nu este înregistrată în scopuri de TVA, astfel că prețurile nu conțin și nu se adaugă TVA. Cifrele, rezultatele și exemplele din portofoliu ilustrează proiecte anterioare și nu garantează rezultate identice.
 
 ## 3. Solicitări prin formulare
 
@@ -68,7 +68,7 @@ ${companyBlock("en")}
 
 Through the Site, ${LEGAL.tradeName} presents its services: website and online store development, SaaS platforms, CRM systems and automation, AI-assisted product photo and video, video editing and social media management.
 
-The information on the Site is general and for presentation purposes. **It does not constitute a binding offer.** Prices, timelines, the exact scope of services and the terms of collaboration are set only through the personalised proposal and contract sent individually to each client. Figures, results and portfolio examples illustrate previous projects and do not guarantee identical results.
+The information on the Site is general and for presentation purposes. **It does not constitute a binding offer.** Prices, timelines, the exact scope of services and the terms of collaboration are set only through the personalised proposal and contract sent individually to each client. Prices shown on the Pricing page are indicative starting prices. ${LEGAL.legalName} is not registered for VAT, so prices do not include VAT and no VAT is added. Figures, results and portfolio examples illustrate previous projects and do not guarantee identical results.
 
 ## 3. Enquiries via forms
 

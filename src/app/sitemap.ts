@@ -22,7 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   };
 
   return [
-    ...["/", "/servicii", "/proiecte", "/despre-noi", "/contact", "/incepe-un-proiect", "/blog"].flatMap((p) =>
+    ...["/", "/servicii", "/preturi", "/proiecte", "/despre-noi", "/contact", "/incepe-un-proiect", "/blog"].flatMap((p) =>
       both(p, { changeFrequency: "weekly", priority: p === "/" ? 1 : 0.8 }),
     ),
     ...SERVICES.flatMap((s) => both(`/servicii/${s.slug}`, { changeFrequency: "monthly", priority: 0.8 })),

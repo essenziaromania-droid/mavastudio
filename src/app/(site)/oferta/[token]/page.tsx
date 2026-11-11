@@ -72,7 +72,7 @@ export default async function PublicOffer({ params }: { params: { token: string 
             <dl className="ml-auto mt-6 max-w-xs space-y-2 text-sm">
               <div className="flex justify-between"><dt>Subtotal</dt><dd>{formatLei(o.subtotal, { decimals: true })}</dd></div>
               {Number(o.discount_amount) > 0 && <div className="flex justify-between"><dt>Discount ({Number(o.discount_percent)}%)</dt><dd>-{formatLei(o.discount_amount, { decimals: true })}</dd></div>}
-              <div className="flex justify-between"><dt>TVA ({Number(o.vat_rate)}%)</dt><dd>{formatLei(o.vat_amount, { decimals: true })}</dd></div>
+              {Number(o.vat_rate) > 0 && <div className="flex justify-between"><dt>TVA ({Number(o.vat_rate)}%)</dt><dd>{formatLei(o.vat_amount, { decimals: true })}</dd></div>}
               <div className="flex justify-between border-t border-line pt-3 text-lg"><dt className="font-bold text-ink">Total</dt><dd className="font-extrabold text-gradient">{formatLei(o.total, { decimals: true })}</dd></div>
             </dl>
 

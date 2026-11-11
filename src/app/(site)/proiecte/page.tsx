@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { getPortfolio, getSiteSettings } from "@/lib/public-data";
+import { getPortfolio } from "@/lib/public-data";
 import { CtaBand, Eyebrow } from "@/components/site/sections";
 import { PortfolioGrid } from "@/components/site/portfolio-grid";
 import { DashboardScreen, GrowthBadge, Laptop, Phone, PhoneDashboard } from "@/components/site/mockups";
-import { IconTile } from "@/components/ui/icon";
-import { cn } from "@/lib/utils";
 import { getLocale, pageMeta } from "@/lib/i18n-server";
 import { localePath } from "@/lib/i18n";
 
@@ -14,41 +12,27 @@ const T = {
   ro: {
     metaTitle: "Proiecte",
     metaDescription: "Portofoliul MAVA Studio: website-uri, platforme SaaS, CRM, conținut AI și social media, cu studii de caz detaliate.",
-    eyebrow: ["Portofoliu", "Rezultate reale", "Clienți mulțumiți"],
+    eyebrow: ["Portofoliu", "Proiecte reale"],
     title: ["Proiecte", "care transformă ideile", "în", "succes digital."],
-    lead: "O selecție din proiectele noastre recente, unde strategia, creativitatea și tehnologia s-au combinat pentru a livra produse digitale cu rezultate reale.",
-    growth: ["creștere", "vânzări"],
+    lead: "Site-uri și proiecte reale, construite pentru clienții noștri. Intră pe fiecare ca să vezi ce am făcut și cum arată.",
+    growth: ["Proiecte", "reale,", "livrate"],
     phone: { title: "Proiectele mele", sub: "Platformă SaaS · Aplicație mobilă · Integrare API", cta: "Deschide" },
     caseStudy: "Studiu de caz",
-    caseTitle: ["— de la idee", "la o platformă scalabilă"],
+    caseTitle: ["— de la idee", "la proiect lansat"],
     caseCta: "Vezi studiul complet",
-    results: ["Rezultate care vorbesc de la sine", "Suntem mândri de impactul pe care îl avem în afacerile clienților noștri."],
-    resultItems: [
-      ["bars", "green", "+320%", "creștere conversii", "în medie, pentru magazinele online"],
-      ["clock", "purple", "70%", "timp redus de lucru", "prin automatizări și platforme personalizate"],
-      ["users", "blue", "+250%", "lead-uri crescute", "prin strategii de conținut și campanii sociale"],
-      ["star", "purple", "98%", "clienți mulțumiți", "care revin pentru noi proiecte"],
-    ],
     cta: ["Gata să construim următorul tău proiect de succes?", "Hai să discutăm despre ideea ta și să o transformăm într-un produs digital puternic."],
   },
   en: {
     metaTitle: "Projects",
     metaDescription: "The MAVA Studio portfolio: websites, SaaS platforms, CRM, AI content and social media, with detailed case studies.",
-    eyebrow: ["Portfolio", "Real results", "Happy clients"],
+    eyebrow: ["Portfolio", "Real projects"],
     title: ["Projects", "that turn ideas", "into", "digital success."],
-    lead: "A selection of our recent projects, where strategy, creativity and technology came together to deliver digital products with real results.",
-    growth: ["sales", "growth"],
+    lead: "Real websites and projects built for our clients. Open each one to see what we did and how it looks.",
+    growth: ["Real", "projects,", "delivered"],
     phone: { title: "My projects", sub: "SaaS platform · Mobile app · API integration", cta: "Open" },
     caseStudy: "Case study",
-    caseTitle: ["— from idea", "to a scalable platform"],
+    caseTitle: ["— from idea", "to launch"],
     caseCta: "Read the full case study",
-    results: ["Results that speak for themselves", "We're proud of the impact we have on our clients' businesses."],
-    resultItems: [
-      ["bars", "green", "+320%", "conversion growth", "on average, for online stores"],
-      ["clock", "purple", "70%", "less time spent", "thanks to automation and custom platforms"],
-      ["users", "blue", "+250%", "more leads", "through content strategy and social campaigns"],
-      ["star", "purple", "98%", "happy clients", "who come back for new projects"],
-    ],
     cta: ["Ready to build your next successful project?", "Let's talk about your idea and turn it into a powerful digital product."],
   },
 };
@@ -61,7 +45,7 @@ export function generateMetadata(): Metadata {
 export default async function ProjectsPage() {
   const locale = getLocale();
   const t = T[locale];
-  const [items, settings] = await Promise.all([getPortfolio(locale), getSiteSettings()]);
+  const items = await getPortfolio(locale);
   const caseStudy = items.find((p) => p.category === "saas") ?? items[0];
   const caseMetric = caseStudy?.metrics?.[0];
 
@@ -86,7 +70,7 @@ export default async function ProjectsPage() {
             <div aria-hidden className="absolute left-[20%] top-[4%] h-[76%] w-[76%] rounded-full bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-100" />
             <Laptop className="relative ml-[12%] w-[88%]"><DashboardScreen variant="saas" lang={locale} /></Laptop>
             <Phone className="absolute bottom-0 left-0 z-10 h-[62%] w-[24%]"><PhoneDashboard lang={locale} {...t.phone} /></Phone>
-            <GrowthBadge className="-right-2 top-0" value="+320%" lines={t.growth} />
+            <GrowthBadge className="-right-2 top-0" lines={t.growth} />
           </div>
         </div>
       </section>
@@ -122,26 +106,6 @@ export default async function ProjectsPage() {
         </section>
       )}
 
-      {settings.show_stats && (
-        <section className="section pt-0">
-          <div className="container">
-            <h2 className="section-title">{t.results[0]}</h2>
-            <p className="section-sub">{t.results[1]}</p>
-            <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:divide-x lg:divide-line">
-              {t.resultItems.map(([icon, color, v, l, d]) => (
-                <div key={l} className={cn("flex items-start gap-4 lg:px-6")}>
-                  <IconTile name={icon!} color={color as "blue"} round />
-                  <div>
-                    <div className="font-display text-3xl font-extrabold text-ink">{v}</div>
-                    <div className="font-semibold text-ink">{l}</div>
-                    <div className="text-sm text-body">{d}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
 
       <CtaBand title={t.cta[0]!} text={t.cta[1]!} locale={locale} />
     </>

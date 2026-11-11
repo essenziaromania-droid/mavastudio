@@ -1,24 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Check, Plus } from "lucide-react";
-import { getServices } from "@/content/services";
+import { ArrowRight } from "lucide-react";
 import { CtaBand, Eyebrow, HeroButtons, SectionHeading } from "@/components/site/sections";
 import { IconTile } from "@/components/ui/icon";
 import { Laptop, Phone, PhoneDashboard, GrowthBadge, Bottle } from "@/components/site/mockups";
 import { LogoMark } from "@/components/ui/logo";
-import { cn } from "@/lib/utils";
+import { ServiceGroups, Faq } from "@/components/site/sales-sections";
 import { getLocale, pageMeta } from "@/lib/i18n-server";
 import { localePath } from "@/lib/i18n";
-
-type Pkg = { name: string; icon: string; badge: string; popular?: boolean; text: string; items: string[] };
 
 const T = {
   ro: {
     metaTitle: "Servicii",
     metaDescription: "Website-uri, platforme SaaS, CRM & automatizări, foto & video de produs cu AI, editare video și administrare social media.",
-    eyebrow: "Soluții digitale pentru orice etapă de creștere",
+    eyebrow: "Tot ce îi trebuie afacerii tale în online",
     title: ["Serviciile", "noastre"],
-    lead: "MAVA Studio oferă soluții digitale complete pentru afaceri care vor să crească. De la website-uri și platforme personalizate, la conținut vizual, automatizări și social media — totul într-un singur partener.",
+    lead: "Îți facem site-ul sau magazinul online, pozele și clipurile de produs și postările pe rețelele sociale, iar când ai nevoie, îți construim și programe pentru firmă. Le poți lua separat sau împreună.",
     mock: { title: ["Idei. Strategie.", "Rezultate reale."], sub: "Partenerul tău pentru creștere digitală.", cta: "Pornește un proiect →", phone: "Soluții digitale pentru afaceri moderne.", phoneCta: "Pornește un proiect", growth: ["Branduri", "care cresc", "online"] },
     services: ["Serviciile noastre", "Soluții digitale complete, adaptate nevoilor afacerii tale."],
     more: "Află mai mult",
@@ -30,12 +27,7 @@ const T = {
       ["file", "blue", "Conținut", "Ne ocupăm de texte, imagini și materiale video."],
       ["headphones", "blue", "Suport", "Îți suntem alături și după lansare, cu suport continuu."],
     ],
-    packages: ["Pachete adaptate nevoilor tale", "Fie că ești la început sau vrei să scalezi, avem soluția potrivită."],
-    pkgs: [
-      { name: "Start", icon: "box", badge: "Ideal pentru început", text: "Tot ce ai nevoie pentru a avea o prezență online profesionistă.", items: ["Website modern (până la 5 pagini)", "Design personalizat", "Optimizare SEO de bază", "Suport 30 de zile"] },
-      { name: "Business", icon: "diamond", badge: "Cel mai popular", popular: true, text: "Soluții complete pentru afaceri care vor să crească.", items: ["Website / Platformă personalizată", "Funcționalități avansate", "Integrare CRM și automatizări", "Suport 3 luni"] },
-      { name: "Enterprise", icon: "crown", badge: "Pentru scalare", text: "Soluții custom pentru proiecte complexe și creștere accelerată.", items: ["Platformă SaaS personalizată", "Integrări avansate și automatizări", "Conținut foto & video inclus", "Suport dedicat pe termen lung"] },
-    ] as Pkg[],
+    pricing: ["Cât costă?", "Prețurile de pornire pentru fiecare serviciu sunt pe pagina Prețuri. Oferta exactă o primești după o discuție scurtă și gratuită.", "Vezi prețurile"],
     process: ["Cum lucrăm", "Un proces simplu și clar, de la idee la rezultate reale."],
     steps: [
       ["search", "blue", "Discutăm", "Înțelegem obiectivele tale, publicul și cerințele."],
@@ -46,20 +38,20 @@ const T = {
     faqTitle: ["Întrebări frecvente", "Răspunsuri la cele mai comune întrebări despre serviciile noastre."],
     faq: [
       ["Cât durează realizarea unui website?", "Un website de prezentare durează de obicei 3–6 săptămâni, în funcție de numărul de pagini, conținut și integrări. Îți comunicăm un termen exact în ofertă."],
-      ["Lucrați și cu afaceri la început de drum?", "Da. Pachetul Start este gândit exact pentru afacerile care au nevoie de o prezență online profesionistă, fără costuri mari."],
+      ["Lucrați și cu afaceri la început de drum?", "Da. Poți începe cu un site de prezentare sau cu un pachet de social media, apoi adaugi alte servicii pe măsură ce crești."],
       ["Oferiți și mentenanță după lansare?", "Da. Oferim pachete lunare de mentenanță: actualizări, backup, monitorizare, securitate și modificări de conținut."],
       ["Ce informații sunt necesare pentru un proiect?", "Ne ajută să știm obiectivul, publicul țintă, exemple care îți plac, bugetul estimativ și termenul dorit. Dacă nu le ai pe toate, le clarificăm împreună."],
       ["Puteți integra un sistem de plăți?", "Da. Integrăm plăți cu cardul (Stripe, Netopia și alte procesatoare), abonamente recurente și facturare automată."],
-      ["Putem discuta o soluție personalizată?", "Desigur. Majoritatea proiectelor noastre sunt personalizate. Programează o consultație gratuită și găsim împreună soluția potrivită."],
+      ["Cât costă un proiect?", "Prețurile de pornire sunt pe pagina Prețuri. Pentru o ofertă exactă, programează o consultație gratuită și îți trimitem prețul și termenul în scris."],
     ],
     cta: ["Gata să duci afacerea ta la următorul nivel?", "Hai să discutăm despre proiectul tău și să găsim cea mai bună soluție."],
   },
   en: {
     metaTitle: "Services",
     metaDescription: "Websites, SaaS platforms, CRM & automation, AI product photo & video, video editing and social media management.",
-    eyebrow: "Digital solutions for every stage of growth",
+    eyebrow: "Everything your business needs online",
     title: ["Our", "services"],
-    lead: "MAVA Studio offers complete digital solutions for businesses that want to grow. From websites and custom platforms to visual content, automation and social media — all with one partner.",
+    lead: "We build your website or online store, create your product photos and videos and run your social media, and when you need it, we build software for your company too. Take them separately or together.",
     mock: { title: ["Ideas. Strategy.", "Real results."], sub: "Your partner for digital growth.", cta: "Start a project →", phone: "Digital solutions for modern businesses.", phoneCta: "Start a project", growth: ["Brands", "growing", "online"] },
     services: ["Our services", "Complete digital solutions, tailored to your business needs."],
     more: "Learn more",
@@ -71,12 +63,7 @@ const T = {
       ["file", "blue", "Content", "We take care of copy, images and video."],
       ["headphones", "blue", "Support", "We stay by your side after launch, with ongoing support."],
     ],
-    packages: ["Packages tailored to your needs", "Whether you're just starting out or ready to scale, we have the right solution."],
-    pkgs: [
-      { name: "Start", icon: "box", badge: "Ideal to get started", text: "Everything you need for a professional online presence.", items: ["Modern website (up to 5 pages)", "Custom design", "Basic SEO optimisation", "30 days of support"] },
-      { name: "Business", icon: "diamond", badge: "Most popular", popular: true, text: "Complete solutions for businesses that want to grow.", items: ["Custom website / platform", "Advanced features", "CRM integration & automation", "3 months of support"] },
-      { name: "Enterprise", icon: "crown", badge: "Built to scale", text: "Custom solutions for complex projects and accelerated growth.", items: ["Custom SaaS platform", "Advanced integrations & automation", "Photo & video content included", "Dedicated long-term support"] },
-    ] as Pkg[],
+    pricing: ["How much does it cost?", "Starting prices for every service are on the Pricing page. You get an exact proposal after a short, free call.", "See pricing"],
     process: ["How we work", "A simple, clear process, from idea to real results."],
     steps: [
       ["search", "blue", "We talk", "We understand your goals, your audience and your requirements."],
@@ -91,7 +78,7 @@ const T = {
       ["Do you offer maintenance after launch?", "Yes. We offer monthly maintenance plans: updates, backups, monitoring, security and content changes."],
       ["What information do you need to start a project?", "It helps to know your goal, target audience, examples you like, an estimated budget and your preferred deadline. If you don't have all of these, we'll clarify them together."],
       ["Can you integrate a payment system?", "Yes. We integrate card payments (Stripe and other processors), recurring subscriptions and automatic invoicing."],
-      ["Can we discuss a custom solution?", "Of course. Most of our projects are custom. Book a free consultation and we'll find the right solution together."],
+      ["How much does a project cost?", "Starting prices are on the Pricing page. For an exact quote, book a free consultation and we'll send you the price and timeline in writing."],
     ],
     cta: ["Ready to take your business to the next level?", "Let's talk about your project and find the best solution."],
   },
@@ -140,25 +127,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="section">
-        <div className="container">
-          <SectionHeading title={t.services[0]} sub={t.services[1]} />
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {getServices(locale).map((s) => (
-              <Link key={s.slug} href={l(`/servicii/${s.slug}`)} className="card group flex gap-5 p-6 card-hover">
-                <IconTile name={s.icon} color={s.color} />
-                <div>
-                  <h3 className="text-[17px] font-bold">{s.menuTitle}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-body">{s.short}</p>
-                  <span className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-brand-blue">
-                    {t.more} <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ServiceGroups locale={locale} />
 
       <section className="section pt-0">
         <div className="container">
@@ -178,31 +147,17 @@ export default function ServicesPage() {
 
       <section className="section pt-0">
         <div className="container">
-          <SectionHeading title={t.packages[0]} sub={t.packages[1]} />
-          <div className="grid gap-6 lg:grid-cols-3">
-            {t.pkgs.map((p) => (
-              <div key={p.name} className={cn("card flex flex-col p-7", p.popular && "border-brand-blue/30 shadow-card-hover")}>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <IconTile name={p.icon} color={p.name === "Enterprise" ? "orange" : p.popular ? "purple" : "blue"} size="sm" />
-                    <h3 className="text-xl font-extrabold">{p.name}</h3>
-                  </div>
-                  <span className={cn("rounded-full px-3 py-1 text-[11px] font-semibold", p.popular ? "bg-brand-gradient text-white" : "bg-blue-50 text-brand-blue")}>{p.badge}</span>
-                </div>
-                <p className="mt-4 text-sm text-body">{p.text}</p>
-                <ul className="mt-5 flex-1 space-y-3">
-                  {p.items.map((it) => (
-                    <li key={it} className="flex items-center gap-3 text-sm text-ink-2">
-                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-blue text-white"><Check className="h-3 w-3" strokeWidth={3} /></span>
-                      {it}
-                    </li>
-                  ))}
-                </ul>
-                <Link href={l(`/incepe-un-proiect?pachet=${p.name.toLowerCase()}`)} className={cn("mt-7 w-full", p.popular ? "btn-primary" : "btn-outline")}>
-                  {t.more} <ArrowRight className="h-4 w-4" />
-                </Link>
+          <div className="flex flex-col items-start justify-between gap-6 rounded-[28px] bg-gradient-to-br from-[#F5F6FF] to-[#F3EEFF] p-8 md:flex-row md:items-center md:p-12">
+            <div className="flex items-start gap-5">
+              <IconTile name="card" color="purple" size="lg" round />
+              <div>
+                <h2 className="text-2xl font-extrabold md:text-3xl">{t.pricing[0]}</h2>
+                <p className="mt-2 max-w-2xl text-body">{t.pricing[1]}</p>
               </div>
-            ))}
+            </div>
+            <Link href={l("/preturi")} className="btn-primary shrink-0 !px-8 !py-4">
+              {t.pricing[2]} <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
       </section>
@@ -223,22 +178,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="section pt-0">
-        <div className="container">
-          <SectionHeading title={t.faqTitle[0]} sub={t.faqTitle[1]} />
-          <div className="grid gap-x-6 gap-y-3 md:grid-cols-2">
-            {t.faq.map(([q, a]) => (
-              <details key={q} className="card group px-5 py-3.5 [&_summary::-webkit-details-marker]:hidden">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-semibold text-ink">
-                  {q}
-                  <Plus className="h-4 w-4 shrink-0 transition group-open:rotate-45" />
-                </summary>
-                <p className="mt-3 text-sm leading-relaxed text-body">{a}</p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
+      <Faq title={t.faqTitle[0]!} sub={t.faqTitle[1]} items={t.faq as [string, string][]} />
 
       <CtaBand title={t.cta[0]!} text={t.cta[1]!} locale={locale} />
     </>

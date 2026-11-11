@@ -6,7 +6,6 @@ import { getSiteSettings } from "@/lib/public-data";
 import { TikTokIcon } from "@/components/ui/brand-icons";
 import { localePath, type Locale } from "@/lib/i18n";
 import { CookieSettingsLink } from "./analytics";
-import { LEGAL } from "@/content/legal";
 
 const T = {
   ro: { anpc: "Protecția consumatorilor – ANPC", rights: "Toate drepturile rezervate.", privacy: "Confidențialitate", terms: "Termeni", cookies: "Cookies", cookieSettings: "Setări cookies" },
@@ -56,7 +55,7 @@ export async function Footer({ locale }: { locale: Locale }) {
         </div>
       </div>
       <div className="container flex flex-col items-center justify-between gap-3 py-5 text-xs text-muted md:flex-row">
-        <p>© {new Date().getFullYear()} MAVA Studio · {LEGAL.legalName}. {t.rights}</p>
+        <p>© {new Date().getFullYear()} MAVA Studio. {t.rights}</p>
         <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
           <Link href={l("/politica-de-confidentialitate")} className="hover:text-brand-blue">{t.privacy}</Link>
           <Link href={l("/termeni-si-conditii")} className="hover:text-brand-blue">{t.terms}</Link>

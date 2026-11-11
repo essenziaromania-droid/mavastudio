@@ -19,7 +19,7 @@ const round = (n: number) => Math.round(n * 100) / 100;
 export async function createInvoice(fd: FormData) {
   const s = await getSession();
   const total = Number(fd.get("total") || 0);
-  const vat = Number(fd.get("vat_rate") ?? 21);
+  const vat = Number(fd.get("vat_rate") ?? 0);
   const subtotal = round(total / (1 + vat / 100));
   const projectId = str(fd, "project_id");
   let clientId = str(fd, "client_id");

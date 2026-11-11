@@ -12,7 +12,7 @@ const H = {
     glow: ["Strălucește", "natural"],
     ads: ["Perfect pentru", "reclame și social media"],
     reel: "Reel nou", carousel: "Carusel", likes: "2.480 aprecieri", scheduled: "programat pentru 18:00",
-    social: ["Mai mult", "engagement", "în 90 de zile"],
+    social: ["Postări", "constante,", "fără bătăi de cap"],
     calendar: ["Calendar editorial", "aprobat de tine"],
     crm: { title: "Totul sub control.", sub: "Clienți, proiecte, venituri și mai mult, într-un singur loc.", cta: "Accesează CRM" },
     saas: { title: "Proiectele mele", sub: "Platformă SaaS · Aplicație mobilă · Integrare API", cta: "Deschide" },
@@ -22,7 +22,7 @@ const H = {
     glow: ["Glow", "naturally"],
     ads: ["Perfect for", "ads and social media"],
     reel: "New reel", carousel: "Carousel", likes: "2,480 likes", scheduled: "scheduled for 6:00 PM",
-    social: ["More", "engagement", "in 90 days"],
+    social: ["Consistent", "posting,", "no hassle"],
     calendar: ["Content calendar", "approved by you"],
     crm: { title: "Everything under control.", sub: "Clients, projects, revenue and more, all in one place.", cta: "Open CRM" },
     saas: { title: "My projects", sub: "SaaS platform · Mobile app · API integration", cta: "Open" },
@@ -58,7 +58,7 @@ export function WebsiteHero({ lang = "ro" }: L) {
       <Orbs />
       <Laptop className="relative ml-[12%] w-[88%]"><WebsiteScreen lang={lang} /></Laptop>
       <Phone className="absolute bottom-0 left-0 z-10 h-[62%] w-[24%]"><WebsiteScreen compact lang={lang} /></Phone>
-      <GrowthBadge className="-right-2 top-0" value="+120%" lines={H[lang].web} />
+      <GrowthBadge className="-right-2 top-0" lines={H[lang].web} />
     </div>
   );
 }
@@ -130,7 +130,7 @@ export function SocialHero({ lang = "ro" }: L) {
           </Phone>
         ))}
       </div>
-      <GrowthBadge className="-right-2 top-2" value="+3x" lines={t.social} lang={lang} />
+      <GrowthBadge className="-right-2 top-2" lines={t.social} lang={lang} />
       <FloatCard className="bottom-6 left-0 flex items-center gap-2"><Zap className="h-5 w-5 text-purple-600" /><span className="text-[11px] font-bold leading-tight text-ink">{t.calendar[0]}<br />{t.calendar[1]}</span></FloatCard>
     </div>
   );

@@ -35,7 +35,7 @@ export function OfferBuilder({
   );
   const [open, setOpen] = useState<string | null>(null);
   const [discount, setDiscount] = useState(initial.discount_percent ?? 0);
-  const [vat, setVat] = useState(initial.vat_rate ?? 21);
+  const [vat, setVat] = useState(initial.vat_rate ?? 0);
   const [delivery, setDelivery] = useState(initial.delivery_term ?? "");
   const [payment, setPayment] = useState(initial.payment_terms ?? "50% avans la semnarea contractului, 30% la livrarea versiunii beta, 20% la lansare.");
   const [conditions, setConditions] = useState(initial.conditions ?? "Prețurile includ două runde de revizii pe etapă. Conținutul (texte, fotografii) este furnizat de client, dacă nu este inclus explicit în ofertă.");

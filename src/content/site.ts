@@ -6,33 +6,33 @@ export const SITE = {
   email: "contact@mavastudio.ro",
   tagline: "Construim produse digitale care ajută afacerile să crească.",
   description:
-    "MAVA Studio – website-uri, platforme SaaS, sisteme CRM, foto & video de produs cu AI, editare video și administrare social media. Totul într-un singur studio.",
+    "MAVA Studio – site-uri și magazine online, poze și clipuri de produs, administrare social media și programe CRM pentru afaceri mici și mijlocii. Totul de la un singur partener.",
 };
 
 const COPY = {
   ro: {
-    defaultTitle: "MAVA Studio – Soluții digitale pentru afaceri moderne",
+    defaultTitle: "MAVA Studio – Site-uri, conținut și social media pentru afaceri",
     tagline: SITE.tagline,
     description: SITE.description,
   },
   en: {
-    defaultTitle: "MAVA Studio – Digital solutions for modern businesses",
+    defaultTitle: "MAVA Studio – Websites, content and social media for businesses",
     tagline: "We build digital products that help businesses grow.",
     description:
-      "MAVA Studio – websites, SaaS platforms, CRM systems, AI product photo & video, video editing and social media management. All in one studio.",
+      "MAVA Studio – websites and online stores, product photos and videos, social media management and CRM software for small and medium businesses. All from one partner.",
   },
 };
 export const siteCopy = (l: Locale) => COPY[l];
 
 /** Adresele sunt cele românești; se traduc în engleză cu localePath(). */
 const NAV_LABELS = {
-  ro: { "/": "Acasă", "/servicii": "Servicii", "/proiecte": "Proiecte", "/despre-noi": "Despre noi", "/contact": "Contact", "/blog": "Blog" },
-  en: { "/": "Home", "/servicii": "Services", "/proiecte": "Projects", "/despre-noi": "About us", "/contact": "Contact", "/blog": "Blog" },
+  ro: { "/": "Acasă", "/servicii": "Servicii", "/proiecte": "Proiecte", "/despre-noi": "Despre noi", "/preturi": "Prețuri", "/contact": "Contact", "/blog": "Blog" },
+  en: { "/": "Home", "/servicii": "Services", "/proiecte": "Projects", "/despre-noi": "About us", "/preturi": "Pricing", "/contact": "Contact", "/blog": "Blog" },
 } as const;
 
 export function nav(l: Locale) {
   const labels = NAV_LABELS[l];
-  return (["/", "/servicii", "/proiecte", "/despre-noi", "/contact"] as const).map((href) => ({ href, label: labels[href] }));
+  return (["/", "/servicii", "/preturi", "/proiecte", "/despre-noi", "/contact"] as const).map((href) => ({ href, label: labels[href] }));
 }
 export const blogLabel = (l: Locale) => NAV_LABELS[l]["/blog"];
 

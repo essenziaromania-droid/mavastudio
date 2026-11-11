@@ -42,7 +42,8 @@ export function generateMetadata(): Metadata {
 export default function StartProjectPage({ searchParams }: { searchParams: { serviciu?: string; pachet?: string } }) {
   const t = T[getLocale()];
   const service = PROJECT_TYPES.some((x) => x.value === searchParams.serviciu) ? searchParams.serviciu : undefined;
-  const pkg = ["start", "business", "enterprise"].includes(searchParams.pachet ?? "") ? searchParams.pachet : undefined;
+  // Numele pachetului ales pe pagina Prețuri; doar text scurt, ca să nu poată fi abuzat.
+  const pkg = /^[\p{L}\p{N} .,&+-]{1,60}$/u.test(searchParams.pachet ?? "") ? searchParams.pachet : undefined;
   return (
     <section className="bg-hero-soft">
       <div className="container grid gap-10 py-14 lg:grid-cols-[1fr_2fr] lg:py-20">

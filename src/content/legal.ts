@@ -4,15 +4,15 @@
  * Modifică aici și se actualizează în toate paginile legale.
  */
 export const LEGAL = {
-  legalName: "ESSENZIA SRL",
+  legalName: "MAVA TRADE SOLUTIONS S.R.L.",
   tradeName: "MAVA Studio",
-  cui: "RO44628032",
+  cui: "48542049",
   /** Nr. de ordine în Registrul Comerțului (ex. J29/1234/2021). Gol = rândul nu apare. */
-  regCom: "J2021001813293",
+  regCom: "J2023001668293",
   address: "Str. Dumitru C. Brătianu nr. 2, sat Șoimești, comuna Ceptura, județul Prahova, România",
   email: "contact@mavastudio.ro",
   website: "www.mavastudio.ro",
-  updated: "30.10.2026",
+  updated: "11.11.2026",
 };
 
 /** Blocul de identificare a firmei, în Markdown (listă). */

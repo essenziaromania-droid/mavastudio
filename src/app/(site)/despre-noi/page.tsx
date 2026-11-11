@@ -24,18 +24,18 @@ const TEAM_STYLE: { icon: string; color: TileColor; photo: string; tint: string 
 const T = {
   ro: {
     metaTitle: "Despre noi",
-    metaDescription: "MAVA Studio este o echipă de specialiști în web, conținut, design și strategie, care construiește produse digitale cu impact real.",
-    eyebrow: ["O echipă pasionată", "Idei cu impact", "Creștere reală"],
+    metaDescription: "MAVA Studio este un studio digital condus de fondatorul său: site-uri, conținut și social media pentru afaceri mici și mijlocii, cu un singur om de contact.",
+    eyebrow: ["Studio condus de fondator", "Un singur om de contact"],
     title: ["Despre", "noi"],
     lead: "MAVA Studio construiește produse digitale care ajută afacerile să crească.",
-    sub: "Suntem o echipă de specialiști în web, conținut, design și strategie, uniți de aceeași misiune: să transformăm ideile în soluții digitale cu impact real.",
+    sub: "Lucrezi direct cu fondatorul studioului, de la prima discuție până la lansare. Fără intermediari și fără mesaje pierdute între departamente.",
     story: "Vezi povestea noastră",
-    teamAlt: "Echipa MAVA Studio",
+    teamAlt: "Fondatorul MAVA Studio",
     float1: ["Idei", "Produse", "Oameni", "Rezultate"],
-    float2: ["Creștem", "împreună branduri", "extraordinare"],
+    float2: ["Lucrezi", "direct cu", "fondatorul"],
     who: "Cine suntem",
-    whoTitle: ["O echipă de oameni care cred în puterea", "digitalului"],
-    whoText: "MAVA Studio este un studio digital creat din pasiune pentru tehnologie, design și povești de brand. Combinăm strategia cu execuția pentru a crea produse digitale care nu doar arată bine, ci aduc rezultate măsurabile.",
+    whoTitle: ["Un studio mic, construit în jurul", "clienților"],
+    whoText: "MAVA Studio este un studio digital creat din pasiune pentru tehnologie, design și povești de brand. Același om care discută cu tine îți face și site-ul, conținutul și postările, așa că nimic nu se pierde pe drum.",
     believe: ["Credem că orice afacere, indiferent de dimensiune, merită instrumente moderne care să o ajute să crească în online. De aceea, lucrăm aproape de clienții noștri, înțelegem obiectivele lor și construim", "soluții personalizate", ", gândite pentru succes pe termen lung."],
     mission: ["Misiunea noastră", "Să facem digitalul accesibil, eficient și valoros pentru orice afacere care își dorește mai mult."],
     values: ["Valorile noastre", "Principiile care ne ghidează", "Tot ceea ce facem este construit pe o fundație solidă de valori."],
@@ -52,30 +52,30 @@ const T = {
       { icon: "code", color: "pink", title: "Construim", text: "Dezvoltăm, designuim și implementăm tot ce este necesar." },
       { icon: "bars", color: "green", title: "Creștem împreună", text: "Testăm, optimizăm și susținem evoluția pe termen lung." },
     ] as Step[],
-    team: ["Echipa noastră", "O combinație de competențe pentru", "rezultate complete", "Suntem o echipă multidisciplinară de specialiști care acoperă toate aspectele unui proiect digital, de la strategie și design, până la dezvoltare și promovare."],
+    team: ["Ce acoperă studioul", "Tot proiectul,", "de la un singur om", "Fondatorul MAVA Studio se ocupă de proiectul tău de la cap la coadă: strategie, design, site, video și social media. Ai un singur om de contact, care cunoaște fiecare detaliu."],
     roles: [
-      ["Strateg", "Analiză, strategie și planificare."],
-      ["Designer", "Identitate vizuală și experiență de brand."],
-      ["Developer", "Website-uri și soluții tehnice."],
-      ["Video Editor", "Conținut video care inspiră."],
-      ["Social Media Manager", "Strategie și conținut pentru comunități."],
+      ["Strategie", "Analiză, plan și obiective clare."],
+      ["Design", "Identitate vizuală și aspectul site-ului."],
+      ["Site-uri și aplicații", "Site-uri, magazine online și programe."],
+      ["Video", "Clipuri pentru produse și rețele sociale."],
+      ["Social media", "Postări, calendar și raportare lunară."],
     ],
-    cta: ["Hai să construim ceva extraordinar împreună!", "Spune-ne despre proiectul tău și hai să discutăm cum te putem ajuta."],
+    cta: ["Hai să ne cunoaștem", "Spune-mi pe scurt ce ai nevoie și îți răspund în 24 de ore lucrătoare."],
   },
   en: {
     metaTitle: "About us",
-    metaDescription: "MAVA Studio is a team of web, content, design and strategy specialists building digital products with real impact.",
-    eyebrow: ["A passionate team", "Ideas with impact", "Real growth"],
+    metaDescription: "MAVA Studio is a founder-led digital studio: websites, content and social media for small and medium businesses, with one point of contact.",
+    eyebrow: ["Founder-led studio", "One point of contact"],
     title: ["About", "us"],
     lead: "MAVA Studio builds digital products that help businesses grow.",
-    sub: "We are a team of web, content, design and strategy specialists, united by the same mission: turning ideas into digital solutions with real impact.",
+    sub: "You work directly with the studio's founder, from the first call to launch. No middlemen and no messages lost between departments.",
     story: "Read our story",
-    teamAlt: "The MAVA Studio team",
+    teamAlt: "The founder of MAVA Studio",
     float1: ["Ideas", "Products", "People", "Results"],
-    float2: ["Growing", "extraordinary brands", "together"],
+    float2: ["Work", "directly with", "the founder"],
     who: "Who we are",
-    whoTitle: ["A team of people who believe in the power of", "digital"],
-    whoText: "MAVA Studio is a digital studio born from a passion for technology, design and brand storytelling. We combine strategy with execution to create digital products that don't just look good, but deliver measurable results.",
+    whoTitle: ["A small studio, built around", "its clients"],
+    whoText: "MAVA Studio is a digital studio born from a passion for technology, design and brand storytelling. The same person you talk to builds your website, content and posts, so nothing gets lost along the way.",
     believe: ["We believe every business, whatever its size, deserves modern tools that help it grow online. That's why we work closely with our clients, understand their goals and build", "tailor-made solutions", ", designed for long-term success."],
     mission: ["Our mission", "To make digital accessible, efficient and valuable for every business that wants more."],
     values: ["Our values", "The principles that guide us", "Everything we do is built on a solid foundation of values."],
@@ -92,15 +92,15 @@ const T = {
       { icon: "code", color: "pink", title: "We build", text: "We develop, design and implement everything that's needed." },
       { icon: "bars", color: "green", title: "We grow together", text: "We test, optimise and support long-term growth." },
     ] as Step[],
-    team: ["Our team", "A combination of skills for", "complete results", "We are a multidisciplinary team of specialists covering every aspect of a digital project, from strategy and design to development and promotion."],
+    team: ["What the studio covers", "The whole project,", "from one person", "The founder of MAVA Studio handles your project end to end: strategy, design, website, video and social media. One point of contact who knows every detail."],
     roles: [
-      ["Strategist", "Analysis, strategy and planning."],
-      ["Designer", "Visual identity and brand experience."],
-      ["Developer", "Websites and technical solutions."],
-      ["Video Editor", "Video content that inspires."],
-      ["Social Media Manager", "Strategy and content for communities."],
+      ["Strategy", "Analysis, a plan and clear goals."],
+      ["Design", "Visual identity and website look."],
+      ["Websites and apps", "Websites, online stores and software."],
+      ["Video", "Videos for products and social media."],
+      ["Social media", "Posts, calendar and monthly reports."],
     ],
-    cta: ["Let's build something extraordinary together!", "Tell us about your project and let's talk about how we can help."],
+    cta: ["Let's get to know each other", "Tell me briefly what you need and I'll reply within 24 working hours."],
   },
 };
 
@@ -112,7 +112,7 @@ export function generateMetadata(): Metadata {
 export default function AboutPage() {
   const locale = getLocale();
   const t = T[locale];
-  const teamPhoto = publicImage("images/echipa.jpg");
+  const teamPhoto = publicImage("images/fondator.jpg") ?? publicImage("images/echipa.jpg");
   return (
     <>
       <section className="relative overflow-hidden bg-hero-soft">
@@ -138,11 +138,6 @@ export default function AboutPage() {
                   <LogoMark className="h-24" />
                   <span className="mt-2 font-display text-4xl font-extrabold text-ink">MAVA</span>
                   <span className="text-xs font-semibold tracking-[0.6em] text-ink/70">STUDIO</span>
-                  <div className="mt-8 flex -space-x-3">
-                    {["from-amber-200 to-orange-300", "from-rose-200 to-pink-300", "from-sky-200 to-blue-300", "from-emerald-200 to-teal-300", "from-violet-200 to-purple-300"].map((g) => (
-                      <div key={g} className={`h-12 w-12 rounded-full border-4 border-white bg-gradient-to-br ${g}`} />
-                    ))}
-                  </div>
                 </div>
               )}
             </div>

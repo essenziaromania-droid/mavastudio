@@ -108,13 +108,13 @@ export function FloatCard({ children, className }: { children: React.ReactNode; 
   return <div className={cn("absolute z-20 rounded-2xl bg-white/95 p-3 shadow-[0_16px_40px_-12px_rgba(43,76,245,.30)] ring-1 ring-line backdrop-blur", className)}>{children}</div>;
 }
 
-export function GrowthBadge({ value = "+28%", lines, className, lang = "ro" }: { value?: string; lines?: string[]; className?: string; lang?: Locale }) {
+export function GrowthBadge({ value, lines, className, lang = "ro" }: { value?: string; lines?: string[]; className?: string; lang?: Locale }) {
   lines ??= M[lang].growth;
   return (
     <FloatCard className={cn("w-40 rotate-[-4deg] p-4", className)}>
       <div className="flex items-start justify-between">
         <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-purple-50 text-purple-600"><BarChart3 className="h-5 w-5" /></div>
-        <span className="flex items-center gap-0.5 text-xs font-bold text-brand-blue">{value}<TrendingUp className="h-3.5 w-3.5 text-emerald-500" /></span>
+        <span className="flex items-center gap-0.5 text-xs font-bold text-brand-blue">{value ?? null}<TrendingUp className="h-3.5 w-3.5 text-emerald-500" /></span>
       </div>
       <p className="mt-2 text-[12px] font-bold leading-tight text-ink">{lines.map((l) => <span key={l} className="block">{l}</span>)}</p>
       <svg viewBox="0 0 120 30" className="mt-1 h-6 w-full"><path d="M0 28 C30 26 50 22 70 14 S105 4 120 2" fill="none" stroke="#9b5cf6" strokeWidth="2" /></svg>

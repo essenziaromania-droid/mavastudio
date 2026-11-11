@@ -1,21 +1,19 @@
 import type { Metadata } from "next";
-import { getServices } from "@/content/services";
 import { siteCopy } from "@/content/site";
 import { getLocalizedSettings, getPortfolio } from "@/lib/public-data";
 import { getLocale, pageMeta } from "@/lib/i18n-server";
-import { localePath } from "@/lib/i18n";
-import { CtaBand, Eyebrow, FeatureCard, HeroButtons, ProcessSteps, SectionHeading, Stats, type Step } from "@/components/site/sections";
+import { CtaBand, Eyebrow, HeroButtons, ProcessSteps, SectionHeading, Stats, type Step } from "@/components/site/sections";
+import { Audience, HomeFaq, NextSteps, ServiceGroups, Testimonials, WhyUs } from "@/components/site/sales-sections";
 import { DashboardHero } from "@/components/site/hero-visuals";
 import { ProjectCard } from "@/components/site/project-card";
 
 const T = {
   ro: {
-    eyebrow: "Soluții digitale pentru afaceri moderne",
-    title: "Idei puternice transformate în produse digitale",
-    highlight: "de succes.",
-    lead: "Website-uri, platforme SaaS, sisteme CRM, conținut vizual cu AI, editare video și administrare social media — totul într-un singur studio.",
-    services: ["Serviciile noastre", "Soluții digitale complete pentru afaceri care vor să se dezvolte."],
-    projects: ["Proiecte selectate", "O privire asupra a ceea ce am construit pentru branduri extraordinare."],
+    eyebrow: "Studio digital pentru afaceri mici și mijlocii",
+    title: "Site-uri, conținut și social media care îți aduc",
+    highlight: "clienți.",
+    lead: "Îți facem site-ul sau magazinul online, pozele și clipurile de produs și postările pe rețelele sociale. Iar când afacerea crește, îți construim și programele interne, totul de la un singur partener.",
+    projects: ["Proiecte reale", "Câteva dintre site-urile și proiectele pe care le-am construit pentru clienții noștri."],
     process: ["Cum lucrăm", "Un proces simplu și clar, de la idee la rezultate reale."],
     steps: [
       { icon: "search", color: "blue", title: "Analiză și planificare", text: "Înțelegem obiectivele tale, publicul și cerințele." },
@@ -23,15 +21,14 @@ const T = {
       { icon: "code", color: "pink", title: "Dezvoltare și conținut", text: "Construim, creăm și integrăm toate elementele necesare." },
       { icon: "bars", color: "green", title: "Lansare și creștere", text: "Testăm, optimizăm și te susținem în continuare pentru rezultate mai bune." },
     ] as Step[],
-    cta: { title: "Gata să construim ceva extraordinar?", text: "Transformă-ți ideile în produse digitale puternice.", button: "Programează o consultație gratuită" },
+    cta: { title: "Hai să vedem ce ți se potrivește", text: "O discuție scurtă și gratuită, apoi primești o ofertă clară, cu preț și termen.", button: "Programează o consultație gratuită" },
   },
   en: {
-    eyebrow: "Digital solutions for modern businesses",
-    title: "Powerful ideas turned into",
-    highlight: "successful digital products.",
-    lead: "Websites, SaaS platforms, CRM systems, AI visual content, video editing and social media management — all in one studio.",
-    services: ["Our services", "Complete digital solutions for businesses that want to grow."],
-    projects: ["Selected projects", "A look at what we've built for extraordinary brands."],
+    eyebrow: "Digital studio for small and medium businesses",
+    title: "Websites, content and social media that bring you",
+    highlight: "customers.",
+    lead: "We build your website or online store, create your product photos and videos and run your social media. And as your business grows, we build your internal software too, all from one partner.",
+    projects: ["Real projects", "Some of the websites and projects we've built for our clients."],
     process: ["How we work", "A simple, clear process, from idea to real results."],
     steps: [
       { icon: "search", color: "blue", title: "Discovery & planning", text: "We understand your goals, your audience and your requirements." },
@@ -39,7 +36,7 @@ const T = {
       { icon: "code", color: "pink", title: "Development & content", text: "We build, create and integrate everything that's needed." },
       { icon: "bars", color: "green", title: "Launch & growth", text: "We test, optimise and keep supporting you for better results." },
     ] as Step[],
-    cta: { title: "Ready to build something extraordinary?", text: "Turn your ideas into powerful digital products.", button: "Book a free consultation" },
+    cta: { title: "Let's see what fits you", text: "A short, free call, then you get a clear proposal with price and timeline.", button: "Book a free consultation" },
   },
 };
 
@@ -60,7 +57,7 @@ export default async function HomePage() {
         <div className="container grid items-center gap-12 py-14 lg:grid-cols-[1fr_1.1fr] lg:py-20">
           <div>
             <Eyebrow parts={[t.eyebrow]} />
-            <h1 className="text-[2.7rem] font-extrabold leading-[1.02] md:text-[3.7rem]">
+            <h1 className="text-[2.5rem] font-extrabold leading-[1.05] md:text-[3.3rem]">
               {t.title} <span className="text-gradient">{t.highlight}</span>
             </h1>
             <p className="mt-6 max-w-lg text-lg leading-relaxed text-body">{t.lead}</p>
@@ -71,16 +68,9 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="section">
-        <div className="container">
-          <SectionHeading title={t.services[0]} sub={t.services[1]} />
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {getServices(locale).map((s) => (
-              <FeatureCard key={s.slug} icon={s.icon} color={s.color} title={s.menuTitle} text={s.short} href={localePath(`/servicii/${s.slug}`, locale)} />
-            ))}
-          </div>
-        </div>
-      </section>
+      <ServiceGroups locale={locale} />
+      <WhyUs locale={locale} />
+      <Audience locale={locale} />
 
       <section className="section pt-0">
         <div className="container">
@@ -97,6 +87,10 @@ export default async function HomePage() {
           <ProcessSteps steps={t.steps} />
         </div>
       </section>
+
+      <Testimonials locale={locale} />
+      <HomeFaq locale={locale} />
+      <NextSteps locale={locale} />
 
       <CtaBand title={t.cta.title} text={t.cta.text} button={t.cta.button} locale={locale} />
     </>

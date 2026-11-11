@@ -43,7 +43,7 @@ export default async function NewInvoicePage({ searchParams }: { searchParams: {
           <Field label="Proiect"><Select name="project_id" options={projects} defaultValue={searchParams.project ?? ""} placeholder="—" /></Field>
           <Field label="Descriere servicii *" className="sm:col-span-2"><Input name="description" defaultValue={description} required /></Field>
           <Field label="Total cu TVA (lei) *"><Input name="total" type="number" step="0.01" defaultValue={amount} required /></Field>
-          <Field label="Cotă TVA (%)"><Input name="vat_rate" type="number" defaultValue={21} /></Field>
+          <Field label="Cotă TVA (%)"><Input name="vat_rate" type="number" defaultValue={0} /></Field>
           <Field label="Data emiterii"><Input name="issue_date" type="date" defaultValue={new Date().toISOString().slice(0, 10)} /></Field>
           <Field label="Scadență"><Input name="due_date" type="date" defaultValue={in5} /></Field>
           <Field label="Categorie serviciu" hint="Pentru raportul „Venituri pe servicii”."><Select name="service_category" options={Object.fromEntries(Object.entries(SERVICE_CATEGORY).map(([k, v]) => [k, v.label]))} defaultValue={category} placeholder="—" /></Field>
