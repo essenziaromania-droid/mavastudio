@@ -49,7 +49,7 @@ const RO = {
   why: ["De ce MAVA Studio", "Ce primești în plus față de un freelancer sau o agenție mare."],
   whyItems: [
     { icon: "layers", color: "blue", title: "Un singur partener pentru tot", text: "Site, conținut și social media făcute de aceeași mână, cu același stil. Nu mai alergi după trei colaboratori diferiți." },
-    { icon: "users", color: "purple", title: "Vorbești direct cu cel care lucrează", text: "Fără intermediari și fără „revin”. Discuți direct cu fondatorul studioului, de la ofertă până la lansare." },
+    { icon: "users", color: "purple", title: "Vorbești direct cu cel care lucrează", text: "Fără intermediari și fără „revin”. Discuți direct cu Marius, fondatorul studioului, de la ofertă până la lansare." },
     { icon: "eye", color: "green", title: "Vezi tot ce se întâmplă", text: "Ofertă și contract semnate online, plus un portal unde urmărești proiectul, fișierele și facturile." },
     { icon: "card", color: "orange", title: "Prețuri clare de la început", text: "Ai prețurile orientative pe site, iar în ofertă vezi exact ce primești și ce nu e inclus." },
   ] as Card[],
@@ -64,10 +64,10 @@ const RO = {
   faqTitle: ["Întrebări frecvente", "Ce ne întreabă cel mai des clienții înainte să înceapă."],
   faq: [
     ["Cât costă?", "Depinde de ce ai nevoie, dar pe pagina Prețuri găsești prețurile de pornire pentru fiecare serviciu. După o discuție scurtă primești o ofertă exactă, fără costuri ascunse."],
-    ["Cât durează?", "Un site de prezentare durează de obicei 3–6 săptămâni, iar un magazin online 4–8 săptămâni. Administrarea social media poate începe în aproximativ o săptămână. Termenul exact e scris în ofertă."],
+    ["Cât durează?", "Un landing page e gata în 3 zile lucrătoare, un site de prezentare în 7–15 zile lucrătoare, iar un magazin online în 15–30 de zile lucrătoare. Pozele și clipurile cu AI le primești în 7 zile lucrătoare, iar un CRM sau o platformă web durează 30–60 de zile. Termenul exact e scris în ofertă."],
     ["Ce trebuie să pregătesc?", "Ideal: logo, câteva texte despre afacere, poze dacă ai și exemple de site-uri care îți plac. Dacă nu ai nimic din acestea, te ajutăm noi cu textele, pozele și designul."],
     ["Ce se întâmplă după lansare?", "Nu te lăsăm singur. Oferim mentenanță lunară (actualizări, copii de siguranță, mici modificări), iar dacă vrei, ne ocupăm și de conținut și social media."],
-    ["Cu cine lucrez efectiv?", "Lucrezi direct cu fondatorul MAVA Studio. Ai un singur om de contact care cunoaște tot proiectul."],
+    ["Cu cine lucrez efectiv?", "Lucrezi direct cu Marius Ungureanu, fondatorul MAVA Studio. Ai un singur om de contact care cunoaște tot proiectul."],
     ["Pot începe cu ceva mic?", "Da. Mulți clienți încep cu un site sau cu un pachet de social media și adaugă alte servicii pe parcurs."],
   ] as [string, string][],
   next: ["Ce urmează după ce ne scrii", "Simplu și fără obligații."],
@@ -109,7 +109,7 @@ const EN: typeof RO = {
   why: ["Why MAVA Studio", "What you get compared with a freelancer or a big agency."],
   whyItems: [
     { icon: "layers", color: "blue", title: "One partner for everything", text: "Website, content and social media made by the same hands, in the same style. No more chasing three different contractors." },
-    { icon: "users", color: "purple", title: "Talk directly to the person doing the work", text: "No middlemen. You work directly with the studio's founder, from proposal to launch." },
+    { icon: "users", color: "purple", title: "Talk directly to the person doing the work", text: "No middlemen. You work directly with Marius, the studio's founder, from proposal to launch." },
     { icon: "eye", color: "green", title: "See everything that's happening", text: "Proposal and contract signed online, plus a portal where you follow the project, files and invoices." },
     { icon: "card", color: "orange", title: "Clear prices from the start", text: "Starting prices are on the website, and the proposal shows exactly what's included and what isn't." },
   ],
@@ -124,10 +124,10 @@ const EN: typeof RO = {
   faqTitle: ["Frequently asked questions", "What clients ask us most often before getting started."],
   faq: [
     ["How much does it cost?", "It depends on what you need, but the Pricing page shows starting prices for every service. After a short call you get an exact proposal, with no hidden costs."],
-    ["How long does it take?", "A business website usually takes 3–6 weeks and an online store 4–8 weeks. Social media management can start in about a week. The exact timeline is in the proposal."],
+    ["How long does it take?", "A landing page is ready in 3 working days, a business website in 7–15 working days and an online store in 15–30 working days. AI photos and videos are delivered in 7 working days, and a CRM or web platform takes 30–60 days. The exact timeline is in the proposal."],
     ["What do I need to prepare?", "Ideally: your logo, a few lines about your business, photos if you have them and examples of websites you like. If you don't have any of these, we'll help with copy, photos and design."],
     ["What happens after launch?", "You're not on your own. We offer monthly maintenance (updates, backups, small changes), and we can also take care of content and social media."],
-    ["Who will I actually work with?", "You work directly with the founder of MAVA Studio. One point of contact who knows the whole project."],
+    ["Who will I actually work with?", "You work directly with Marius Ungureanu, the founder of MAVA Studio. One point of contact who knows the whole project."],
     ["Can I start small?", "Yes. Many clients start with a website or a social media package and add other services along the way."],
   ],
   next: ["What happens after you get in touch", "Simple and with no obligation."],

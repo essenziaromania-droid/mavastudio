@@ -51,7 +51,7 @@ export const SERVICES: Service[] = [
     stats: [
       { value: "50+", label: "Website-uri livrate" },
       { value: "98%", label: "Clienți mulțumiți" },
-      { value: "3–6 săpt.", label: "Timp mediu de livrare" },
+      { value: "7–15 zile", label: "Livrare site de prezentare" },
     ],
     hero: "website",
     metaDescription: "Website-uri de prezentare, landing page-uri, magazine online și website-uri custom, rapide și optimizate SEO.",

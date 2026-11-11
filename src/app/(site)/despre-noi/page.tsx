@@ -28,9 +28,9 @@ const T = {
     eyebrow: ["Studio condus de fondator", "Un singur om de contact"],
     title: ["Despre", "noi"],
     lead: "MAVA Studio construiește produse digitale care ajută afacerile să crească.",
-    sub: "Lucrezi direct cu fondatorul studioului, de la prima discuție până la lansare. Fără intermediari și fără mesaje pierdute între departamente.",
+    sub: "Lucrezi direct cu Marius Ungureanu, fondatorul studioului, de la prima discuție până la lansare. Fără intermediari și fără mesaje pierdute între departamente.",
     story: "Vezi povestea noastră",
-    teamAlt: "Fondatorul MAVA Studio",
+    teamAlt: "Marius Ungureanu, fondatorul MAVA Studio",
     float1: ["Idei", "Produse", "Oameni", "Rezultate"],
     float2: ["Lucrezi", "direct cu", "fondatorul"],
     who: "Cine suntem",
@@ -52,7 +52,7 @@ const T = {
       { icon: "code", color: "pink", title: "Construim", text: "Dezvoltăm, designuim și implementăm tot ce este necesar." },
       { icon: "bars", color: "green", title: "Creștem împreună", text: "Testăm, optimizăm și susținem evoluția pe termen lung." },
     ] as Step[],
-    team: ["Ce acoperă studioul", "Tot proiectul,", "de la un singur om", "Fondatorul MAVA Studio se ocupă de proiectul tău de la cap la coadă: strategie, design, site, video și social media. Ai un singur om de contact, care cunoaște fiecare detaliu."],
+    team: ["Ce acoperă studioul", "Tot proiectul,", "de la un singur om", "Marius Ungureanu, fondatorul MAVA Studio, se ocupă de proiectul tău de la cap la coadă: strategie, design, site, video și social media. Ai un singur om de contact, care cunoaște fiecare detaliu."],
     roles: [
       ["Strategie", "Analiză, plan și obiective clare."],
       ["Design", "Identitate vizuală și aspectul site-ului."],
@@ -68,9 +68,9 @@ const T = {
     eyebrow: ["Founder-led studio", "One point of contact"],
     title: ["About", "us"],
     lead: "MAVA Studio builds digital products that help businesses grow.",
-    sub: "You work directly with the studio's founder, from the first call to launch. No middlemen and no messages lost between departments.",
+    sub: "You work directly with Marius Ungureanu, the studio's founder, from the first call to launch. No middlemen and no messages lost between departments.",
     story: "Read our story",
-    teamAlt: "The founder of MAVA Studio",
+    teamAlt: "Marius Ungureanu, founder of MAVA Studio",
     float1: ["Ideas", "Products", "People", "Results"],
     float2: ["Work", "directly with", "the founder"],
     who: "Who we are",
@@ -92,7 +92,7 @@ const T = {
       { icon: "code", color: "pink", title: "We build", text: "We develop, design and implement everything that's needed." },
       { icon: "bars", color: "green", title: "We grow together", text: "We test, optimise and support long-term growth." },
     ] as Step[],
-    team: ["What the studio covers", "The whole project,", "from one person", "The founder of MAVA Studio handles your project end to end: strategy, design, website, video and social media. One point of contact who knows every detail."],
+    team: ["What the studio covers", "The whole project,", "from one person", "Marius Ungureanu, founder of MAVA Studio, handles your project end to end: strategy, design, website, video and social media. One point of contact who knows every detail."],
     roles: [
       ["Strategy", "Analysis, a plan and clear goals."],
       ["Design", "Visual identity and website look."],
@@ -112,7 +112,8 @@ export function generateMetadata(): Metadata {
 export default function AboutPage() {
   const locale = getLocale();
   const t = T[locale];
-  const teamPhoto = publicImage("images/fondator.jpg") ?? publicImage("images/echipa.jpg");
+  // Poza fondatorului e în public/images/fondator.jpg.
+  const teamPhoto = "/images/fondator.jpg";
   return (
     <>
       <section className="relative overflow-hidden bg-hero-soft">

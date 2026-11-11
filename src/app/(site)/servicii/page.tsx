@@ -37,7 +37,7 @@ const T = {
     ],
     faqTitle: ["Întrebări frecvente", "Răspunsuri la cele mai comune întrebări despre serviciile noastre."],
     faq: [
-      ["Cât durează realizarea unui website?", "Un website de prezentare durează de obicei 3–6 săptămâni, în funcție de numărul de pagini, conținut și integrări. Îți comunicăm un termen exact în ofertă."],
+      ["Cât durează realizarea unui website?", "Un landing page e gata în 3 zile lucrătoare, un site de prezentare în 7–15 zile lucrătoare, iar un magazin online în 15–30 de zile lucrătoare. Termenul exact îl primești în ofertă."],
       ["Lucrați și cu afaceri la început de drum?", "Da. Poți începe cu un site de prezentare sau cu un pachet de social media, apoi adaugi alte servicii pe măsură ce crești."],
       ["Oferiți și mentenanță după lansare?", "Da. Oferim pachete lunare de mentenanță: actualizări, backup, monitorizare, securitate și modificări de conținut."],
       ["Ce informații sunt necesare pentru un proiect?", "Ne ajută să știm obiectivul, publicul țintă, exemple care îți plac, bugetul estimativ și termenul dorit. Dacă nu le ai pe toate, le clarificăm împreună."],
@@ -73,7 +73,7 @@ const T = {
     ],
     faqTitle: ["Frequently asked questions", "Answers to the most common questions about our services."],
     faq: [
-      ["How long does it take to build a website?", "A business website usually takes 3–6 weeks, depending on the number of pages, content and integrations. We give you an exact timeline in our proposal."],
+      ["How long does it take to build a website?", "A landing page is ready in 3 working days, a business website in 7–15 working days and an online store in 15–30 working days. You get the exact timeline in the proposal."],
       ["Do you work with international clients?", "Yes. We work remotely with clients from all over the world, communicate in English and adapt our schedule to your time zone."],
       ["Do you offer maintenance after launch?", "Yes. We offer monthly maintenance plans: updates, backups, monitoring, security and content changes."],
       ["What information do you need to start a project?", "It helps to know your goal, target audience, examples you like, an estimated budget and your preferred deadline. If you don't have all of these, we'll clarify them together."],

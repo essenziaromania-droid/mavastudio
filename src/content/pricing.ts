@@ -46,16 +46,16 @@ const RO = {
       sub: "Plată o singură dată. Domeniul și găzduirea se plătesc separat.",
       service: "dezvoltare-website-uri",
       items: [
-        { name: "Landing page", type: "website", price: "1.000 lei", text: "O singură pagină pentru o campanie, un produs sau un eveniment.", items: ["Design personalizat", "Formular de contact", "Adaptat pentru telefon", "Livrare în 1–2 săptămâni"] },
-        { name: "Site de prezentare", type: "website", price: "3.000 lei", popular: true, text: "Site complet pentru firmă: cine ești, ce oferi și cum te contactează clienții.", items: ["Până la 6 pagini", "Design personalizat", "Optimizare de bază pentru Google", "Formulare, hartă, rețele sociale", "Suport 30 de zile după lansare"] },
-        { name: "Magazin online", type: "ecommerce", price: "6.000 lei", text: "Magazin gata de vânzare, ușor de administrat de tine.", items: ["Produse, categorii și filtre", "Plată cu cardul și ramburs", "Integrare curierat și facturare", "Instruire pentru administrare", "Suport 60 de zile după lansare"] },
+        { name: "Landing page", type: "website", price: "1.000 lei", text: "O singură pagină pentru o campanie, un produs sau un eveniment.", items: ["Design personalizat", "Formular de contact", "Adaptat pentru telefon", "Livrare în 3 zile lucrătoare"] },
+        { name: "Site de prezentare", type: "website", price: "3.000 lei", popular: true, text: "Site complet pentru firmă: cine ești, ce oferi și cum te contactează clienții.", items: ["Până la 6 pagini", "Design personalizat", "Optimizare de bază pentru Google", "Formulare, hartă, rețele sociale", "Suport 30 de zile după lansare", "Livrare în 7–15 zile lucrătoare"] },
+        { name: "Magazin online", type: "ecommerce", price: "6.000 lei", text: "Magazin gata de vânzare, ușor de administrat de tine.", items: ["Produse, categorii și filtre", "Plată cu cardul și ramburs", "Integrare curierat și facturare", "Instruire pentru administrare", "Suport 60 de zile după lansare", "Livrare în 15–30 de zile lucrătoare"] },
       ],
     },
     {
       icon: "megaphone",
       color: "purple",
       title: "Administrare social media",
-      sub: "Abonament lunar. Fără perioadă minimă după primele 3 luni.",
+      sub: "Abonament lunar, cu o perioadă minimă de 3 luni. După aceea continui de la lună la lună.",
       service: "administrare-social-media",
       items: [
         { name: "Start", type: "social", price: "1.500 lei", unit: "/ lună", text: "Prezență constantă pentru afaceri la început.", items: ["2 rețele sociale", "8 postări pe lună", "Calendar aprobat de tine", "Raport lunar"] },
@@ -70,8 +70,8 @@ const RO = {
       sub: "Pe proiect sau ca pachet lunar.",
       service: "foto-video-produs-ai",
       items: [
-        { name: "Poze de produs cu AI", type: "ai", price: "600 lei", text: "Imagini de prezentare și lifestyle, fără ședință foto.", items: ["10 imagini pentru un produs", "Pentru site, magazin și reclame", "2 runde de modificări"] },
-        { name: "Clip de produs cu AI", type: "ai", price: "150 lei", unit: "/ clip", text: "Clip de produs pentru reclame și rețele sociale.", items: ["15–30 de secunde sau mai lung, la cerere", "Format vertical și orizontal", "Muzică și text pe ecran"] },
+        { name: "Poze de produs cu AI", type: "ai", price: "600 lei", text: "Imagini de prezentare și lifestyle, fără ședință foto.", items: ["10 imagini pentru un produs", "Pentru site, magazin și reclame", "2 runde de modificări", "Livrare în 7 zile lucrătoare"] },
+        { name: "Clip de produs cu AI", type: "ai", price: "150 lei", unit: "/ clip", text: "Clip de produs pentru reclame și rețele sociale.", items: ["15–30 de secunde sau mai lung, la cerere", "Format vertical și orizontal", "Muzică și text pe ecran", "Livrare în 7 zile lucrătoare"] },
         { name: "Editare video", type: "video", price: "25 lei", unit: "/ minut", text: "Din materialele tale facem clipuri pentru Reels, TikTok, Shorts și YouTube.", items: ["Preț pe minut de video final", "Subtitrări și text pe ecran", "Muzică, tranziții și corecție de culoare"] },
       ],
     },
@@ -81,8 +81,8 @@ const RO = {
       title: "Programe pentru afacerea ta",
       sub: "Construite pe măsură. Prețul depinde de ce trebuie să facă programul.",
       items: [
-        { name: "CRM și automatizări", type: "crm", price: "10.000 lei", text: "Clienți, oferte, contracte, proiecte și facturare într-un singur loc.", items: ["Construit pe procesele tale", "Facturare SmartBill, Oblio sau FGO", "Sarcini repetitive făcute automat"] },
-        { name: "Platformă sau aplicație web", type: "saas", price: "25.000 lei", text: "Platforme cu conturi de utilizator, abonamente și plăți online.", items: ["Analiză și prototip înainte de dezvoltare", "Plăți și abonamente online", "Dezvoltare pe etape"] },
+        { name: "CRM și automatizări", type: "crm", price: "10.000 lei", text: "Clienți, oferte, contracte, proiecte și facturare într-un singur loc.", items: ["Construit pe procesele tale", "Facturare SmartBill, Oblio sau FGO", "Sarcini repetitive făcute automat", "Livrare în 30–60 de zile"] },
+        { name: "Platformă sau aplicație web", type: "saas", price: "25.000 lei", text: "Platforme cu conturi de utilizator, abonamente și plăți online.", items: ["Analiză și prototip înainte de dezvoltare", "Plăți și abonamente online", "Dezvoltare pe etape", "Livrare în 30–60 de zile"] },
         { name: "Mentenanță site", type: "website", price: "500 lei", unit: "/ lună", text: "Site-ul tău rămâne rapid, sigur și actualizat.", items: ["Actualizări și copii de siguranță", "Monitorizare și securitate", "Mici modificări de conținut"] },
       ],
     },
@@ -90,7 +90,7 @@ const RO = {
   faqTitle: ["Întrebări despre prețuri", "Ce trebuie să știi înainte să ceri o ofertă."],
   faq: [
     ["De ce scrie „de la”?", "Fiecare afacere are nevoi diferite. Prețul de pornire e pentru varianta de bază, iar în ofertă vezi exact cât costă ce îți trebuie ție."],
-    ["Cum se face plata?", "La proiecte, de obicei plătești un avans la semnarea contractului și restul la livrare. Abonamentele se plătesc lunar, pe factură."],
+    ["Cum se face plata?", "La proiecte plătești un avans de 50% la semnarea contractului și restul de 50% la livrare. Abonamentele se plătesc lunar, pe factură."],
     ["Sunt costuri ascunse?", "Nu. Tot ce e inclus și ce nu e inclus e scris în ofertă. Costurile separate (domeniu, găzduire, buget de reclame) sunt anunțate de la început."],
     ["Pot combina mai multe servicii?", "Da, și de obicei iese mai avantajos. De exemplu, un site plus administrare social media sau un magazin online plus poze de produs."],
   ] as [string, string][],
@@ -116,16 +116,16 @@ const EN: typeof RO = {
       sub: "One-time payment. Domain and hosting are paid separately.",
       service: "dezvoltare-website-uri",
       items: [
-        { name: "Landing page", type: "website", price: "€200", text: "A single page for a campaign, product or event.", items: ["Custom design", "Contact form", "Mobile-friendly", "Delivered in 1–2 weeks"] },
-        { name: "Business website", type: "website", price: "€600", popular: true, text: "A complete company website: who you are, what you offer and how customers reach you.", items: ["Up to 6 pages", "Custom design", "Basic Google optimisation", "Forms, map, social links", "30 days of support after launch"] },
-        { name: "Online store", type: "ecommerce", price: "€1,200", text: "A store ready to sell, easy for you to manage.", items: ["Products, categories and filters", "Card and cash-on-delivery payments", "Courier and invoicing integration", "Training to manage it", "60 days of support after launch"] },
+        { name: "Landing page", type: "website", price: "€200", text: "A single page for a campaign, product or event.", items: ["Custom design", "Contact form", "Mobile-friendly", "Delivered in 3 working days"] },
+        { name: "Business website", type: "website", price: "€600", popular: true, text: "A complete company website: who you are, what you offer and how customers reach you.", items: ["Up to 6 pages", "Custom design", "Basic Google optimisation", "Forms, map, social links", "30 days of support after launch", "Delivered in 7–15 working days"] },
+        { name: "Online store", type: "ecommerce", price: "€1,200", text: "A store ready to sell, easy for you to manage.", items: ["Products, categories and filters", "Card and cash-on-delivery payments", "Courier and invoicing integration", "Training to manage it", "60 days of support after launch", "Delivered in 15–30 working days"] },
       ],
     },
     {
       icon: "megaphone",
       color: "purple",
       title: "Social media management",
-      sub: "Monthly plan. No minimum term after the first 3 months.",
+      sub: "Monthly plan with a 3-month minimum. After that, you continue month to month.",
       service: "administrare-social-media",
       items: [
         { name: "Start", type: "social", price: "€300", unit: "/ month", text: "Consistent presence for businesses getting started.", items: ["2 social networks", "8 posts per month", "Calendar approved by you", "Monthly report"] },
@@ -140,8 +140,8 @@ const EN: typeof RO = {
       sub: "Per project or as a monthly package.",
       service: "foto-video-produs-ai",
       items: [
-        { name: "AI product photos", type: "ai", price: "€120", text: "Product and lifestyle images, without a photo shoot.", items: ["10 images for one product", "For website, store and ads", "2 rounds of changes"] },
-        { name: "AI product video", type: "ai", price: "€30", unit: "/ video", text: "A product video for ads and social media.", items: ["15–30 seconds, or longer on request", "Vertical and horizontal format", "Music and on-screen text"] },
+        { name: "AI product photos", type: "ai", price: "€120", text: "Product and lifestyle images, without a photo shoot.", items: ["10 images for one product", "For website, store and ads", "2 rounds of changes", "Delivered in 7 working days"] },
+        { name: "AI product video", type: "ai", price: "€30", unit: "/ video", text: "A product video for ads and social media.", items: ["15–30 seconds, or longer on request", "Vertical and horizontal format", "Music and on-screen text", "Delivered in 7 working days"] },
         { name: "Video editing", type: "video", price: "€5", unit: "/ minute", text: "We turn your footage into videos for Reels, TikTok, Shorts and YouTube.", items: ["Price per minute of final video", "Subtitles and on-screen text", "Music, transitions and colour correction"] },
       ],
     },
@@ -151,8 +151,8 @@ const EN: typeof RO = {
       title: "Software for your business",
       sub: "Built to measure. The price depends on what the software needs to do.",
       items: [
-        { name: "CRM and automation", type: "crm", price: "€2,000", text: "Clients, proposals, contracts, projects and invoicing in one place.", items: ["Built around your processes", "Invoicing integrations", "Repetitive tasks done automatically"] },
-        { name: "Web platform or app", type: "saas", price: "€5,000", text: "Platforms with user accounts, subscriptions and online payments.", items: ["Analysis and prototype before development", "Online payments and subscriptions", "Built in stages"] },
+        { name: "CRM and automation", type: "crm", price: "€2,000", text: "Clients, proposals, contracts, projects and invoicing in one place.", items: ["Built around your processes", "Invoicing integrations", "Repetitive tasks done automatically", "Delivered in 30–60 days"] },
+        { name: "Web platform or app", type: "saas", price: "€5,000", text: "Platforms with user accounts, subscriptions and online payments.", items: ["Analysis and prototype before development", "Online payments and subscriptions", "Built in stages", "Delivered in 30–60 days"] },
         { name: "Website maintenance", type: "website", price: "€100", unit: "/ month", text: "Your website stays fast, secure and up to date.", items: ["Updates and backups", "Monitoring and security", "Small content changes"] },
       ],
     },
@@ -160,7 +160,7 @@ const EN: typeof RO = {
   faqTitle: ["Pricing questions", "What to know before asking for a quote."],
   faq: [
     ["Why does it say “from”?", "Every business needs something different. The starting price is for the basic version, and the proposal shows exactly what you need costs."],
-    ["How does payment work?", "For projects, you usually pay a deposit when signing the contract and the rest on delivery. Monthly plans are invoiced monthly."],
+    ["How does payment work?", "For projects, you pay a 50% deposit when signing the contract and the remaining 50% on delivery. Monthly plans are invoiced monthly."],
     ["Are there hidden costs?", "No. Everything included and not included is written in the proposal. Separate costs (domain, hosting, ad budget) are stated upfront."],
     ["Can I combine several services?", "Yes, and it's usually better value. For example, a website plus social media management, or an online store plus product photos."],
   ],
