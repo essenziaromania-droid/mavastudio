@@ -5,26 +5,26 @@ import { getPosts } from "@/lib/public-data";
 import { CtaBand, Eyebrow } from "@/components/site/sections";
 import { formatDate } from "@/lib/utils";
 import { readingTime } from "@/lib/markdown";
-import { LogoMark } from "@/components/ui/logo";
+import { BlogCover } from "@/components/site/blog-cover";
 import { getLocale, pageMeta } from "@/lib/i18n-server";
 import { localePath } from "@/lib/i18n";
 
 const T = {
   ro: {
-    metaDescription: "Articole despre website-uri, SaaS, CRM, conținut AI, video și social media, de la echipa MAVA Studio.",
+    metaDescription: "Ghiduri practice despre site-uri, magazine online, SEO, social media, video, conținut AI și CRM pentru afaceri mici și mijlocii, scrise de Marius Ungureanu, MAVA Studio.",
     eyebrow: ["Blog", "Idei", "Ghiduri"],
-    lead: "Idei, ghiduri și noutăți despre website-uri, platforme SaaS, CRM, conținut AI, video și social media.",
+    lead: "Ghiduri practice, pe înțelesul oricui, despre site-uri, magazine online, SEO, social media, video, conținut AI și programe pentru afaceri.",
     empty: "În curând publicăm primele articole.",
     readArticle: "Citește articolul", read: "Citește",
-    cta: ["Ai o idee de proiect?", "Hai să discutăm cum o putem transforma într-un produs digital de succes."],
+    cta: ["Ai o idee de proiect?", "Scrie-ne și primești în 24 de ore o recomandare gratuită, cu preț și termen."],
   },
   en: {
-    metaDescription: "Articles about websites, SaaS, CRM, AI content, video and social media from the MAVA Studio team.",
+    metaDescription: "Practical guides on websites, online stores, SEO, social media, video, AI content and CRM for small and medium businesses, by Marius Ungureanu, MAVA Studio.",
     eyebrow: ["Blog", "Ideas", "Guides"],
-    lead: "Ideas, guides and news about websites, SaaS platforms, CRM, AI content, video and social media.",
+    lead: "Practical, plain-language guides on websites, online stores, SEO, social media, video, AI content and business software.",
     empty: "Articles coming soon.",
     readArticle: "Read the article", read: "Read",
-    cta: ["Have a project idea?", "Let's talk about how we can turn it into a successful digital product."],
+    cta: ["Have a project idea?", "Write to us and get a free recommendation within 24 hours, with price and timeline."],
   },
 };
 
@@ -33,20 +33,12 @@ export function generateMetadata(): Metadata {
   return pageMeta("/blog", locale, { title: "Blog", description: T[locale].metaDescription });
 }
 
-function Cover({ src, title, category }: { src?: string | null; title: string; category?: string | null }) {
+function Cover({ src, title, category, feature }: { src?: string | null; title: string; category?: string | null; feature?: boolean }) {
   if (src) {
     // eslint-disable-next-line @next/next/no-img-element
     return <img src={src} alt={title} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" />;
   }
-  return (
-    <div className="relative flex h-full items-center justify-center overflow-hidden bg-gradient-to-br from-blue-50 via-indigo-50 to-fuchsia-50">
-      <div aria-hidden className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-to-br from-cyan-200 to-purple-200" />
-      <div className="relative flex flex-col items-center gap-2">
-        <LogoMark className="h-10" />
-        {category && <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-brand-blue shadow-sm">{category}</span>}
-      </div>
-    </div>
-  );
+  return <BlogCover title={title} category={category} size={feature ? "feature" : "card"} className="transition duration-500 group-hover:scale-[1.02]" />;
 }
 
 export default async function BlogPage() {
@@ -72,7 +64,7 @@ export default async function BlogPage() {
           {!first && <p className="py-20 text-center text-body">{t.empty}</p>}
           {first && (
             <Link href={l(`/blog/${first.slug}`)} className="card group mb-10 grid overflow-hidden card-hover md:grid-cols-2">
-              <div className="aspect-[16/10] overflow-hidden md:aspect-auto"><Cover src={first.cover_url} title={first.title} category={first.category} /></div>
+              <div className="aspect-[16/10] overflow-hidden md:aspect-auto"><Cover src={first.cover_url} title={first.title} category={first.category} feature /></div>
               <div className="flex flex-col justify-center p-8">
                 <p className="eyebrow">{first.category} · {formatDate(first.published_at, false, locale)} · {readingTime(first.content)} min</p>
                 <h2 className="mt-3 text-3xl font-extrabold leading-tight">{first.title}</h2>

@@ -3,6 +3,7 @@ import { cache } from "react";
 import { hasSupabase } from "@/lib/supabase/env";
 import { createPublicClient } from "@/lib/supabase/server";
 import { DEMO_PORTFOLIO, DEMO_POSTS, type BlogPost, type PortfolioItem } from "@/content/demo";
+import { FILE_POSTS } from "@/content/blog";
 import type { Locale } from "@/lib/i18n";
 
 export type SiteSettings = {
@@ -129,8 +130,9 @@ export async function getPortfolioItem(slug: string, locale: Locale = "ro") {
   return all.find((p) => p.slug === slug) ?? null;
 }
 
-const getPostsRaw = cache(async (): Promise<BlogPost[]> => {
-  if (!hasSupabase) return DEMO_POSTS;
+/** Articolele din CRM (baza de date). */
+const getDbPosts = cache(async (): Promise<BlogPost[]> => {
+  if (!hasSupabase) return [];
   try {
     const { data } = await createPublicClient()
       .from("blog_posts")
@@ -138,10 +140,23 @@ const getPostsRaw = cache(async (): Promise<BlogPost[]> => {
       .eq("status", "published")
       .lte("published_at", new Date().toISOString())
       .order("published_at", { ascending: false });
-    return data && data.length ? (data as BlogPost[]) : DEMO_POSTS;
+    return (data as BlogPost[] | null) ?? [];
   } catch {
-    return DEMO_POSTS;
+    return [];
   }
+});
+
+/**
+ * Articolele publicate: cele din CRM + cele scrise în cod (src/content/blog), doar cele cu data
+ * de publicare trecută. La același slug câștigă varianta din CRM.
+ */
+const getPostsRaw = cache(async (): Promise<BlogPost[]> => {
+  const now = Date.now();
+  const db = await getDbPosts();
+  const dbSlugs = new Set(db.map((p) => p.slug));
+  const files = FILE_POSTS.filter((p) => !dbSlugs.has(p.slug) && new Date(p.published_at!).getTime() <= now);
+  const all = [...db, ...files].sort((a, b) => new Date(b.published_at ?? 0).getTime() - new Date(a.published_at ?? 0).getTime());
+  return all.length ? all : DEMO_POSTS;
 });
 
 /** Articolele publicate; în engleză doar cele traduse. */
