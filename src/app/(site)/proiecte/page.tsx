@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { getPortfolio, getSiteSettings } from "@/lib/public-data";
 import { CtaBand, Eyebrow } from "@/components/site/sections";
 import { PortfolioGrid } from "@/components/site/portfolio-grid";
-import { DashboardScreen, GrowthBadge, Laptop, Phone, WebsiteScreen } from "@/components/site/mockups";
+import { DashboardScreen, GrowthBadge, Laptop, Phone, PhoneDashboard } from "@/components/site/mockups";
 import { IconTile } from "@/components/ui/icon";
 import { cn } from "@/lib/utils";
 import { getLocale, pageMeta } from "@/lib/i18n-server";
@@ -18,6 +18,7 @@ const T = {
     title: ["Proiecte", "care transformă ideile", "în", "succes digital."],
     lead: "O selecție din proiectele noastre recente, unde strategia, creativitatea și tehnologia s-au combinat pentru a livra produse digitale cu rezultate reale.",
     growth: ["creștere", "vânzări"],
+    phone: { title: "Proiectele mele", sub: "Platformă SaaS · Aplicație mobilă · Integrare API", cta: "Deschide" },
     caseStudy: "Studiu de caz",
     caseTitle: ["— de la idee", "la o platformă scalabilă"],
     caseCta: "Vezi studiul complet",
@@ -37,6 +38,7 @@ const T = {
     title: ["Projects", "that turn ideas", "into", "digital success."],
     lead: "A selection of our recent projects, where strategy, creativity and technology came together to deliver digital products with real results.",
     growth: ["sales", "growth"],
+    phone: { title: "My projects", sub: "SaaS platform · Mobile app · API integration", cta: "Open" },
     caseStudy: "Case study",
     caseTitle: ["— from idea", "to a scalable platform"],
     caseCta: "Read the full case study",
@@ -82,8 +84,8 @@ export default async function ProjectsPage() {
           </div>
           <div className="relative mx-auto w-full max-w-[620px] pb-6 pt-10">
             <div aria-hidden className="absolute left-[20%] top-[4%] h-[76%] w-[76%] rounded-full bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-100" />
-            <Laptop className="relative ml-[12%] w-[88%]"><WebsiteScreen lang={locale} /></Laptop>
-            <Phone className="absolute bottom-0 left-0 z-10 h-[62%] w-[24%]"><WebsiteScreen compact lang={locale} /></Phone>
+            <Laptop className="relative ml-[12%] w-[88%]"><DashboardScreen variant="saas" lang={locale} /></Laptop>
+            <Phone className="absolute bottom-0 left-0 z-10 h-[62%] w-[24%]"><PhoneDashboard lang={locale} {...t.phone} /></Phone>
             <GrowthBadge className="-right-2 top-0" value="+320%" lines={t.growth} />
           </div>
         </div>
