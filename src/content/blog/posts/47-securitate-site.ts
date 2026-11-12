@@ -179,7 +179,7 @@ O mare parte dintre incidente pornesc de la o greșeală umană, nu de la un ata
 - **nu instala extensii sau programe** pe site fără acordul celui care se ocupă de mentenanță;
 - **folosește doar dispozitive actualizate** pentru accesul la conturile importante.
 
-O scurtă discuție de 15 minute cu echipa, o dată pe an, previne multe probleme.
+O scurtă discuție de 15 minute cu echipa, o dată pe an, previne multe probleme. Fă-o practică: arată un exemplu real de email fals, explică cum verifici un link înainte să-l deschizi și stabiliți clar cui îi spune fiecare când ceva pare suspect.
 
 ## Întrebări frecvente
 
@@ -384,7 +384,7 @@ Many incidents start with human error, not a sophisticated attack. A few habits 
 - **don't install plugins or software** on the website without the agreement of whoever handles maintenance;
 - **use only up-to-date devices** to access important accounts.
 
-A short 15-minute conversation with the team once a year prevents a lot of problems.
+A short 15-minute conversation with the team once a year prevents a lot of problems. Make it practical: show a real example of a fake email, explain how to check a link before clicking it, and agree on exactly who to tell when something looks suspicious. People who know what to look for become your first line of defence, rather than the weakest link.
 
 ## Frequently asked questions
 

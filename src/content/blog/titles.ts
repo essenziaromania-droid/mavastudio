@@ -469,5 +469,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "Website security for a small business: 15 measures that protect you",
       "category": "Websites"
     }
+  },
+  "recenzii-google-cum-le-obtii": {
+    "ro": {
+      "title": "Recenziile Google: cum obții mai multe, corect, și cum răspunzi la ele",
+      "category": "SEO & GEO"
+    },
+    "en": {
+      "title": "Google reviews: how to get more of them, the right way, and how to reply",
+      "category": "SEO & GEO"
+    }
   }
 };
