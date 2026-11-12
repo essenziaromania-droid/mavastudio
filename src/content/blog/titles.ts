@@ -199,5 +199,25 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "Automation for small businesses: 15 tasks you no longer need to do by hand",
       "category": "CRM & automation"
     }
+  },
+  "idei-de-postari-pentru-afaceri": {
+    "ro": {
+      "title": "60 de idei de postări pentru afacerea ta pe Facebook și Instagram",
+      "category": "Social media"
+    },
+    "en": {
+      "title": "60 post ideas for your business on Facebook and Instagram",
+      "category": "Social media"
+    }
+  },
+  "domeniu-gazduire-email-profesional": {
+    "ro": {
+      "title": "Domeniu, găzduire și email profesional: ghid simplu pentru afaceri",
+      "category": "Site-uri"
+    },
+    "en": {
+      "title": "Domain, hosting and professional email: a simple guide for businesses",
+      "category": "Websites"
+    }
   }
 };

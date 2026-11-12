@@ -20,6 +20,8 @@ import a17 from "./posts/17-calendar-editorial-social-media";
 import a18 from "./posts/18-cat-costa-editarea-video";
 import a19 from "./posts/19-viteza-site-ului-core-web-vitals";
 import a20 from "./posts/20-automatizari-pentru-afaceri-mici";
+import a21 from "./posts/21-idei-de-postari-pentru-afaceri";
+import a22 from "./posts/22-domeniu-gazduire-email-profesional";
 
-export const FILE_ARTICLES = [a01, a02, a03, a04, a05, a06, a07, a08, a09, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20];
+export const FILE_ARTICLES = [a01, a02, a03, a04, a05, a06, a07, a08, a09, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22];
 export const FILE_POSTS = toBlogPosts(FILE_ARTICLES);
