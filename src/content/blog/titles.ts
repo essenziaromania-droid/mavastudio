@@ -359,5 +359,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "Automatic invoicing for service companies: deposits, subscriptions and payment reminders",
       "category": "CRM & automation"
     }
+  },
+  "video-de-produs-magazin-online": {
+    "ro": {
+      "title": "Video de produs pentru magazinul online: ce tipuri de clipuri vând și cum le faci",
+      "category": "Video"
+    },
+    "en": {
+      "title": "Product videos for your online store: which types sell and how to make them",
+      "category": "Video"
+    }
   }
 };
