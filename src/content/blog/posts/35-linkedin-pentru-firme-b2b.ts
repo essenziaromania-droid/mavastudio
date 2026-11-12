@@ -112,7 +112,7 @@ Dacă vrei să inițiezi tu o discuție, mesajul contează enorm. Un mesaj bun:
 
 Exemplu: „Bună, Andrei! Am citit postarea ta despre planificarea comenzilor. Am lucrat recent cu o fabrică cu aceeași problemă și am scris câteva lecții aici: [link]. Dacă ți-ar fi utilă o discuție de 15 minute, îmi spui.”
 
-Comparați cu: „Bună ziua, suntem firma X și oferim servicii complete de...” Primul mesaj deschide o conversație. Al doilea e ignorat.
+Compară cu: „Bună ziua, suntem firma X și oferim servicii complete de...” Primul mesaj deschide o conversație. Al doilea e ignorat, de cele mai multe ori fără răspuns.
 
 ## Angajații ca ambasadori
 

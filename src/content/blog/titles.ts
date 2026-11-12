@@ -349,5 +349,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "LinkedIn for B2B companies: how to use it to win clients, not just likes",
       "category": "Social media"
     }
+  },
+  "facturare-automata-integrare": {
+    "ro": {
+      "title": "Facturare automată pentru firme de servicii: avans, abonamente și mementouri de plată",
+      "category": "CRM & automatizări"
+    },
+    "en": {
+      "title": "Automatic invoicing for service companies: deposits, subscriptions and payment reminders",
+      "category": "CRM & automation"
+    }
   }
 };
