@@ -449,5 +449,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "How much does a web app cost in 2026? What drives the price and how to budget",
       "category": "Web apps"
     }
+  },
+  "ai-in-marketingul-afacerilor-mici": {
+    "ro": {
+      "title": "Inteligența artificială în marketingul unei afaceri mici: ce merită folosit și ce nu",
+      "category": "Conținut AI"
+    },
+    "en": {
+      "title": "Artificial intelligence in small-business marketing: what's worth using and what isn't",
+      "category": "AI content"
+    }
   }
 };
