@@ -429,5 +429,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "How to film good videos on your phone for your business: settings, light, sound",
       "category": "Video"
     }
+  },
+  "raport-social-media-metrici": {
+    "ro": {
+      "title": "Raportul de social media: ce cifre contează cu adevărat și cum le citești",
+      "category": "Social media"
+    },
+    "en": {
+      "title": "Your social media report: which numbers really matter and how to read them",
+      "category": "Social media"
+    }
   }
 };
