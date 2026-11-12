@@ -38,15 +38,20 @@ export default async function WebsiteAdmin({ searchParams }: { searchParams: { t
   );
 
   async function Blog() {
-    const { data } = await sb.from("blog_posts").select("id, title, slug, status, category, published_at, updated_at").order("updated_at", { ascending: false });
+    const { data } = await sb.from("blog_posts").select("id, title, slug, status, category, published_at, updated_at").order("published_at", { ascending: false, nullsFirst: true });
+    const now = Date.now();
     return (
       <Panel pad={false} title="Articole" actions={<Link href="/crm/website/blog/nou" className="btn-primary btn-sm"><Plus className="h-4 w-4" /> Articol nou</Link>}>
-        <Table head={["Titlu", "Categorie", "Status", "Publicat", "Actualizat"]} empty="Niciun articol încă. Până publici primul articol, pe site apar 3 articole demonstrative.">
+        <Table head={["Titlu", "Categorie", "Status", "Data publicării", "Actualizat"]} empty="Niciun articol încă. Până publici primul articol, pe site apar 3 articole demonstrative.">
           {(data ?? []).map((p) => (
             <tr key={p.id} className="hover:bg-soft/50">
               <Td><Link href={`/crm/website/blog/${p.id}`} className="font-semibold text-ink hover:text-brand-blue">{p.title}</Link><p className="text-xs text-muted">/blog/{p.slug}</p></Td>
               <Td className="text-xs">{p.category ?? "—"}</Td>
-              <Td><Badge tone={p.status === "published" ? "green" : "gray"}>{p.status === "published" ? "Publicat" : "Draft"}</Badge></Td>
+              <Td>
+                {p.status !== "published" ? <Badge tone="gray">Draft</Badge>
+                  : p.published_at && new Date(p.published_at).getTime() > now ? <Badge tone="blue">Programat</Badge>
+                  : <Badge tone="green">Publicat</Badge>}
+              </Td>
               <Td className="text-xs">{formatDate(p.published_at)}</Td>
               <Td className="text-xs text-muted">{formatDate(p.updated_at, true)}</Td>
             </tr>

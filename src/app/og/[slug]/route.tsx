@@ -7,15 +7,40 @@ export const runtime = "edge";
 const loadExtraBold = () => fetch(new URL("../../../../public/fonts/PlusJakartaSans-ExtraBold.ttf", import.meta.url)).then((r) => r.arrayBuffer());
 const loadRegular = () => fetch(new URL("../../../../public/fonts/PlusJakartaSans-Regular.ttf", import.meta.url)).then((r) => r.arrayBuffer());
 
+type DbRow = { title: string; category: string | null; translations: { en?: { title?: string; category?: string } } | null };
+
+async function titleFromCrm(slug: string, lang: "ro" | "en") {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key || !/^[a-z0-9-]+$/.test(slug)) return null;
+  try {
+    const res = await fetch(`${url}/rest/v1/blog_posts?slug=eq.${slug}&status=eq.published&select=title,category,translations&limit=1`, {
+      headers: { apikey: key, Authorization: `Bearer ${key}` },
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return null;
+    const row = ((await res.json()) as DbRow[])[0];
+    if (!row) return null;
+    const en = row.translations?.en;
+    return lang === "en" && en?.title
+      ? { title: en.title, category: en.category ?? row.category ?? undefined }
+      : { title: row.title, category: row.category ?? undefined };
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Imaginea de distribuire a unui articol (Facebook, LinkedIn, WhatsApp, Google Discover):
  * titlul pe gradientul MAVA, 1200×630. Adresa: /og/<slug>?lang=ro|en
  */
 export async function GET(req: Request, { params }: { params: { slug: string } }) {
   const lang = new URL(req.url).searchParams.get("lang") === "en" ? "en" : "ro";
-  const entry = BLOG_TITLES[params.slug];
-  const title = entry?.[lang]?.title ?? (lang === "en" ? "MAVA Studio blog" : "Blog MAVA Studio");
-  const category = entry?.[lang]?.category ?? "Blog";
+  // Titlul vine din CRM (ca modificările să apară și în imagine); lista din cod e rezerva.
+  const fromDb = await titleFromCrm(params.slug, lang);
+  const entry = BLOG_TITLES[params.slug]?.[lang];
+  const title = fromDb?.title ?? entry?.title ?? (lang === "en" ? "MAVA Studio blog" : "Blog MAVA Studio");
+  const category = fromDb?.category ?? entry?.category ?? "Blog";
   const [extra, regular] = await Promise.all([loadExtraBold(), loadRegular()]);
   const size = title.length > 90 ? 56 : title.length > 60 ? 64 : 74;
 

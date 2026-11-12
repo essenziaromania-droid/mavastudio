@@ -130,33 +130,34 @@ export async function getPortfolioItem(slug: string, locale: Locale = "ro") {
   return all.find((p) => p.slug === slug) ?? null;
 }
 
-/** Articolele din CRM (baza de date). */
-const getDbPosts = cache(async (): Promise<BlogPost[]> => {
-  if (!hasSupabase) return [];
+/** Articolele din CRM (baza de date). `null` = baza de date nu e disponibilă. */
+const getDbPosts = cache(async (): Promise<BlogPost[] | null> => {
+  if (!hasSupabase) return null;
   try {
-    const { data } = await createPublicClient()
+    const { data, error } = await createPublicClient()
       .from("blog_posts")
       .select("*")
       .eq("status", "published")
       .lte("published_at", new Date().toISOString())
       .order("published_at", { ascending: false });
+    if (error) return null;
     return (data as BlogPost[] | null) ?? [];
   } catch {
-    return [];
+    return null;
   }
 });
 
 /**
- * Articolele publicate: cele din CRM + cele scrise în cod (src/content/blog), doar cele cu data
- * de publicare trecută. La același slug câștigă varianta din CRM.
+ * Articolele publicate, cu data de publicare trecută. Sursa principală e CRM-ul (baza de date):
+ * articolele se editează, se programează și se șterg de acolo. Copia din cod (src/content/blog)
+ * e folosită doar dacă baza de date nu răspunde.
  */
 const getPostsRaw = cache(async (): Promise<BlogPost[]> => {
-  const now = Date.now();
   const db = await getDbPosts();
-  const dbSlugs = new Set(db.map((p) => p.slug));
-  const files = FILE_POSTS.filter((p) => !dbSlugs.has(p.slug) && new Date(p.published_at!).getTime() <= now);
-  const all = [...db, ...files].sort((a, b) => new Date(b.published_at ?? 0).getTime() - new Date(a.published_at ?? 0).getTime());
-  return all.length ? all : DEMO_POSTS;
+  if (db) return db;
+  const now = Date.now();
+  const files = FILE_POSTS.filter((p) => new Date(p.published_at!).getTime() <= now);
+  return files.length ? files : DEMO_POSTS;
 });
 
 /** Articolele publicate; în engleză doar cele traduse. */
