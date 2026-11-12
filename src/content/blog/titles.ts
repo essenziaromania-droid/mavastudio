@@ -229,5 +229,25 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "Online payments for your store: cards, cash on delivery, bank transfer and choosing a processor",
       "category": "Online stores"
     }
+  },
+  "clipuri-video-cu-ai-pentru-reclame": {
+    "ro": {
+      "title": "Clipuri video cu AI pentru reclame: cum le faci să vândă, nu doar să arate bine",
+      "category": "Conținut AI"
+    },
+    "en": {
+      "title": "AI videos for ads: how to make them sell, not just look good",
+      "category": "AI content"
+    }
+  },
+  "de-ce-site-ul-nu-aduce-clienti": {
+    "ro": {
+      "title": "De ce site-ul tău nu aduce clienți: 12 cauze și cum le repari",
+      "category": "Site-uri"
+    },
+    "en": {
+      "title": "Why your website isn't bringing in customers: 12 causes and how to fix them",
+      "category": "Websites"
+    }
   }
 };
