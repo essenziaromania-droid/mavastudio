@@ -25,6 +25,8 @@ import a22 from "./posts/22-domeniu-gazduire-email-profesional";
 import a23 from "./posts/23-plati-online-magazin";
 import a24 from "./posts/24-clipuri-video-cu-ai-pentru-reclame";
 import a25 from "./posts/25-de-ce-site-ul-nu-aduce-clienti";
+import a26 from "./posts/26-reclame-facebook-instagram-buget";
+import a27 from "./posts/27-oferte-si-contracte-semnate-online";
 
-export const FILE_ARTICLES = [a01, a02, a03, a04, a05, a06, a07, a08, a09, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25];
+export const FILE_ARTICLES = [a01, a02, a03, a04, a05, a06, a07, a08, a09, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27];
 export const FILE_POSTS = toBlogPosts(FILE_ARTICLES);

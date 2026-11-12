@@ -249,5 +249,25 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "Why your website isn't bringing in customers: 12 causes and how to fix them",
       "category": "Websites"
     }
+  },
+  "reclame-facebook-instagram-buget": {
+    "ro": {
+      "title": "Cât buget îți trebuie pentru reclame pe Facebook și Instagram și cum îl împarți",
+      "category": "Social media"
+    },
+    "en": {
+      "title": "How much budget you need for Facebook and Instagram ads, and how to split it",
+      "category": "Social media"
+    }
+  },
+  "oferte-si-contracte-semnate-online": {
+    "ro": {
+      "title": "Oferte și contracte semnate online: cum funcționează și ce valoare au",
+      "category": "CRM & automatizări"
+    },
+    "en": {
+      "title": "Quotes and contracts signed online: how it works and what legal value it has",
+      "category": "CRM & automation"
+    }
   }
 };
