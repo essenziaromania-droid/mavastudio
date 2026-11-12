@@ -299,5 +299,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "TikTok for local businesses: is it worth it, and how to start without embarrassing yourself",
       "category": "Social media"
     }
+  },
+  "cuvinte-cheie-cum-le-alegi": {
+    "ro": {
+      "title": "Cuvintele cheie: cum afli ce caută clienții tăi în Google și cum le folosești",
+      "category": "SEO & GEO"
+    },
+    "en": {
+      "title": "Keywords: how to find out what your customers search for on Google, and how to use them",
+      "category": "SEO & GEO"
+    }
   }
 };
