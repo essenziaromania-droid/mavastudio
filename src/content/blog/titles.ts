@@ -69,5 +69,35 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "Landing page or business website: which one is right for your business?",
       "category": "Websites"
     }
+  },
+  "clipuri-scurte-reels-tiktok-shorts": {
+    "ro": {
+      "title": "Clipuri scurte pentru Reels, TikTok și Shorts: ghid practic pentru afaceri",
+      "category": "Video"
+    },
+    "en": {
+      "title": "Short videos for Reels, TikTok and Shorts: a practical guide for businesses",
+      "category": "Video"
+    }
+  },
+  "cat-costa-un-magazin-online": {
+    "ro": {
+      "title": "Cât costă un magazin online în România în 2026: buget realist, pe bucăți",
+      "category": "Magazine online"
+    },
+    "en": {
+      "title": "How much does an online store cost in 2026? A realistic budget, piece by piece",
+      "category": "Online stores"
+    }
+  },
+  "strategie-social-media-afaceri-mici": {
+    "ro": {
+      "title": "Strategie de social media pentru afaceri mici: un plan simplu, pas cu pas",
+      "category": "Social media"
+    },
+    "en": {
+      "title": "Social media strategy for small businesses: a simple, step-by-step plan",
+      "category": "Social media"
+    }
   }
 };
