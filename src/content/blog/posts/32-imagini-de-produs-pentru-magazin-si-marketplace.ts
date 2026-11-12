@@ -80,7 +80,7 @@ Dacă alegi să fotografiezi chiar tu produsele, iată o metodă simplă care d�
 6. **aceeași poziție** pentru toate produsele, marcată pe masă cu bandă adezivă;
 7. **mai multe cadre** pentru fiecare produs, ca să ai din ce alege.
 
-Apoi imaginile se curăță, fundalul se uniformizează la alb și se exportă în formatele necesare.
+Apoi imaginile se curăță, fundalul se uniformizează la alb și se exportă în formatele necesare. Cu puțin exercițiu, poți fotografia zeci de produse într-o singură zi.
 
 ## Uniformitatea: magazinul trebuie să arate unitar
 

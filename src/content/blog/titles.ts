@@ -319,5 +319,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "Product images for your online store and marketplaces: what you need and how to prepare them",
       "category": "AI content"
     }
+  },
+  "texte-pentru-site": {
+    "ro": {
+      "title": "Cum scrii textele pentru site ca oamenii să te contacteze: ghid de copywriting simplu",
+      "category": "Site-uri"
+    },
+    "en": {
+      "title": "How to write your website copy so people get in touch: a simple copywriting guide",
+      "category": "Websites"
+    }
   }
 };
