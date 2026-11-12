@@ -219,5 +219,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "Domain, hosting and professional email: a simple guide for businesses",
       "category": "Websites"
     }
+  },
+  "plati-online-magazin": {
+    "ro": {
+      "title": "Plăți online pentru magazinul tău: card, ramburs, transfer și cum alegi procesatorul",
+      "category": "Magazine online"
+    },
+    "en": {
+      "title": "Online payments for your store: cards, cash on delivery, bank transfer and choosing a processor",
+      "category": "Online stores"
+    }
   }
 };
