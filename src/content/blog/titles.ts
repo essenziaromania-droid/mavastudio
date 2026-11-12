@@ -149,5 +149,25 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "AI images or a traditional photo shoot? An honest comparison for businesses",
       "category": "AI content"
     }
+  },
+  "obligatii-legale-magazin-online": {
+    "ro": {
+      "title": "Obligațiile legale ale unui magazin online în România: ghid practic pentru 2026",
+      "category": "Magazine online"
+    },
+    "en": {
+      "title": "Legal requirements for an online store in Romania: a practical 2026 guide",
+      "category": "Online stores"
+    }
+  },
+  "calendar-editorial-social-media": {
+    "ro": {
+      "title": "Calendarul editorial pentru social media: cum îl faci și cum îl ții o lună întreagă",
+      "category": "Social media"
+    },
+    "en": {
+      "title": "The social media content calendar: how to build one and stick to it for a whole month",
+      "category": "Social media"
+    }
   }
 };

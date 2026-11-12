@@ -15,6 +15,8 @@ import a12 from "./posts/12-crm-gata-facut-sau-personalizat";
 import a13 from "./posts/13-ce-trebuie-sa-contina-un-site-de-prezentare";
 import a14 from "./posts/14-geo-cum-apari-in-chatgpt-si-google-ai";
 import a15 from "./posts/15-ai-sau-sedinta-foto-clasica";
+import a16 from "./posts/16-obligatii-legale-magazin-online";
+import a17 from "./posts/17-calendar-editorial-social-media";
 
-export const FILE_ARTICLES = [a01, a02, a03, a04, a05, a06, a07, a08, a09, a10, a11, a12, a13, a14, a15];
+export const FILE_ARTICLES = [a01, a02, a03, a04, a05, a06, a07, a08, a09, a10, a11, a12, a13, a14, a15, a16, a17];
 export const FILE_POSTS = toBlogPosts(FILE_ARTICLES);
