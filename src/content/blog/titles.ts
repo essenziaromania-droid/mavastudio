@@ -169,5 +169,25 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "The social media content calendar: how to build one and stick to it for a whole month",
       "category": "Social media"
     }
+  },
+  "cat-costa-editarea-video": {
+    "ro": {
+      "title": "Cât costă editarea video în 2026: prețuri, ce include și cum compari ofertele",
+      "category": "Video"
+    },
+    "en": {
+      "title": "How much does video editing cost in 2026? Prices, what's included and how to compare quotes",
+      "category": "Video"
+    }
+  },
+  "viteza-site-ului-core-web-vitals": {
+    "ro": {
+      "title": "Viteza site-ului: de ce contează, cum o măsori și cum o îmbunătățești",
+      "category": "Site-uri"
+    },
+    "en": {
+      "title": "Website speed: why it matters, how to measure it and how to improve it",
+      "category": "Websites"
+    }
   }
 };
