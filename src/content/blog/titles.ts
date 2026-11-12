@@ -189,5 +189,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "Website speed: why it matters, how to measure it and how to improve it",
       "category": "Websites"
     }
+  },
+  "automatizari-pentru-afaceri-mici": {
+    "ro": {
+      "title": "Automatizări pentru afaceri mici: 15 sarcini pe care nu mai trebuie să le faci de mână",
+      "category": "CRM & automatizări"
+    },
+    "en": {
+      "title": "Automation for small businesses: 15 tasks you no longer need to do by hand",
+      "category": "CRM & automation"
+    }
   }
 };
