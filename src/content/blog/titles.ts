@@ -129,5 +129,25 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "What a business website must include: 15 elements that bring in customers",
       "category": "Websites"
     }
+  },
+  "geo-cum-apari-in-chatgpt-si-google-ai": {
+    "ro": {
+      "title": "GEO: cum apari în răspunsurile ChatGPT, Gemini, Perplexity și Google AI",
+      "category": "SEO & GEO"
+    },
+    "en": {
+      "title": "GEO: how to show up in ChatGPT, Gemini, Perplexity and Google AI answers",
+      "category": "SEO & GEO"
+    }
+  },
+  "ai-sau-sedinta-foto-clasica": {
+    "ro": {
+      "title": "Imagini cu AI sau ședință foto clasică? Comparație sinceră pentru afaceri",
+      "category": "Conținut AI"
+    },
+    "en": {
+      "title": "AI images or a traditional photo shoot? An honest comparison for businesses",
+      "category": "AI content"
+    }
   }
 };

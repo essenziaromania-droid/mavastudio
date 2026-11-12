@@ -13,6 +13,8 @@ import a10 from "./posts/10-strategie-social-media-afaceri-mici";
 import a11 from "./posts/11-seo-pentru-afaceri-mici-ghid";
 import a12 from "./posts/12-crm-gata-facut-sau-personalizat";
 import a13 from "./posts/13-ce-trebuie-sa-contina-un-site-de-prezentare";
+import a14 from "./posts/14-geo-cum-apari-in-chatgpt-si-google-ai";
+import a15 from "./posts/15-ai-sau-sedinta-foto-clasica";
 
-export const FILE_ARTICLES = [a01, a02, a03, a04, a05, a06, a07, a08, a09, a10, a11, a12, a13];
+export const FILE_ARTICLES = [a01, a02, a03, a04, a05, a06, a07, a08, a09, a10, a11, a12, a13, a14, a15];
 export const FILE_POSTS = toBlogPosts(FILE_ARTICLES);
