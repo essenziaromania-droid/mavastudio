@@ -269,5 +269,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "Quotes and contracts signed online: how it works and what legal value it has",
       "category": "CRM & automation"
     }
+  },
+  "subtitrari-video": {
+    "ro": {
+      "title": "Subtitrările video: de ce contează pentru afacerea ta și cum le faci bine",
+      "category": "Video"
+    },
+    "en": {
+      "title": "Video subtitles: why they matter for your business and how to do them well",
+      "category": "Video"
+    }
   }
 };

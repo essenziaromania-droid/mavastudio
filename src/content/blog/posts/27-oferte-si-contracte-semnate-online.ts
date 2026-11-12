@@ -168,7 +168,7 @@ Unii clienți, mai ales cei mai în vârstă sau cei care semnează pentru prima
 - **un telefon sau un email** la care poate întreba dacă se blochează;
 - **o confirmare imediată**, cu documentul semnat atașat.
 
-Odată ce au semnat o dată, aproape toți clienții preferă varianta online pentru documentele următoare.
+Odată ce au semnat o dată, aproape toți clienții preferă varianta online pentru documentele următoare. Iar pentru cei care chiar nu se descurcă cu semnarea online, păstrează o alternativă simplă: documentul trimis în PDF, semnat de mână și returnat. Scopul e ca procesul să fie mai ușor pentru toată lumea, nu să excludă pe cineva.
 
 ## Întrebări frecvente
 
