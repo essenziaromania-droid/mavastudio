@@ -99,5 +99,35 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "Social media strategy for small businesses: a simple, step-by-step plan",
       "category": "Social media"
     }
+  },
+  "seo-pentru-afaceri-mici-ghid": {
+    "ro": {
+      "title": "SEO pentru afaceri mici: ghid pe înțelesul tuturor ca să apari în Google",
+      "category": "SEO & GEO"
+    },
+    "en": {
+      "title": "SEO for small businesses: a plain-language guide to showing up on Google",
+      "category": "SEO & GEO"
+    }
+  },
+  "crm-gata-facut-sau-personalizat": {
+    "ro": {
+      "title": "CRM gata făcut sau CRM personalizat: ce alegi și cât costă pe termen lung",
+      "category": "CRM & automatizări"
+    },
+    "en": {
+      "title": "Off-the-shelf CRM or custom CRM: which to choose and what it costs long term",
+      "category": "CRM & automation"
+    }
+  },
+  "ce-trebuie-sa-contina-un-site-de-prezentare": {
+    "ro": {
+      "title": "Ce trebuie să conțină un site de prezentare: 15 elemente care aduc clienți",
+      "category": "Site-uri"
+    },
+    "en": {
+      "title": "What a business website must include: 15 elements that bring in customers",
+      "category": "Websites"
+    }
   }
 };
