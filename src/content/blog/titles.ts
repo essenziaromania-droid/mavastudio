@@ -379,5 +379,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "Website maintenance: what it includes, why it matters and what it costs",
       "category": "Websites"
     }
+  },
+  "reels-carusel-sau-postare-simpla": {
+    "ro": {
+      "title": "Reels, carusel sau postare simplă: ce format alegi pentru fiecare mesaj",
+      "category": "Social media"
+    },
+    "en": {
+      "title": "Reels, carousel or single post: which format to choose for each message",
+      "category": "Social media"
+    }
   }
 };

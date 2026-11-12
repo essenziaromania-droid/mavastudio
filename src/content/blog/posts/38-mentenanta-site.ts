@@ -177,6 +177,19 @@ Dacă observi texte sau linkuri străine, redirecționări ciudate sau un averti
 
 Cu o mentenanță bună, această listă e foarte rar necesară.
 
+## Cum alegi furnizorul de mentenanță
+
+Dacă cel care ți-a făcut site-ul nu oferă mentenanță sau vrei să schimbi furnizorul, caută pe cineva care:
+
+- îți explică clar ce e inclus și ce nu;
+- cere acces corect la conturi, pe numele tău, nu preia proprietatea lor;
+- configurează copiile de siguranță și monitorizarea în prima săptămână;
+- îți trimite un raport lunar scurt;
+- îți dă un timp de reacție scris;
+- îți spune sincer dacă site-ul are nevoie de mai mult decât mentenanță, de exemplu de o refacere.
+
+Un furnizor bun de mentenanță e cel la care trebuie să te gândești foarte rar.
+
 ## Întrebări frecvente
 
 ### Ce înseamnă mentenanța unui site?
@@ -377,6 +390,19 @@ If you notice foreign text or links, strange redirects or a security warning, ac
 7. **inform customers** if personal data was exposed, and check your legal obligations, including towards the data protection authority.
 
 With good maintenance, this list is very rarely needed.
+
+## How to choose a maintenance provider
+
+If the person who built your website doesn't offer maintenance, or you want to change provider, look for someone who:
+
+- explains clearly what's included and what isn't;
+- asks for proper access to your accounts, in your name, rather than taking over ownership;
+- sets up backups and monitoring in the first week;
+- sends you a short monthly report;
+- gives you a written response time;
+- tells you honestly if your website needs more than maintenance, for example a rebuild.
+
+A good maintenance provider is one you rarely have to think about.
 
 ## Frequently asked questions
 
