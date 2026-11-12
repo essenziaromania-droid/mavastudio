@@ -329,5 +329,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "How to write your website copy so people get in touch: a simple copywriting guide",
       "category": "Websites"
     }
+  },
+  "e-factura-pentru-magazine-online": {
+    "ro": {
+      "title": "e-Factura și magazinul online: ce trebuie să știi și cum automatizezi totul",
+      "category": "Magazine online"
+    },
+    "en": {
+      "title": "e-Factura and your online store: what you need to know and how to automate it all",
+      "category": "Online stores"
+    }
   }
 };
