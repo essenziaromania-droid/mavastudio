@@ -399,5 +399,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "How to build a SaaS platform: from idea to your first paying customers",
       "category": "Web apps"
     }
+  },
+  "brief-pentru-site": {
+    "ro": {
+      "title": "Brief pentru site: ce pregătești înainte să ceri o ofertă (cu model completat)",
+      "category": "Site-uri"
+    },
+    "en": {
+      "title": "A website brief: what to prepare before you ask for a quote (with a filled-in example)",
+      "category": "Websites"
+    }
   }
 };
