@@ -339,5 +339,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "e-Factura and your online store: what you need to know and how to automate it all",
       "category": "Online stores"
     }
+  },
+  "linkedin-pentru-firme-b2b": {
+    "ro": {
+      "title": "LinkedIn pentru firme B2B: cum îl folosești ca să aduci clienți, nu doar like-uri",
+      "category": "Social media"
+    },
+    "en": {
+      "title": "LinkedIn for B2B companies: how to use it to win clients, not just likes",
+      "category": "Social media"
+    }
   }
 };

@@ -101,6 +101,8 @@ Câteva detalii care apar des în magazine și trebuie configurate corect:
 - **produsele cadou** sau mostrele gratuite au regulile lor fiscale;
 - **comenzile parțial livrate** pot avea nevoie de facturi separate.
 
+Toate aceste reguli se setează o singură dată în programul de facturare, împreună cu contabilul, și apoi se aplică automat la fiecare comandă.
+
 ## Firma neplătitoare de TVA
 
 Dacă firma ta nu e înregistrată în scopuri de TVA, facturile se emit fără TVA, iar acest lucru trebuie configurat corect în programul de facturare și în magazin. E bine să menționezi pe site că prețurile sunt finale. Dacă firma devine plătitoare de TVA, prețurile, facturile și setările magazinului trebuie actualizate din prima zi, cu ajutorul contabilului.
