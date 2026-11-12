@@ -279,5 +279,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "Video subtitles: why they matter for your business and how to do them well",
       "category": "Video"
     }
+  },
+  "wordpress-shopify-sau-site-personalizat": {
+    "ro": {
+      "title": "WordPress, Shopify sau site personalizat: ce platformă alegi pentru afacerea ta",
+      "category": "Site-uri"
+    },
+    "en": {
+      "title": "WordPress, Shopify or a custom website: which platform is right for your business?",
+      "category": "Websites"
+    }
   }
 };
