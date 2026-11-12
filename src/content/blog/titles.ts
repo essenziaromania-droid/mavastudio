@@ -439,5 +439,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "Your social media report: which numbers really matter and how to read them",
       "category": "Social media"
     }
+  },
+  "cat-costa-o-aplicatie-web": {
+    "ro": {
+      "title": "Cât costă o aplicație web în 2026: ce influențează prețul și cum îți faci bugetul",
+      "category": "Aplicații web"
+    },
+    "en": {
+      "title": "How much does a web app cost in 2026? What drives the price and how to budget",
+      "category": "Web apps"
+    }
   }
 };
