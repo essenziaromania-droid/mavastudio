@@ -479,5 +479,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "Google reviews: how to get more of them, the right way, and how to reply",
       "category": "SEO & GEO"
     }
+  },
+  "cand-e-momentul-pentru-redesign": {
+    "ro": {
+      "title": "Când e momentul pentru un site nou? 10 semne și cum faci redesignul fără să pierzi clienți",
+      "category": "Site-uri"
+    },
+    "en": {
+      "title": "When is it time for a new website? 10 signs, and how to redesign without losing customers",
+      "category": "Websites"
+    }
   }
 };
