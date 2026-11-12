@@ -459,5 +459,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "Artificial intelligence in small-business marketing: what's worth using and what isn't",
       "category": "AI content"
     }
+  },
+  "securitate-site": {
+    "ro": {
+      "title": "Securitatea site-ului pentru o afacere mică: 15 măsuri care te protejează",
+      "category": "Site-uri"
+    },
+    "en": {
+      "title": "Website security for a small business: 15 measures that protect you",
+      "category": "Websites"
+    }
   }
 };
