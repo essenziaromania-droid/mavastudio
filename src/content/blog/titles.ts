@@ -369,5 +369,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "Product videos for your online store: which types sell and how to make them",
       "category": "Video"
     }
+  },
+  "mentenanta-site": {
+    "ro": {
+      "title": "Mentenanța unui site: ce include, de ce contează și cât costă",
+      "category": "Site-uri"
+    },
+    "en": {
+      "title": "Website maintenance: what it includes, why it matters and what it costs",
+      "category": "Websites"
+    }
   }
 };

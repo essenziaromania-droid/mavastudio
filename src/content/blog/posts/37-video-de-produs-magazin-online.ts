@@ -93,7 +93,7 @@ Dacă vrei să filmezi singur, organizarea face diferența între o zi productiv
 6. **la final, demonstrațiile**, care cer de obicei un alt decor (bucătărie, baie, birou);
 7. **notează numele fiecărui fișier** sau filmează la începutul fiecărui clip o foaie cu numele produsului, ca editorul să le găsească ușor.
 
-Cu un plan ca acesta, 20 de produse pot fi filmate într-o singură zi de lucru.
+Cu un plan ca acesta, 20 de produse pot fi filmate într-o singură zi de lucru, iar editarea pornește imediat, fără întrebări suplimentare.
 
 ## Unde pui clipul pe pagina de produs
 
@@ -123,7 +123,7 @@ Am explicat de ce contează viteza în ghidul despre [viteza site-ului](/blog/vi
 - **newslettere**, cu o imagine animată și link spre produs;
 - **YouTube**, pentru demonstrațiile mai lungi, unde pot fi găsite și prin căutare.
 
-Un singur set de clipuri bine făcut lucrează pentru tine în cinci locuri.
+Un singur set de clipuri bine făcut lucrează pentru tine în cinci locuri, fără costuri suplimentare de producție.
 
 ## Clipurile și SEO-ul
 
