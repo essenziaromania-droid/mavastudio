@@ -409,5 +409,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "A website brief: what to prepare before you ask for a quote (with a filled-in example)",
       "category": "Websites"
     }
+  },
+  "site-pentru-clinica-sau-cabinet": {
+    "ro": {
+      "title": "Site pentru clinică, cabinet medical sau terapeut: ce trebuie să aibă ca pacienții să te aleagă",
+      "category": "Site-uri"
+    },
+    "en": {
+      "title": "A website for a clinic, medical practice or therapist: what it needs so patients choose you",
+      "category": "Websites"
+    }
   }
 };
