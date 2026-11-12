@@ -489,5 +489,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "When is it time for a new website? 10 signs, and how to redesign without losing customers",
       "category": "Websites"
     }
+  },
+  "cum-alegi-o-agentie-digitala": {
+    "ro": {
+      "title": "Cum alegi o agenție digitală sau un freelancer: 20 de întrebări înainte să semnezi",
+      "category": "Afaceri online"
+    },
+    "en": {
+      "title": "How to choose a digital agency or freelancer: 20 questions to ask before you sign",
+      "category": "Online business"
+    }
   }
 };

@@ -76,7 +76,7 @@ Dacă nu ai texte, spune clar. Textele sunt cea mai frecventă cauză de întâr
 - ai deja domeniu? Pe numele cui e?
 - ai găzduire? Email pe domeniu?
 - ai un site vechi? Ce se întâmplă cu el?
-- ai conturi de Google Search Console, Google Business Profile, rețele sociale?
+- ai conturi de [Google Search Console](https://search.google.com/search-console/about), [Google Business Profile](https://www.google.com/business/), rețele sociale?
 
 Am explicat de ce contează să deții tu toate acestea în ghidul despre [domeniu, găzduire și email profesional](/blog/domeniu-gazduire-email-profesional).
 
@@ -273,7 +273,7 @@ If you don't have copy, say so clearly. Copy is the most common cause of website
 - do you already have a domain? Whose name is it in?
 - do you have hosting? Email on your domain?
 - do you have an old website? What happens to it?
-- do you have Google Search Console, Google Business Profile and social media accounts?
+- do you have [Google Search Console](https://search.google.com/search-console/about), [Google Business Profile](https://www.google.com/business/) and social media accounts?
 
 I explained why it matters that you own all of these in our guide to [domain, hosting and professional email](/blog/domeniu-gazduire-email-profesional).
 

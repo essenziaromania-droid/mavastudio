@@ -49,6 +49,7 @@ import a46 from "./posts/46-ai-in-marketingul-afacerilor-mici";
 import a47 from "./posts/47-securitate-site";
 import a48 from "./posts/48-recenzii-google-cum-le-obtii";
 import a49 from "./posts/49-cand-e-momentul-pentru-redesign";
+import a50 from "./posts/50-cum-alegi-o-agentie-digitala";
 
-export const FILE_ARTICLES = [a01, a02, a03, a04, a05, a06, a07, a08, a09, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30, a31, a32, a33, a34, a35, a36, a37, a38, a39, a40, a41, a42, a43, a44, a45, a46, a47, a48, a49];
+export const FILE_ARTICLES = [a01, a02, a03, a04, a05, a06, a07, a08, a09, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30, a31, a32, a33, a34, a35, a36, a37, a38, a39, a40, a41, a42, a43, a44, a45, a46, a47, a48, a49, a50];
 export const FILE_POSTS = toBlogPosts(FILE_ARTICLES);

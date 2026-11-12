@@ -192,7 +192,7 @@ Ca postările să arate bine pe telefon, folosește formatele potrivite:
 - **coperta unui Reels**: o imagine clară, cu un titlu scurt, care arată bine și decupată pătrat în grila profilului;
 - **același stil** pentru toate copertele, ca grila profilului să arate ordonat.
 
-Platformele își schimbă din când în când recomandările de format, așa că verifică regulile la zi în centrele lor de ajutor.
+Platformele își schimbă din când în când recomandările de format, așa că verifică regulile la zi în centrele lor de ajutor, de exemplu în [centrul de ajutor Instagram](https://help.instagram.com/).
 
 ## Întrebări frecvente
 
@@ -410,7 +410,7 @@ So your posts look good on phones, use the right formats:
 - **a Reels cover**: a clear image with a short title that also looks good when cropped square in the profile grid;
 - **the same style** for every cover, so your profile grid looks tidy.
 
-Platforms change their format recommendations from time to time, so check the current rules in their help centres.
+Platforms change their format recommendations from time to time, so check the current rules in their help centres, for example the [Instagram Help Centre](https://help.instagram.com/).
 
 ## Frequently asked questions
 

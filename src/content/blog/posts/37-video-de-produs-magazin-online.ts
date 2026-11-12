@@ -111,7 +111,7 @@ Un clip pus greșit poate face pagina de produs foarte lentă pe telefon. Reguli
 - **încarcă clipul doar când omul apasă „play”**, sau folosește o imagine de previzualizare până atunci;
 - **comprimă clipul** la o rezoluție potrivită pentru telefon;
 - **găzduiește clipurile** pe un serviciu potrivit pentru video, nu ca fișiere uriașe pe serverul magazinului;
-- **testează pagina** după adăugarea clipului, cu PageSpeed Insights.
+- **testează pagina** după adăugarea clipului, cu [PageSpeed Insights](https://pagespeed.web.dev/).
 
 Am explicat de ce contează viteza în ghidul despre [viteza site-ului](/blog/viteza-site-ului-core-web-vitals).
 
@@ -309,7 +309,7 @@ A badly placed video can make a product page very slow on phones. Rules:
 - **load the video only when someone presses "play"**, or use a preview image until then;
 - **compress the video** to a resolution suited to phones;
 - **host videos** on a service designed for video, not as huge files on the store's server;
-- **test the page** after adding the video, with PageSpeed Insights.
+- **test the page** after adding the video, with [PageSpeed Insights](https://pagespeed.web.dev/).
 
 I explained why speed matters in our guide to [website speed](/blog/viteza-site-ului-core-web-vitals).
 

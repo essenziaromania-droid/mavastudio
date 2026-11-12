@@ -93,7 +93,7 @@ Prețul fix îți dă siguranță, dar are nevoie de cerințe clare. De aceea, p
 
 1. **Pornește cu o primă versiune minimă (MVP).** 3–5 funcții esențiale, nu 30.
 2. **Amână aplicația mobilă nativă.** O aplicație web bine adaptată pentru telefon e suficientă la început.
-3. **Folosește servicii existente** pentru plăți, email, hărți, în loc să le construiești de la zero.
+3. **Folosește servicii existente** pentru plăți (de exemplu [Stripe](https://stripe.com/)), email, hărți, în loc să le construiești de la zero.
 4. **Simplifică rolurile** la lansare: câte tipuri de utilizatori sunt cu adevărat necesare acum?
 5. **Pregătește bine cerințele**: un document clar scurtează analiza și reduce modificările.
 6. **Construiește pe etape**, cu feedback real de la utilizatori între ele.
@@ -301,7 +301,7 @@ A fixed price gives you certainty but needs clear requirements. That's why, for 
 
 1. **Start with a minimal first version (MVP).** 3–5 essential features, not 30.
 2. **Postpone a native mobile app.** A web app that works well on phones is enough at the start.
-3. **Use existing services** for payments, email and maps instead of building them from scratch.
+3. **Use existing services** for payments (for example [Stripe](https://stripe.com/)), email and maps instead of building them from scratch.
 4. **Simplify roles** at launch: how many user types are really needed right now?
 5. **Prepare your requirements well**: a clear document shortens the analysis and reduces changes.
 6. **Build in stages**, with real user feedback in between.

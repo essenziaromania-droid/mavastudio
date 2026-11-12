@@ -48,7 +48,7 @@ Dacă ai două tipuri foarte diferite de clienți (de exemplu persoane fizice ș
 | LinkedIn | servicii B2B, consultanță, recrutare, expertiză | postări text, carusele, articole |
 | YouTube | tutoriale, demonstrații, conținut care rămâne căutat | clipuri lungi și Shorts |
 
-Pentru o afacere mică, recomand **două rețele făcute foarte bine**. Poți adăuga a treia după ce ai un ritm stabil.
+Pentru o afacere mică, recomand **două rețele făcute foarte bine**. Poți adăuga a treia după ce ai un ritm stabil. Fiecare rețea are un centru oficial pentru afaceri, de exemplu [Meta for Business](https://www.facebook.com/business/help) sau [LinkedIn for Business](https://business.linkedin.com/), unde găsești regulile și recomandările la zi.
 
 ## Pasul 4: definește 3–4 piloni de conținut
 
@@ -261,7 +261,7 @@ If you have two very different types of customer (for example individuals and co
 | LinkedIn | B2B services, consulting, recruitment, expertise | text posts, carousels, articles |
 | YouTube | tutorials, demonstrations, content people keep searching for | long videos and Shorts |
 
-For a small business, I recommend **two networks done really well**. You can add a third once you have a steady rhythm.
+For a small business, I recommend **two networks done really well**. You can add a third once you have a steady rhythm. Each network has an official business centre, for example [Meta for Business](https://www.facebook.com/business/help) or [LinkedIn for Business](https://business.linkedin.com/), where you'll find the current rules and recommendations.
 
 ## Step 4: define 3–4 content pillars
 

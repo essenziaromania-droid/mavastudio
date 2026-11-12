@@ -38,7 +38,7 @@ Investește întâi în microfon, apoi în trepied. Sunetul prost face oamenii s
 ## Orientarea: verticală sau orizontală?
 
 - **vertical (9:16)**: pentru Reels, TikTok, Shorts și stories;
-- **orizontal (16:9)**: pentru YouTube, site și prezentări;
+- **orizontal (16:9)**: pentru YouTube, site și prezentări; recomandările tehnice de încărcare sunt în [centrul de ajutor YouTube](https://support.google.com/youtube/);
 - **dacă ai nevoie de ambele**, filmează separat sau filmează orizontal în 4K, cu subiectul în centru, și decupează în editare.
 
 ## Lumina: cel mai important lucru
@@ -249,7 +249,7 @@ Invest in a microphone first, then a tripod. Bad sound makes people leave faster
 ## Orientation: vertical or horizontal?
 
 - **vertical (9:16)**: for Reels, TikTok, Shorts and stories;
-- **horizontal (16:9)**: for YouTube, your website and presentations;
+- **horizontal (16:9)**: for YouTube, your website and presentations; technical upload recommendations are in the [YouTube Help Centre](https://support.google.com/youtube/);
 - **if you need both**, film them separately, or film horizontally in 4K with the subject centred and crop in editing.
 
 ## Light: the most important thing

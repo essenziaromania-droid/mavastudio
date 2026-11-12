@@ -122,7 +122,7 @@ Chiar și cu mentenanță, câteva lucruri sunt la tine:
 
 - spune-i furnizorului când se schimbă ceva în afacere (prețuri, servicii, program, date ale firmei);
 - verifică din când în când formularul de contact, trimițând un mesaj de test;
-- uită-te lunar în Google Search Console după erori;
+- uită-te lunar în [Google Search Console](https://search.google.com/search-console/about) după erori;
 - păstrează accesul la toate conturile importante;
 - nu instala extensii sau scripturi noi fără să întrebi.
 
@@ -336,7 +336,7 @@ Even with maintenance, a few things are up to you:
 
 - tell your provider when something changes in the business (prices, services, opening hours, company details);
 - check your contact form now and then by sending a test message;
-- look at Google Search Console monthly for errors;
+- look at [Google Search Console](https://search.google.com/search-console/about) monthly for errors;
 - keep access to all your important accounts;
 - don't install new plugins or scripts without asking.
 

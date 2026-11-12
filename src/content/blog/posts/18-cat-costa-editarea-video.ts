@@ -120,7 +120,7 @@ Separat de editare, pot fi create și clipuri de produs direct cu AI, pornind de
 
 Una dintre cele mai frecvente probleme în video e muzica. O melodie cunoscută pusă pe un clip de firmă poate duce la blocarea clipului, la eliminarea sunetului sau, în cazul reclamelor, la respingerea lor. Câteva reguli:
 
-- **pentru postările organice**, folosește muzica din biblioteca oficială a platformei, unde e permisă pentru conturile de firmă;
+- **pentru postările organice**, folosește muzica din biblioteca oficială a platformei, unde e permisă pentru conturile de firmă; YouTube, de exemplu, explică regulile în [centrul său de ajutor](https://support.google.com/youtube/);
 - **pentru reclame și pentru site**, folosește muzică cu licență comercială, din biblioteci de muzică care permit explicit acest tip de folosire;
 - **păstrează dovada licenței**, în caz că primești o notificare;
 - **nu presupune** că „câteva secunde” dintr-o melodie sunt permise; regulile nu funcționează așa.
@@ -310,7 +310,7 @@ Separately from editing, product videos can also be created directly with AI, st
 
 One of the most common problems in video is music. A well-known song on a business video can get the video blocked, muted or, in the case of ads, rejected. A few rules:
 
-- **for organic posts**, use music from the platform's official library, where it's allowed for business accounts;
+- **for organic posts**, use music from the platform's official library, where it's allowed for business accounts; YouTube, for example, explains the rules in its [Help Centre](https://support.google.com/youtube/);
 - **for ads and your website**, use music with a commercial licence, from music libraries that explicitly allow this kind of use;
 - **keep proof of the licence**, in case you receive a notice;
 - **don't assume** that "a few seconds" of a song are allowed; the rules don't work that way.

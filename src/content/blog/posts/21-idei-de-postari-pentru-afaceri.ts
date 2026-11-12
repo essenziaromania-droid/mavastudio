@@ -132,7 +132,7 @@ Exemplu pentru ideea 2 („o greșeală frecventă”):
 | Întrebări, sondaje | stories |
 | Poveste, culise | clip scurt sau carusel cu text |
 
-Clipurile scurte aduc cea mai mare vizibilitate. Am explicat cum le faci în ghidul despre [clipurile scurte pentru Reels, TikTok și Shorts](/blog/clipuri-scurte-reels-tiktok-shorts).
+Pentru carusele și imagini, un instrument de design precum [Canva](https://www.canva.com/) e suficient pentru majoritatea afacerilor mici. Clipurile scurte aduc cea mai mare vizibilitate. Am explicat cum le faci în ghidul despre [clipurile scurte pentru Reels, TikTok și Shorts](/blog/clipuri-scurte-reels-tiktok-shorts).
 
 ## Reguli ca fiecare postare să lucreze pentru tine
 
@@ -351,7 +351,7 @@ Example for idea 2 ("a common mistake"):
 | Questions, polls | stories |
 | Story, behind the scenes | short video or text carousel |
 
-Short videos bring the most reach. I explained how to make them in our guide to [short videos for Reels, TikTok and Shorts](/blog/clipuri-scurte-reels-tiktok-shorts).
+For carousels and images, a design tool such as [Canva](https://www.canva.com/) is enough for most small businesses. Short videos bring the most reach. I explained how to make them in our guide to [short videos for Reels, TikTok and Shorts](/blog/clipuri-scurte-reels-tiktok-shorts).
 
 ## Rules so every post works for you
 
