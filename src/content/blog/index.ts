@@ -31,6 +31,7 @@ import a28 from "./posts/28-subtitrari-video";
 import a29 from "./posts/29-wordpress-shopify-sau-site-personalizat";
 import a30 from "./posts/30-tiktok-pentru-afaceri-locale";
 import a31 from "./posts/31-cuvinte-cheie-cum-le-alegi";
+import a32 from "./posts/32-imagini-de-produs-pentru-magazin-si-marketplace";
 
-export const FILE_ARTICLES = [a01, a02, a03, a04, a05, a06, a07, a08, a09, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30, a31];
+export const FILE_ARTICLES = [a01, a02, a03, a04, a05, a06, a07, a08, a09, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30, a31, a32];
 export const FILE_POSTS = toBlogPosts(FILE_ARTICLES);

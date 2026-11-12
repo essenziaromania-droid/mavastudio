@@ -49,7 +49,7 @@ Cea mai bună sursă de cuvinte cheie sunt chiar clienții tăi. Notează:
 - cum descriu problema lor, cu vorbele lor;
 - ce au căutat în Google înainte să ajungă la tine (întreabă-i direct).
 
-Diferența dintre limbajul tău și al lor e adesea surprinzătoare. Tu spui „implanturi dentare”, ei caută „dinți ficși”.
+Diferența dintre limbajul tău și al lor e adesea surprinzătoare. Tu spui „implanturi dentare”, ei caută „dinți ficși”. Ține o listă deschisă tot timpul și adaugă în ea fiecare expresie nouă pe care o auzi.
 
 ## Pasul 2: sugestiile din Google
 

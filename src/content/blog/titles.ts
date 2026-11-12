@@ -309,5 +309,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "Keywords: how to find out what your customers search for on Google, and how to use them",
       "category": "SEO & GEO"
     }
+  },
+  "imagini-de-produs-pentru-magazin-si-marketplace": {
+    "ro": {
+      "title": "Imagini de produs pentru magazin online și marketplace: ce trebuie să ai și cum le pregătești",
+      "category": "Conținut AI"
+    },
+    "en": {
+      "title": "Product images for your online store and marketplaces: what you need and how to prepare them",
+      "category": "AI content"
+    }
   }
 };
