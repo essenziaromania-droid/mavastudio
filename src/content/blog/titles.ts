@@ -419,5 +419,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "A website for a clinic, medical practice or therapist: what it needs so patients choose you",
       "category": "Websites"
     }
+  },
+  "filmare-cu-telefonul": {
+    "ro": {
+      "title": "Cum filmezi clipuri bune cu telefonul pentru afacerea ta: setări, lumină, sunet",
+      "category": "Video"
+    },
+    "en": {
+      "title": "How to film good videos on your phone for your business: settings, light, sound",
+      "category": "Video"
+    }
   }
 };

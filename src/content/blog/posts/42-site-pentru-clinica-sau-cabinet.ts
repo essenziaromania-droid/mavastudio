@@ -136,7 +136,7 @@ Mulți pacienți amână programarea pentru că nu știu ce îi așteaptă. O pa
 - **informații practice**: parcare, acces pentru persoane cu dizabilități, cum găsește intrarea;
 - **ce rămâne confidențial**, mai ales pentru terapie și psihologie.
 
-O pagină ca aceasta răspunde exact la întrebările pe care oamenii le au, dar ezită să le pună la telefon.
+O pagină ca aceasta răspunde exact la întrebările pe care oamenii le au, dar ezită să le pună la telefon. Pune un link spre ea în emailul de confirmare a programării și pe pagina fiecărui serviciu, ca pacientul să o găsească exact când are nevoie de ea, iar recepția să primească mai puține telefoane cu aceleași întrebări.
 
 ## Recenziile pacienților: cum le ceri cu tact
 
@@ -147,6 +147,8 @@ Recenziile contează mult pentru cabinete, dar trebuie cerute cu grijă:
 - **trimite linkul direct** spre recenziile din profilul Google, ca să fie ușor;
 - **răspunde la recenzii fără detalii medicale** și fără să confirmi că persoana e pacientul tău, dacă regulile profesiei cer asta;
 - **nu publica pe site recenzii** fără acordul persoanei.
+
+Câteva recenzii sincere, primite constant, valorează mult mai mult decât multe recenzii adunate într-o singură săptămână. Pacienții citesc mai ales recenziile recente și felul în care cabinetul răspunde la ele.
 
 ## Accesibilitatea și ușurința de folosire
 
