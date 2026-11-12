@@ -289,5 +289,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "WordPress, Shopify or a custom website: which platform is right for your business?",
       "category": "Websites"
     }
+  },
+  "tiktok-pentru-afaceri-locale": {
+    "ro": {
+      "title": "TikTok pentru afaceri locale: merită și cum începi fără să te faci de râs",
+      "category": "Social media"
+    },
+    "en": {
+      "title": "TikTok for local businesses: is it worth it, and how to start without embarrassing yourself",
+      "category": "Social media"
+    }
   }
 };

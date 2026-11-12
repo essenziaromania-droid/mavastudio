@@ -29,6 +29,7 @@ import a26 from "./posts/26-reclame-facebook-instagram-buget";
 import a27 from "./posts/27-oferte-si-contracte-semnate-online";
 import a28 from "./posts/28-subtitrari-video";
 import a29 from "./posts/29-wordpress-shopify-sau-site-personalizat";
+import a30 from "./posts/30-tiktok-pentru-afaceri-locale";
 
-export const FILE_ARTICLES = [a01, a02, a03, a04, a05, a06, a07, a08, a09, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29];
+export const FILE_ARTICLES = [a01, a02, a03, a04, a05, a06, a07, a08, a09, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30];
 export const FILE_POSTS = toBlogPosts(FILE_ARTICLES);
