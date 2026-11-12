@@ -138,7 +138,7 @@ Descrierea de sub postare are roluri diferite, în funcție de format:
 - **la imaginile simple**, descrierea completează imaginea: povestea din spatele ei, prețul, termenul, linkul;
 - **la stories**, textul stă pe imagine, scurt, iar acțiunea e un autocolant (link, sondaj, întrebare).
 
-Și o regulă comună: primul rând contează cel mai mult, pentru că e singurul pe care îl vede omul înainte să apese „mai mult”.
+Și o regulă comună: primul rând contează cel mai mult, pentru că e singurul pe care îl vede omul înainte să apese „mai mult”. Scrie-l ultimul, după ce știi exact ce conține postarea.
 
 ## Formatul și reclamele
 
@@ -149,7 +149,7 @@ Când promovezi o postare cu bani, formatul contează și mai mult:
 - **imaginile simple** sunt potrivite pentru oferte clare, cu preț și termen;
 - **stories** sunt bune pentru reclamele verticale, pe tot ecranul.
 
-Cel mai sigur e să promovezi postările care au mers deja bine organic. Despre buget am scris în ghidul despre [reclamele pe Facebook și Instagram](/blog/reclame-facebook-instagram-buget).
+Cel mai sigur e să promovezi postările care au mers deja bine organic: au demonstrat deja că opresc oamenii din derulat și că mesajul lor interesează. Despre buget am scris în ghidul despre [reclamele pe Facebook și Instagram](/blog/reclame-facebook-instagram-buget).
 
 ## Cum măsori ce format funcționează
 

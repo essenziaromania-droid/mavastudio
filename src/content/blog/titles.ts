@@ -389,5 +389,15 @@ export const BLOG_TITLES: Record<string, Record<"ro" | "en", { title: string; ca
       "title": "Reels, carousel or single post: which format to choose for each message",
       "category": "Social media"
     }
+  },
+  "cum-construiesti-o-platforma-saas": {
+    "ro": {
+      "title": "Cum construiești o platformă SaaS: de la idee la primii clienți plătitori",
+      "category": "Aplicații web"
+    },
+    "en": {
+      "title": "How to build a SaaS platform: from idea to your first paying customers",
+      "category": "Web apps"
+    }
   }
 };
